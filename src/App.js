@@ -380,9 +380,12 @@ class App extends Component {
   constructor() {
     super()
     extendObservable(this, {
+      agentid: 'user9',
+      datasetid: 'trivial-linked',
+
       query: `SELECT *
 FROM raw_county_election_data
-limit 10000`,
+limit 1000`,
       schema: null,
       // data: null,
       config: {
@@ -397,9 +400,11 @@ limit 10000`,
   }
 
   getQueryUrl() {
-    const agentid = 'user9'
-    const datasetid = 'trivial-linked'
-    return `http://localhost:9104/v0/sql/${agentid}/${datasetid}?includeTableSchema=true`
+    return `http://localhost:9104/v0/sql/${this.agentid}/${this.datasetid}?includeTableSchema=true`
+  }
+
+  getUploadUrl() {
+    return `http://localhost:9104/v0/uploads/${this.agentid}/${this.datasetid}/files/vega-lite.vl.json`
   }
 
   fetchQuery = async () => {
@@ -429,6 +434,19 @@ limit 10000`,
         mark: 'bar'
       }
     })
+  }
+
+  uploadFile = async () => {
+    const data = await fetch(this.getUploadUrl(), {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/octet-stream'
+      },
+      body: JSON.stringify(this.buildSchema())
+    }).then(r => r.json())
+    console.log(data);
   }
 
   buildSchema(includeValues = true) {
@@ -537,6 +555,11 @@ limit 10000`,
                   <div>
                     <Button bsSize="xs" onClick={this.search}>
                       search
+                    </Button>
+                  </div>
+                  <div>
+                    <Button bsSize="xs" onClick={this.uploadFile}>
+                      save to dataset
                     </Button>
                   </div>
                 </React.Fragment>
