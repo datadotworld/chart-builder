@@ -1,0 +1,9 @@
+.VizCard {
+  height: 520px;
+  width: 696px;
+  border: 1px solid #dfdfdf;
+  border-radius: 2px;
+  background-color: #ffffff;
+  box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.1);
+  /* overflow: auto; */
+}

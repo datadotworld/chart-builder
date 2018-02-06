@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
-import { toJS, extendObservable, runInAction, observable } from 'mobx'
+import { toJS, extendObservable, runInAction } from 'mobx'
 import { observer } from 'mobx-react'
 import * as vegaImport from 'vega'
 import * as VegaLite from 'vega-lite'
 import * as VegaTooltip from 'vega-tooltip'
 import * as cql from 'compassql'
 import DevTools from 'mobx-react-devtools'
+import { Grid, Row, Button, Col } from 'react-bootstrap'
 import './App.css'
 import 'vega-tooltip/build/vega-tooltip.css'
+import Header from './Header'
+import VizCard from './VizCard'
 
 export const vega = vegaImport
 export const vl = VegaLite
@@ -111,9 +114,9 @@ class VegaLiteEmbed extends Component {
 
     spec = vl.compile(spec).spec
 
-    console.log(spec)
-
     const runtime = vega.parse(spec)
+
+    console.log(runtime);
 
     const view = new vega.View(runtime, {
       loader,
@@ -123,10 +126,17 @@ class VegaLiteEmbed extends Component {
 
     VegaTooltip.vegaLite(view, spec)
 
-    view.width(width)
-    view.height(height)
+    view
+      .width(width)
+      .height(height)
 
-    view.run()
+      .run()
+
+    this.view = view
+  }
+
+  componentWillUnmount() {
+    this.view && this.view.finalize()
   }
 
   render() {
@@ -150,7 +160,7 @@ class FieldSelect extends Component {
           )
         }}
       >
-        <option value="">None</option>
+        <option value="">Choose a column</option>
         {this.props.fields.map(f => {
           return (
             <option key={f.name} value={f.name}>
@@ -225,16 +235,14 @@ class Encoding_ extends Component {
     const { fields, encoding } = this.props
     return (
       <div style={{ margin: '1rem 0' }}>
-        Encode
+        <EncodingSelect
+          value={encoding.channel}
+          onChange={e => (encoding.channel = e)}
+        />
         <FieldSelect
           fields={fields}
           value={encoding.field}
           onChange={f => (encoding.field = f)}
-        />
-        as
-        <EncodingSelect
-          value={encoding.channel}
-          onChange={e => (encoding.channel = e)}
         />
         {this.showAdvanced ? (
           <span
@@ -246,18 +254,20 @@ class Encoding_ extends Component {
             }}
           >
             <div>
-              type:
-              <SimpleSelect
-                values={[
-                  'auto',
-                  'quantitative',
-                  'ordinal',
-                  'nominal',
-                  'temporal'
-                ]}
-                value={encoding.type}
-                onChange={t => (encoding.type = t)}
-              />
+              <label>
+                type:
+                <SimpleSelect
+                  values={[
+                    'auto',
+                    'quantitative',
+                    'ordinal',
+                    'nominal',
+                    'temporal'
+                  ]}
+                  value={encoding.type}
+                  onChange={t => (encoding.type = t)}
+                />
+              </label>
             </div>
             <div>
               <label>
@@ -270,35 +280,37 @@ class Encoding_ extends Component {
               </label>
             </div>
             <div>
-              aggregate:
-              <SimpleSelect
-                values={[
-                  'none',
-                  'argmax',
-                  'argmin',
-                  'average',
-                  'count',
-                  'distinct',
-                  'max',
-                  'mean',
-                  'median',
-                  'min',
-                  'missing',
-                  'q1',
-                  'q3',
-                  'ci0',
-                  'ci1',
-                  'stdev',
-                  'stdevp',
-                  'sum',
-                  'valid',
-                  'values',
-                  'variance',
-                  'variancep'
-                ]}
-                value={encoding.aggregate}
-                onChange={t => (encoding.aggregate = t)}
-              />
+              <label>
+                aggregate:
+                <SimpleSelect
+                  values={[
+                    'none',
+                    'argmax',
+                    'argmin',
+                    'average',
+                    'count',
+                    'distinct',
+                    'max',
+                    'mean',
+                    'median',
+                    'min',
+                    'missing',
+                    'q1',
+                    'q3',
+                    'ci0',
+                    'ci1',
+                    'stdev',
+                    'stdevp',
+                    'sum',
+                    'valid',
+                    'values',
+                    'variance',
+                    'variancep'
+                  ]}
+                  value={encoding.aggregate}
+                  onChange={t => (encoding.aggregate = t)}
+                />
+              </label>
             </div>
             <div>
               <label>
@@ -311,31 +323,38 @@ class Encoding_ extends Component {
               </label>
             </div>
             <div>
-              scale:
-              <SimpleSelect
-                values={[
-                  'linear',
-                  'bin-linear',
-                  'log',
-                  'pow',
-                  'sqrt',
-                  'time',
-                  'utc',
-                  'sequential',
-                  'ordinal',
-                  'bin-ordinal',
-                  'point',
-                  'band'
-                ]}
-                value={encoding.scale}
-                onChange={t => (encoding.scale = t)}
-              />
+              <label>
+                scale:
+                <SimpleSelect
+                  values={[
+                    'linear',
+                    'bin-linear',
+                    'log',
+                    'pow',
+                    'sqrt',
+                    'time',
+                    'utc',
+                    'sequential',
+                    'ordinal',
+                    'bin-ordinal',
+                    'point',
+                    'band'
+                  ]}
+                  value={encoding.scale}
+                  onChange={t => (encoding.scale = t)}
+                />
+              </label>
+            </div>
+            <div>
+              <Button bsSize="xs" onClick={() => (this.showAdvanced = false)}>
+                hide advanced
+              </Button>
             </div>
           </span>
         ) : (
-          <button onClick={() => (this.showAdvanced = true)}>
+          <Button bsSize="xs" onClick={() => (this.showAdvanced = true)}>
             show advanced
-          </button>
+          </Button>
         )}
       </div>
     )
@@ -361,10 +380,9 @@ class App extends Component {
   constructor() {
     super()
     extendObservable(this, {
-      queryUrl: 'http://localhost:9104/v0/sql/user9/trivial-linked',
       query: `SELECT *
 FROM raw_county_election_data
-limit 100`,
+limit 10000`,
       schema: null,
       // data: null,
       config: {
@@ -378,12 +396,18 @@ limit 100`,
     this.fetchQuery()
   }
 
+  getQueryUrl() {
+    const agentid = 'user9'
+    const datasetid = 'trivial-linked'
+    return `http://localhost:9104/v0/sql/${agentid}/${datasetid}?includeTableSchema=true`
+  }
+
   fetchQuery = async () => {
     runInAction(() => {
       this.schema = null
       this.data = null
     })
-    const data = await fetch(this.queryUrl + '?includeTableSchema=true', {
+    const data = await fetch(this.getQueryUrl(), {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -398,9 +422,9 @@ limit 100`,
       this.data = rows
       this.config = {
         encodings: [
-          { ...createBlankEncLine(), encoding: 'x' },
-          { ...createBlankEncLine(), encoding: 'y' },
-          { ...createBlankEncLine(), encoding: 'color' }
+          { ...createBlankEncLine(), channel: 'x' },
+          { ...createBlankEncLine(), channel: 'y' },
+          { ...createBlankEncLine(), channel: 'color' }
         ],
         mark: 'bar'
       }
@@ -421,7 +445,6 @@ limit 100`,
             type: e.scale,
             zero: e.zero
           }
-          // type: 'quantitative'
         }
         encoding[e.channel] = enc
       }
@@ -441,10 +464,10 @@ limit 100`,
     const rows = toJS(this.data)
     const query = {
       spec: cql.query.spec.fromSpec(this.buildSchema()),
-      groupBy: 'fieldTransform',
-      orderBy: ['fieldOrder', 'aggregationQuality', 'effectiveness'],
-      chooseBy: ['aggregationQuality', 'effectiveness'],
-      config: { omitTableWithOcclusion: false, autoAddCount: false }
+      // groupBy: 'fieldTransform',
+      // orderBy: ['fieldOrder', 'aggregationQuality', 'effectiveness'],
+      chooseBy: ['aggregationQuality', 'effectiveness']
+      // config: { omitTableWithOcclusion: false, autoAddCount: false }
     }
     query.spec.mark = '?'
     // query.spec.encodings = query.spec.encoding
@@ -465,72 +488,94 @@ limit 100`,
     // var topVlSpec = vlTree.items[0]
     console.log(result)
     console.log(specs)
+    const [sp] = specs
+    if (sp) {
+      this.config.mark = sp.mark
+    }
   }
 
   render() {
     return (
-      <div className="App">
+      <React.Fragment>
         <DevTools />
-        <input
-          type="text"
-          value={this.queryUrl}
-          onChange={e => {
-            this.queryUrl = e.target.value
-          }}
-          style={{ width: 400 }}
-        />
-        <textarea
-          value={this.query}
-          onChange={e => {
-            this.query = e.target.value
-          }}
-          rows="5"
-          cols="30"
-        />
-        <button onClick={this.fetchQuery}>fetch</button>
-        <button onClick={this.search}>search</button>
-        {this.schema && (
-          <React.Fragment>
-            {this.config.encodings.map((e, ei) => {
-              return (
-                <Encoding key={ei} fields={this.schema.fields} encoding={e} />
-              )
-            })}
-            <div>
-              <button
-                onClick={() => this.config.encodings.push(createBlankEncLine())}
-              >
-                add encoding
-              </button>
-            </div>
-            <div>
-              Mark:
+        <Header />
+        <Grid style={{ marginTop: 32 }}>
+          <Row>
+            <Col xs={6}>
+              <h4>Build your chart</h4>
+              <div className="App-title">Marks</div>
               <SimpleSelect
                 values={MARKS}
                 value={this.config.mark}
                 onChange={e => (this.config.mark = e)}
               />
-            </div>
-          </React.Fragment>
-        )}
-        {this.data &&
-          this.schema && (
-            <div>
-              {this.config.encodings.some(e => e.field) && (
-                <VegaLiteEmbed
-                  spec={this.buildSchema()}
-                  key={JSON.stringify(this.buildSchema())}
-                  width={600}
-                  height={600}
-                />
+              <div className="App-title">Configure Chart</div>
+              {/* <Button bsSize="xs" onClick={this.fetchQuery}>
+                fetch
+              </Button> */}
+              {this.schema && (
+                <React.Fragment>
+                  {this.config.encodings.map((e, ei) => {
+                    return (
+                      <Encoding
+                        key={ei}
+                        fields={this.schema.fields}
+                        encoding={e}
+                      />
+                    )
+                  })}
+                  <div>
+                    <Button
+                      bsSize="xs"
+                      onClick={() =>
+                        this.config.encodings.push(createBlankEncLine())
+                      }
+                    >
+                      add encoding
+                    </Button>
+                  </div>
+                  <div>
+                    <Button bsSize="xs" onClick={this.search}>
+                      search
+                    </Button>
+                  </div>
+                </React.Fragment>
               )}
-              <pre>{JSON.stringify(this.buildSchema(false), null, 2)}</pre>
-            </div>
-          )}
+              {/* {this.schema && (
+                <pre>{JSON.stringify(this.buildSchema(false), null, 2)}</pre>
+              )} */}
 
-        {this.schema && <pre>{JSON.stringify(this.schema, null, 2)}</pre>}
-        {this.data && <pre>Length: {this.data.length}</pre>}
-      </div>
+              {/* {this.schema && <pre>{JSON.stringify(this.schema, null, 2)}</pre>} */}
+              {/* {this.data && <pre>Length: {this.data.length}</pre>} */}
+            </Col>
+            <Col xs={6}>
+              <VizCard>
+                {(this.data &&
+                  this.schema &&
+                  this.config.encodings.some(e => e.field) && (
+                    <div style={{ transform: 'translateZ(0)' }}>
+                      {
+                        <VegaLiteEmbed
+                          spec={this.buildSchema()}
+                          key={JSON.stringify(this.buildSchema())}
+                          width={681}
+                          height={450}
+                        />
+                      }
+                    </div>
+                  )) || (
+                  <div className="App-vizPlaceholder">
+                    <div className="App-vizPlaceholderText">
+                    Choose a chart type and columns <br />to the left and your chart
+                    will appear.<br />Like magic ✨
+                  </div>
+                  </div>
+                )}
+              </VizCard>
+            </Col>
+          </Row>
+        </Grid>
+      </React.Fragment>
     )
   }
 }
