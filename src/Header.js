@@ -17,7 +17,9 @@ export default class extends PureComponent {
           </Navbar.Brand>
           <Navbar.Text>Vega-Lite Explorer</Navbar.Text>
         </Navbar.Header>
-        <Navbar.Text pullRight>Back to data.world</Navbar.Text>
+        <Navbar.Text pullRight>
+          <Navbar.Link href="https://data.world">Back to data.world</Navbar.Link>
+        </Navbar.Text>
       </Navbar>
     )
   }

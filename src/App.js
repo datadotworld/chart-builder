@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { toJS, extendObservable, runInAction } from 'mobx'
 import { observer } from 'mobx-react'
+import { Link } from 'react-router-dom'
 import * as vegaImport from 'vega'
 import * as VegaLite from 'vega-lite'
 import * as VegaTooltip from 'vega-tooltip'
@@ -107,16 +108,23 @@ class VegaLiteEmbed extends Component {
   }
 
   componentDidMount() {
+    this.constructView()
+  }
+
+  async constructView() {
     let { spec, width, height } = this.props
     const loader = vega.loader()
     const logLevel = vega.Warn
     const renderer = 'svg'
 
+    const values = spec.data.values
+    spec.data = {
+      name: 'data'
+    }
+
     spec = vl.compile(spec).spec
 
     const runtime = vega.parse(spec)
-
-    console.log(runtime);
 
     const view = new vega.View(runtime, {
       loader,
@@ -124,15 +132,29 @@ class VegaLiteEmbed extends Component {
       renderer
     }).initialize(this.node)
 
+    view.change('data', vega.changeset().insert(values))
+
     VegaTooltip.vegaLite(view, spec)
 
-    view
-      .width(width)
-      .height(height)
-
-      .run()
+    view.width(width).height(height)
 
     this.view = view
+
+    await view.runAsync()
+
+    this.resize()
+  }
+
+  resize() {
+    let { width, height } = this.props
+    const { _viewWidth: viewWidth, _viewHeight: viewHeight } = this.view
+
+    this.node.style.transform = `scale(${width / viewWidth}, ${height /
+      viewHeight})`
+    this.node.style.transformOrigin = `0 0`
+
+    this.scaledNode.innerText = `scaled to fit (${(width / viewWidth).toFixed(2)}, ${(height /
+      viewHeight).toFixed(2)})`
   }
 
   componentWillUnmount() {
@@ -140,7 +162,15 @@ class VegaLiteEmbed extends Component {
   }
 
   render() {
-    return <div ref={r => (this.node = r)} />
+    return (
+      <React.Fragment>
+        <div ref={r => (this.node = r)} />
+        <small
+          style={{ position: 'absolute', right: 10, top: 4 }}
+          ref={r => (this.scaledNode = r)}
+        />
+      </React.Fragment>
+    )
   }
 }
 
@@ -202,13 +232,14 @@ class SimpleSelect extends Component {
 
 class EncodingSelect extends Component {
   props: {
+    encodings: Array<EncodingType>,
     value: EncodingType,
     onChange: (e: EncodingType) => mixed
   }
   render() {
     return (
       <SimpleSelect
-        values={ENCODINGS}
+        values={this.props.encodings}
         value={this.props.value}
         onChange={this.props.onChange}
       />
@@ -236,6 +267,7 @@ class Encoding_ extends Component {
     return (
       <div style={{ margin: '1rem 0' }}>
         <EncodingSelect
+          encodings={ENCODINGS}
           value={encoding.channel}
           onChange={e => (encoding.channel = e)}
         />
@@ -377,40 +409,67 @@ class App extends Component {
   config: ConfigType
   schema: ?Schema
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     extendObservable(this, {
-      agentid: 'user9',
-      datasetid: 'trivial-linked',
-
-      query: `SELECT *
-FROM raw_county_election_data
-limit 1000`,
       schema: null,
       // data: null,
+      loading: true,
       config: {
         encodings: [],
         mark: 'bar'
       },
 
-      s: null
+      get parsedUrlQuery() {
+        console.log(this)
+        console.log(this.props)
+        const query = new URLSearchParams(this.props.location.search)
+        const obj = {}
+        for (let entry of query) {
+          obj[entry[0]] = entry[1]
+        }
+        return obj
+      },
+
+      get agentid() {
+        return this.parsedUrlQuery.agentid
+      },
+      get datasetid() {
+        return this.parsedUrlQuery.datasetid
+      },
+      get query() {
+        return this.parsedUrlQuery.query
+      },
+
+      get isValidPage() {
+        return !!this.agentid && !!this.datasetid && !!this.query
+      }
+
+      // s: null
     })
 
-    this.fetchQuery()
+    if (this.isValidPage) {
+      this.fetchQuery()
+    }
   }
 
   getQueryUrl() {
-    return `http://localhost:9104/v0/sql/${this.agentid}/${this.datasetid}?includeTableSchema=true`
+    return `http://localhost:9104/v0/sql/${this.agentid}/${
+      this.datasetid
+    }?includeTableSchema=true`
   }
 
   getUploadUrl() {
-    return `http://localhost:9104/v0/uploads/${this.agentid}/${this.datasetid}/files/vega-lite.vl.json`
+    return `http://localhost:9104/v0/uploads/${this.agentid}/${
+      this.datasetid
+    }/files/vega-lite.vl.json`
   }
 
   fetchQuery = async () => {
     runInAction(() => {
       this.schema = null
       this.data = null
+      this.loading = true
     })
     const data = await fetch(this.getQueryUrl(), {
       method: 'POST',
@@ -425,6 +484,7 @@ limit 1000`,
     runInAction(() => {
       this.schema = dschema
       this.data = rows
+      this.loading = false
       this.config = {
         encodings: [
           { ...createBlankEncLine(), channel: 'x' },
@@ -446,7 +506,7 @@ limit 1000`,
       },
       body: JSON.stringify(this.buildSchema())
     }).then(r => r.json())
-    console.log(data);
+    console.log(data)
   }
 
   buildSchema(includeValues = true) {
@@ -512,12 +572,70 @@ limit 1000`,
     }
   }
 
+  get hasPossiblyValidChart() {
+    return this.config.encodings.some(e => e.field)
+  }
+
   render() {
+    if (!this.isValidPage) {
+      return (
+        <React.Fragment>
+          <Header />
+          <Grid style={{ marginTop: 32 }}>
+            <Row>
+              <Col xs={12}>
+                <h3>Valid params required</h3>
+                <Link
+                  to={{
+                    pathname: '/',
+                    search:
+                      '?agentid=user9&datasetid=trivial-linked&query=SELECT+%2A%0AFROM+usa_states'
+                  }}
+                >
+                  Here are some
+                </Link>
+              </Col>
+            </Row>
+          </Grid>
+        </React.Fragment>
+      )
+    }
+
+    if (this.loading) {
+      return (
+        <React.Fragment>
+          <DevTools />
+          <Header />
+          <Grid style={{ marginTop: 32 }}>
+            <Row>
+              <Col xs={12}>
+                <h3>
+                  {this.agentid}/{this.datasetid}
+                </h3>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={6}>
+                <h4>Loading...</h4>
+              </Col>
+            </Row>
+          </Grid>
+        </React.Fragment>
+      )
+    }
+
     return (
       <React.Fragment>
         <DevTools />
         <Header />
         <Grid style={{ marginTop: 32 }}>
+          <Row>
+            <Col xs={12}>
+              <h3>
+                {this.agentid}/{this.datasetid}
+              </h3>
+            </Col>
+          </Row>
           <Row>
             <Col xs={6}>
               <h4>Build your chart</h4>
@@ -557,11 +675,13 @@ limit 1000`,
                       search
                     </Button>
                   </div>
-                  <div>
-                    <Button bsSize="xs" onClick={this.uploadFile}>
-                      save to dataset
-                    </Button>
-                  </div>
+                  {this.hasPossiblyValidChart && (
+                    <div>
+                      <Button bsSize="xs" onClick={this.uploadFile}>
+                        save to dataset
+                      </Button>
+                    </div>
+                  )}
                 </React.Fragment>
               )}
               {/* {this.schema && (
@@ -575,23 +695,23 @@ limit 1000`,
               <VizCard>
                 {(this.data &&
                   this.schema &&
-                  this.config.encodings.some(e => e.field) && (
+                  this.hasPossiblyValidChart && (
                     <div style={{ transform: 'translateZ(0)' }}>
                       {
                         <VegaLiteEmbed
                           spec={this.buildSchema()}
-                          key={JSON.stringify(this.buildSchema())}
+                          key={JSON.stringify(this.buildSchema(false))}
                           width={681}
-                          height={450}
+                          height={510}
                         />
                       }
                     </div>
                   )) || (
                   <div className="App-vizPlaceholder">
                     <div className="App-vizPlaceholderText">
-                    Choose a chart type and columns <br />to the left and your chart
-                    will appear.<br />Like magic ✨
-                  </div>
+                      Choose a chart type and columns <br />to the left and your
+                      chart will appear.<br />Like magic ✨
+                    </div>
                   </div>
                 )}
               </VizCard>
