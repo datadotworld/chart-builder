@@ -608,7 +608,8 @@ class App extends Component {
       redirect_uri: 'http://localhost:3500',
       response_type: 'code',
       code_challenge_method: 'plain',
-      code_challenge: CHALLENGE
+      code_challenge: CHALLENGE,
+      state: encodeURIComponent(this.props.location.search)
     })
 
     window.open(
@@ -636,7 +637,10 @@ class App extends Component {
     ).then(r => r.json())
     window.localStorage.setItem('token', d.access_token)
     this.token = d.access_token
-    this.isValidPage && this.fetchQuery()
+    this.props.history.push({
+      path: '/',
+      search: this.parsedUrlQuery.state
+    })
   }
 
   render() {
