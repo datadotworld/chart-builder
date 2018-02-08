@@ -16,9 +16,6 @@ import VizCard from './VizCard'
 export const vega = vegaImport
 export const vl = VegaLite
 
-const token =
-  'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkZXYtY2xpZW50OnVzZXI5IiwiaXNzIjoiYWdlbnQ6dXNlcjk6OjExMWY3ODNlLWExMzMtNDE5YS1hYTI5LWRlNWE1MTE1ZmQwZSIsImlhdCI6MTUwMjI5MTg4NCwicm9sZSI6WyJ1c2VyX2FwaV9yZWFkIiwidXNlcl9hcGlfd3JpdGUiXSwiZ2VuZXJhbC1wdXJwb3NlIjp0cnVlfQ.iUQXx_a_uahylfK6W5K1P8a2xeyWn9To7xTA0ML5twNIDn65L7u3PSqvDVerCqnon3AkJIf361j_9EHEB6pyAw'
-
 type Field = {
   name: string,
   type: string,
@@ -153,8 +150,9 @@ class VegaLiteEmbed extends Component {
       viewHeight})`
     this.node.style.transformOrigin = `0 0`
 
-    this.scaledNode.innerText = `scaled to fit (${(width / viewWidth).toFixed(2)}, ${(height /
-      viewHeight).toFixed(2)})`
+    this.scaledNode.innerText = `scaled to fit (${(width / viewWidth).toFixed(
+      2
+    )}, ${(height / viewHeight).toFixed(2)})`
   }
 
   componentWillUnmount() {
@@ -405,6 +403,9 @@ type ConfigType = {
   encodings: Array<EncLineType>
 }
 
+const CHALLENGE =
+  'aad90d4da7e171d262df33cf031dbbc65603b67d386f25f4e0792a55a82efcaf'
+
 class App extends Component {
   config: ConfigType
   schema: ?Schema
@@ -415,6 +416,8 @@ class App extends Component {
       schema: null,
       // data: null,
       loading: true,
+      saving: false,
+      saved: false,
       config: {
         encodings: [],
         mark: 'bar'
@@ -443,13 +446,19 @@ class App extends Component {
 
       get isValidPage() {
         return !!this.agentid && !!this.datasetid && !!this.query
-      }
+      },
+
+      token: window.localStorage.getItem('token')
 
       // s: null
     })
 
-    if (this.isValidPage) {
+    if (this.isValidPage && this.token) {
       this.fetchQuery()
+    }
+
+    if (this.parsedUrlQuery.code) {
+      this.makeVerifyRequest()
     }
   }
 
@@ -475,7 +484,7 @@ class App extends Component {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: new URLSearchParams({ query: this.query }).toString()
@@ -497,15 +506,22 @@ class App extends Component {
   }
 
   uploadFile = async () => {
+    this.saving = true
     const data = await fetch(this.getUploadUrl(), {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
         'Content-Type': 'application/octet-stream'
       },
       body: JSON.stringify(this.buildSchema())
     }).then(r => r.json())
+    runInAction(() => {
+      this.saving = false
+      this.saved = true
+
+      setTimeout(() => (this.saved = false), 1000)
+    })
     console.log(data)
   }
 
@@ -532,8 +548,18 @@ class App extends Component {
       $schema: 'https://vega.github.io/schema/vega-lite/v2.json',
       mark: config.mark,
       encoding,
+      title: {
+        text: 'chart title'
+      },
       data: {
         values: includeValues ? toJS(this.data) : ['...']
+      },
+      config: {
+        title: {
+          color: '#323D48',
+          font: 'Lato',
+          fontSize: 22
+        }
       }
     }
   }
@@ -576,6 +602,43 @@ class App extends Component {
     return this.config.encodings.some(e => e.field)
   }
 
+  redirectToOauth = () => {
+    const params = new URLSearchParams({
+      client_id: 'dw-vega-explorer',
+      redirect_uri: 'http://localhost:3500',
+      response_type: 'code',
+      code_challenge_method: 'plain',
+      code_challenge: CHALLENGE
+    })
+
+    window.open(
+      'http://localhost:9092/oauth/authorize?' + params.toString(),
+      '_self'
+    )
+  }
+
+  makeVerifyRequest = async () => {
+    const code = this.parsedUrlQuery.code
+
+    const params = new URLSearchParams({
+      client_id: 'dw-vega-explorer',
+      client_secret:
+        'FiE1soILq2yo3eyVQ7AueIRaJ8mk3s8ThJPu7iwT5KMuQmIX5NsQJd9IixzMYDSe',
+      grant_type: 'authorization_code',
+      code,
+      code_verifier: CHALLENGE
+    })
+    const d = await fetch(
+      'http://localhost:9092/oauth/access_token?' + params.toString(),
+      {
+        method: 'POST'
+      }
+    ).then(r => r.json())
+    window.localStorage.setItem('token', d.access_token)
+    this.token = d.access_token
+    this.isValidPage && this.fetchQuery()
+  }
+
   render() {
     if (!this.isValidPage) {
       return (
@@ -589,11 +652,27 @@ class App extends Component {
                   to={{
                     pathname: '/',
                     search:
-                      '?agentid=user9&datasetid=trivial-linked&query=SELECT+%2A%0AFROM+usa_states'
+                      '?agentid=user9&datasetid=trivial-linked&query=SELECT+%2A%0AFROM+iris_data'
                   }}
                 >
                   Here are some
                 </Link>
+              </Col>
+            </Row>
+          </Grid>
+        </React.Fragment>
+      )
+    }
+
+    if (!this.token) {
+      return (
+        <React.Fragment>
+          <Header />
+          <Grid style={{ marginTop: 32 }}>
+            <Row>
+              <Col xs={12}>
+                <h3>You need a token</h3>
+                <Button onClick={this.redirectToOauth}>log in</Button>
               </Col>
             </Row>
           </Grid>
@@ -671,22 +750,30 @@ class App extends Component {
                     </Button>
                   </div>
                   <div>
+                    {/* <Button onClick={this.redirectToOauth}> */}
                     <Button bsSize="xs" onClick={this.search}>
                       search
                     </Button>
                   </div>
-                  {this.hasPossiblyValidChart && (
-                    <div>
-                      <Button bsSize="xs" onClick={this.uploadFile}>
-                        save to dataset
-                      </Button>
-                    </div>
-                  )}
+                  <div>
+                    <Button
+                      bsSize="xs"
+                      onClick={this.uploadFile}
+                      disabled={!this.hasPossiblyValidChart || this.saving}
+                    >
+                      {this.saving ? 'saving to dataset' : 'save to dataset'}
+                    </Button>
+                    {this.saved && (
+                      <small>
+                        saved to {this.agentid}/{this.datasetid}/vega-lite.vl.json
+                      </small>
+                    )}
+                  </div>
                 </React.Fragment>
               )}
-              {/* {this.schema && (
+              {this.hasPossiblyValidChart && (
                 <pre>{JSON.stringify(this.buildSchema(false), null, 2)}</pre>
-              )} */}
+              )}
 
               {/* {this.schema && <pre>{JSON.stringify(this.schema, null, 2)}</pre>} */}
               {/* {this.data && <pre>Length: {this.data.length}</pre>} */}
