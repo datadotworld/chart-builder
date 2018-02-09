@@ -6,4 +6,6 @@ jobs:
     steps:
       - checkout
       - run: ./cicd/setup_aws_credentials.sh
+      - run: yarn install
+      - run: yarn build
       - run: echo "A first hello"
