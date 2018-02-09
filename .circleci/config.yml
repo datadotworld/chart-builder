@@ -1,8 +1,11 @@
 version: 2
 jobs:
   build:
+    branches:
+      only:
+        - master
     docker:
-      - image: circleci/node:8.9.1
+      - image: circleci/node:9
     steps:
       - checkout
       - run: ./cicd/setup_aws_credentials.sh
