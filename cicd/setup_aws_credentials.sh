@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -o xtrace -o errexit -o pipefail
+set -o errexit -o pipefail
 
 # populate the AWS profiles from env vars
 mkdir -p ~/.aws
