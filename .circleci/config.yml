@@ -11,4 +11,4 @@ jobs:
       - run: ./cicd/setup_aws_credentials.sh
       - run: yarn install
       - run: yarn build
-      - run: echo "A first hello"
+      - run: aws s3 sync build s3://dataworld-vegaliteexplorer-us-east-1 --acl public-read
