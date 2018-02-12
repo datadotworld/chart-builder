@@ -9,7 +9,7 @@ export type Schema = {
   fields: Array<Field>
 }
 
-export type EncodingType =
+export type EncodingChannel =
   | 'x'
   | 'y'
   | 'x2'
@@ -36,9 +36,16 @@ export type MarkType =
   | 'circle'
   | 'square'
 
+export type EncodingType =
+  | 'auto'
+  | 'quantitative'
+  | 'ordinal'
+  | 'nominal'
+  | 'temporal'
+
 export type EncLineType = {
   field: ?Field,
-  channel: EncodingType,
+  channel: EncodingChannel,
   type: string,
 
   bin: boolean,

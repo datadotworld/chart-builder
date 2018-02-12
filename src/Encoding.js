@@ -1,10 +1,12 @@
 // @flow
 import React, { Component } from 'react'
 import SimpleSelect from './SimpleSelect'
-import { extendObservable } from 'mobx'
+import { extendObservable, runInAction } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button } from 'react-bootstrap'
-import type { EncodingType, Field, EncLineType } from './types'
+import sparqlTypeToVegaType from './sparqlTypeToVegaType'
+import type EncLine from './EncLine'
+import type { EncodingChannel, Field } from './types'
 
 const ENCODINGS = [
   'x',
@@ -56,9 +58,9 @@ class FieldSelect extends Component<FieldSelectProps> {
 }
 
 type EncodingSelectProps = {
-  encodings: Array<EncodingType>,
-  value: EncodingType,
-  onChange: (e: EncodingType) => mixed
+  encodings: Array<EncodingChannel>,
+  value: EncodingChannel,
+  onChange: (e: EncodingChannel) => mixed
 }
 
 class EncodingSelect extends Component<EncodingSelectProps> {
@@ -70,7 +72,7 @@ class EncodingSelect extends Component<EncodingSelectProps> {
 
 type EncodingProps = {
   fields: Array<Field>,
-  encoding: EncLineType
+  encoding: EncLine
 }
 
 class Encoding extends Component<EncodingProps> {
@@ -119,6 +121,9 @@ class Encoding extends Component<EncodingProps> {
                     'ordinal',
                     'nominal',
                     'temporal'
+                  ]}
+                  labels={[
+                    `auto (${encoding.autoType})`,
                   ]}
                   value={encoding.type}
                   onChange={t => (encoding.type = t)}

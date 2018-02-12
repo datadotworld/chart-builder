@@ -13,6 +13,7 @@ import Editor from './Editor'
 import VegaLiteEmbed from './VegaLiteEmbed'
 import SimpleSelect from './SimpleSelect'
 import Encoding from './Encoding'
+import EncLine from './EncLine'
 import type { ConfigType, Schema } from './types'
 
 const MARKS = [
@@ -49,6 +50,12 @@ const OAUTH_HOST = 'https://data.world'
 class App extends Component {
   config: ConfigType
   schema: ?Schema
+
+  agentid: string
+  datasetid: string
+  query: string
+  isValidPage: bool
+  token: string
 
   constructor(props) {
     super(props)
@@ -136,9 +143,9 @@ class App extends Component {
       this.loading = false
       this.config = {
         encodings: [
-          { ...createBlankEncLine(), channel: 'x' },
-          { ...createBlankEncLine(), channel: 'y' },
-          { ...createBlankEncLine(), channel: 'color' }
+          new EncLine({ channel: 'x' }),
+          new EncLine({ channel: 'y' }),
+          new EncLine({ channel: 'color' })
         ],
         mark: 'bar'
       }
@@ -156,7 +163,6 @@ class App extends Component {
       },
       body: JSON.stringify(this.buildSchema())
     }).then(r => r.json())
-    console.log(data)
     runInAction(() => {
       this.saving = false
       this.saved = true
@@ -384,7 +390,7 @@ class App extends Component {
                         <Button
                           bsSize="xs"
                           onClick={() =>
-                            this.config.encodings.push(createBlankEncLine())
+                            this.config.encodings.push(new EncLine())
                           }
                         >
                           add encoding

@@ -3,23 +3,25 @@ import React, { Component } from 'react'
 
 type Props<T> = {
   values: Array<T>,
+  labels?: Array<string>,
   value: T,
   onChange: (e: T) => any
 }
 
 export default class SimpleSelect extends Component<Props<*>> {
   render() {
+    const { value, onChange, values, labels } = this.props
     return (
       <select
-        value={this.props.value}
+        value={value}
         onChange={e => {
-          this.props.onChange(e.target.value)
+          onChange(e.target.value)
         }}
       >
-        {this.props.values.map(e => {
+        {values.map((e, i) => {
           return (
             <option key={e} value={e}>
-              {e}
+              {(labels && labels[i]) || e}
             </option>
           )
         })}

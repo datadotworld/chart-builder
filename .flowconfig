@@ -1,10 +1,12 @@
 [ignore]
+.*/node_modules/compassql/examples/.*
 
 [include]
 
 [libs]
 
 [lints]
+all=warn
 
 [options]
 
