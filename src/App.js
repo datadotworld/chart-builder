@@ -699,7 +699,13 @@ class App extends Component {
           </Row>
           <Row>
             <Col xs={4}>
-              <Tabs defaultActiveKey={1} id="configure-tabs" animation={false} className='App-editTab'>
+              <Tabs
+                defaultActiveKey={1}
+                id="configure-tabs"
+                animation={false}
+                className="App-editTab"
+                unmountOnExit
+              >
                 <Tab eventKey={1} title="Configure">
                   <h4>Build your chart</h4>
                   <div className="App-title">Marks</div>
@@ -745,7 +751,7 @@ class App extends Component {
                 >
                   {this.hasPossiblyValidChart && (
                     <Editor
-                      onChange={(e) => console.log(e)}
+                      onChange={e => console.log(e)}
                       value={JSON.stringify(this.buildSchema(false), null, 2)}
                     />
                   )}
