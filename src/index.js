@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter, Route } from 'react-router-dom'
 import './index.css'
 import App from './App'
-import registerServiceWorker from './registerServiceWorker'
+import { unregister } from './registerServiceWorker'
 
 const KeyAppBySearch = props => {
   return <App {...props} key={props.location.search} />
@@ -15,4 +15,5 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById('root')
 )
-registerServiceWorker()
+
+unregister()
