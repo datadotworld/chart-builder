@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react'
 import MonacoEditor from 'react-monaco-editor'
 
@@ -19,7 +20,7 @@ function debounce(func, wait, immediate) {
       if (!immediate) func.apply(context, args)
     }
     const callNow = immediate && !timeout
-    clearTimeout(timeout)
+    timeout && clearTimeout(timeout)
     timeout = setTimeout(later, wait)
     if (callNow) func.apply(context, args)
   }
@@ -31,21 +32,25 @@ const requireConfig = {
     vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.10.1/min/vs'
   }
 }
-export default class Editor extends Component {
-  props: {
-    value: string,
-    onChange: (s: string) => mixed
-  }
+type Props = {
+  value: string,
+  onChange: (s: string) => mixed
+}
 
+type State = {
+  code: string
+}
+
+export default class Editor extends Component<Props, State> {
   state = {
     code: this.props.value
   }
 
-  editorDidMount(editor) {
+  editorDidMount(editor: any) {
     editor.focus()
   }
 
-  handleEditorChange = (spec) => {
+  handleEditorChange = (spec: string) => {
     // if (this.props.autoParse) {
     //   this.updateSpec(spec)
     // } else {
@@ -53,7 +58,7 @@ export default class Editor extends Component {
     // }
   }
 
-  editorWillMount = monaco => {
+  editorWillMount = (monaco: any) => {
     monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
       validate: true,
       allowComments: true,

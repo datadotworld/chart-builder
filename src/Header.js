@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react'
 import { Navbar } from 'react-bootstrap'
 import logo from './logo.png'
 
-export default class extends PureComponent {
+export default class extends PureComponent<{}> {
   render() {
     return (
       <Navbar inverse staticTop>
