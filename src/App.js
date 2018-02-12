@@ -66,26 +66,26 @@ const MarkType =
   'bar' |
   'line' |
   'point' |
-  'text' |
+  // 'text' |
   'tick' |
   'rect' |
-  'rule' |
+  // 'rule' |
   'circle' |
-  'square' |
-  'geoshape'
+  'square'
+  // 'geoshape'
 
 const MARKS = [
   'area',
   'bar',
   'line',
   'point',
-  'text',
+  // 'text',
   'tick',
   'rect',
-  'rule',
+  // 'rule',
   'circle',
   'square',
-  'geoshape'
+  // 'geoshape'
 ]
 
 const createBlankEncLine = () => ({
@@ -406,6 +406,12 @@ type ConfigType = {
 const CHALLENGE =
   'aad90d4da7e171d262df33cf031dbbc65603b67d386f25f4e0792a55a82efcaf'
 
+const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
+const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET
+const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI
+const API_HOST = 'https://api.data.world'
+const OAUTH_HOST = 'https://data.world'
+
 class App extends Component {
   config: ConfigType
   schema: ?Schema
@@ -424,8 +430,6 @@ class App extends Component {
       },
 
       get parsedUrlQuery() {
-        console.log(this)
-        console.log(this.props)
         const query = new URLSearchParams(this.props.location.search)
         const obj = {}
         for (let entry of query) {
@@ -459,17 +463,19 @@ class App extends Component {
 
     if (this.parsedUrlQuery.code) {
       this.makeVerifyRequest()
+    } else if (!this.token) {
+      this.redirectToOauth()
     }
   }
 
   getQueryUrl() {
-    return `http://localhost:9104/v0/sql/${this.agentid}/${
+    return `${API_HOST}/v0/sql/${this.agentid}/${
       this.datasetid
     }?includeTableSchema=true`
   }
 
   getUploadUrl() {
-    return `http://localhost:9104/v0/uploads/${this.agentid}/${
+    return `${API_HOST}/v0/uploads/${this.agentid}/${
       this.datasetid
     }/files/vega-lite.vl.json`
   }
@@ -522,7 +528,6 @@ class App extends Component {
 
       setTimeout(() => (this.saved = false), 1000)
     })
-    console.log(data)
   }
 
   buildSchema(includeValues = true) {
@@ -548,9 +553,6 @@ class App extends Component {
       $schema: 'https://vega.github.io/schema/vega-lite/v2.json',
       mark: config.mark,
       encoding,
-      title: {
-        text: 'chart title'
-      },
       data: {
         values: includeValues ? toJS(this.data) : ['...']
       },
@@ -604,8 +606,8 @@ class App extends Component {
 
   redirectToOauth = () => {
     const params = new URLSearchParams({
-      client_id: 'dw-vega-explorer',
-      redirect_uri: 'http://localhost:3500',
+      client_id: CLIENT_ID,
+      redirect_uri: REDIRECT_URI,
       response_type: 'code',
       code_challenge_method: 'plain',
       code_challenge: CHALLENGE,
@@ -613,7 +615,7 @@ class App extends Component {
     })
 
     window.open(
-      'http://localhost:9092/oauth/authorize?' + params.toString(),
+      `${OAUTH_HOST}/oauth/authorize?${params.toString()}`,
       '_self'
     )
   }
@@ -622,19 +624,20 @@ class App extends Component {
     const code = this.parsedUrlQuery.code
 
     const params = new URLSearchParams({
-      client_id: 'dw-vega-explorer',
-      client_secret:
-        'FiE1soILq2yo3eyVQ7AueIRaJ8mk3s8ThJPu7iwT5KMuQmIX5NsQJd9IixzMYDSe',
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
       grant_type: 'authorization_code',
       code,
       code_verifier: CHALLENGE
     })
     const d = await fetch(
-      'http://localhost:9092/oauth/access_token?' + params.toString(),
+      `${OAUTH_HOST}/oauth/access_token`,
       {
-        method: 'POST'
+        method: 'POST',
+        body: params
       }
     ).then(r => r.json())
+    console.log(d);
     window.localStorage.setItem('token', d.access_token)
     this.token = d.access_token
     this.props.history.push({
@@ -656,27 +659,11 @@ class App extends Component {
                   to={{
                     pathname: '/',
                     search:
-                      '?agentid=user9&datasetid=trivial-linked&query=SELECT+%2A%0AFROM+iris_data'
+                      '?agentid=data-society&datasetid=iris-species&query=SELECT+%2A%0AFROM+iris'
                   }}
                 >
                   Here are some
                 </Link>
-              </Col>
-            </Row>
-          </Grid>
-        </React.Fragment>
-      )
-    }
-
-    if (!this.token) {
-      return (
-        <React.Fragment>
-          <Header />
-          <Grid style={{ marginTop: 32 }}>
-            <Row>
-              <Col xs={12}>
-                <h3>You need a token</h3>
-                <Button onClick={this.redirectToOauth}>log in</Button>
               </Col>
             </Row>
           </Grid>
