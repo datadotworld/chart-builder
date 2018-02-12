@@ -72,7 +72,7 @@ const MarkType =
   // 'rule' |
   'circle' |
   'square'
-  // 'geoshape'
+// 'geoshape'
 
 const MARKS = [
   'area',
@@ -84,7 +84,7 @@ const MARKS = [
   'rect',
   // 'rule',
   'circle',
-  'square',
+  'square'
   // 'geoshape'
 ]
 
@@ -522,6 +522,7 @@ class App extends Component {
       },
       body: JSON.stringify(this.buildSchema())
     }).then(r => r.json())
+    console.log(data)
     runInAction(() => {
       this.saving = false
       this.saved = true
@@ -614,10 +615,7 @@ class App extends Component {
       state: encodeURIComponent(this.props.location.search)
     })
 
-    window.open(
-      `${OAUTH_HOST}/oauth/authorize?${params.toString()}`,
-      '_self'
-    )
+    window.open(`${OAUTH_HOST}/oauth/authorize?${params.toString()}`, '_self')
   }
 
   makeVerifyRequest = async () => {
@@ -630,14 +628,11 @@ class App extends Component {
       code,
       code_verifier: CHALLENGE
     })
-    const d = await fetch(
-      `${OAUTH_HOST}/oauth/access_token`,
-      {
-        method: 'POST',
-        body: params
-      }
-    ).then(r => r.json())
-    console.log(d);
+    const d = await fetch(`${OAUTH_HOST}/oauth/access_token`, {
+      method: 'POST',
+      body: params
+    }).then(r => r.json())
+    console.log(d)
     window.localStorage.setItem('token', d.access_token)
     this.token = d.access_token
     this.props.history.push({
