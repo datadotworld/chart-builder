@@ -7,11 +7,12 @@ import * as VegaLite from 'vega-lite'
 import * as VegaTooltip from 'vega-tooltip'
 import * as cql from 'compassql'
 import DevTools from 'mobx-react-devtools'
-import { Grid, Row, Button, Col } from 'react-bootstrap'
+import { Grid, Row, Button, Col, Tabs, Tab } from 'react-bootstrap'
 import './App.css'
 import 'vega-tooltip/build/vega-tooltip.css'
 import Header from './Header'
 import VizCard from './VizCard'
+import Editor from './Editor'
 
 export const vega = vegaImport
 export const vl = VegaLite
@@ -138,21 +139,6 @@ class VegaLiteEmbed extends Component {
     this.view = view
 
     await view.runAsync()
-
-    this.resize()
-  }
-
-  resize() {
-    let { width, height } = this.props
-    const { _viewWidth: viewWidth, _viewHeight: viewHeight } = this.view
-
-    this.node.style.transform = `scale(${width / viewWidth}, ${height /
-      viewHeight})`
-    this.node.style.transformOrigin = `0 0`
-
-    this.scaledNode.innerText = `scaled to fit (${(width / viewWidth).toFixed(
-      2
-    )}, ${(height / viewHeight).toFixed(2)})`
   }
 
   componentWillUnmount() {
@@ -274,13 +260,16 @@ class Encoding_ extends Component {
           value={encoding.field}
           onChange={f => (encoding.field = f)}
         />
-        {this.showAdvanced ? (
-          <span
+        <Button
+          bsSize="xs"
+          onClick={() => (this.showAdvanced = !this.showAdvanced)}
+        >
+          {this.showAdvanced ? 'hide advanced' : 'show advanced'}
+        </Button>
+        {this.showAdvanced && (
+          <div
             style={{
-              display: 'inline-block',
-              width: 300,
-              verticalAlign: 'top',
-              marginLeft: '1rem'
+              width: 300
             }}
           >
             <div>
@@ -375,16 +364,7 @@ class Encoding_ extends Component {
                 />
               </label>
             </div>
-            <div>
-              <Button bsSize="xs" onClick={() => (this.showAdvanced = false)}>
-                hide advanced
-              </Button>
-            </div>
-          </span>
-        ) : (
-          <Button bsSize="xs" onClick={() => (this.showAdvanced = true)}>
-            show advanced
-          </Button>
+          </div>
         )}
       </div>
     )
@@ -695,76 +675,84 @@ class App extends Component {
         <Header />
         <Grid style={{ marginTop: 32 }}>
           <Row>
-            <Col xs={12}>
+            <Col xs={8}>
               <h3>
                 {this.agentid}/{this.datasetid}
               </h3>
             </Col>
+            <Col xs={4}>
+              <div className="pull-right">
+                {this.saved && (
+                  <small>
+                    saved to {this.agentid}/{this.datasetid}/vega-lite.vl.json
+                  </small>
+                )}
+                <Button
+                  bsSize="xs"
+                  onClick={this.uploadFile}
+                  disabled={!this.hasPossiblyValidChart || this.saving}
+                >
+                  {this.saving ? 'saving to dataset' : 'save to dataset'}
+                </Button>
+              </div>
+            </Col>
           </Row>
           <Row>
-            <Col xs={6}>
-              <h4>Build your chart</h4>
-              <div className="App-title">Marks</div>
-              <SimpleSelect
-                values={MARKS}
-                value={this.config.mark}
-                onChange={e => (this.config.mark = e)}
-              />
-              <div className="App-title">Configure Chart</div>
-              {/* <Button bsSize="xs" onClick={this.fetchQuery}>
-                fetch
-              </Button> */}
-              {this.schema && (
-                <React.Fragment>
-                  {this.config.encodings.map((e, ei) => {
-                    return (
-                      <Encoding
-                        key={ei}
-                        fields={this.schema.fields}
-                        encoding={e}
-                      />
-                    )
-                  })}
-                  <div>
-                    <Button
-                      bsSize="xs"
-                      onClick={() =>
-                        this.config.encodings.push(createBlankEncLine())
-                      }
-                    >
-                      add encoding
-                    </Button>
-                  </div>
-                  <div>
-                    {/* <Button onClick={this.redirectToOauth}> */}
-                    <Button bsSize="xs" onClick={this.search}>
-                      search
-                    </Button>
-                  </div>
-                  <div>
-                    <Button
-                      bsSize="xs"
-                      onClick={this.uploadFile}
-                      disabled={!this.hasPossiblyValidChart || this.saving}
-                    >
-                      {this.saving ? 'saving to dataset' : 'save to dataset'}
-                    </Button>
-                    {this.saved && (
-                      <small>
-                        saved to {this.agentid}/{this.datasetid}/vega-lite.vl.json
-                      </small>
-                    )}
-                  </div>
-                </React.Fragment>
-              )}
-              {this.hasPossiblyValidChart && (
-                <pre>{JSON.stringify(this.buildSchema(false), null, 2)}</pre>
-              )}
-
-              {/* {this.schema && <pre>{JSON.stringify(this.schema, null, 2)}</pre>} */}
-              {/* {this.data && <pre>Length: {this.data.length}</pre>} */}
+            <Col xs={4}>
+              <Tabs defaultActiveKey={1} id="configure-tabs" animation={false} className='App-editTab'>
+                <Tab eventKey={1} title="Configure">
+                  <h4>Build your chart</h4>
+                  <div className="App-title">Marks</div>
+                  <SimpleSelect
+                    values={MARKS}
+                    value={this.config.mark}
+                    onChange={e => (this.config.mark = e)}
+                  />
+                  <div className="App-title">Configure Chart</div>
+                  {this.schema && (
+                    <React.Fragment>
+                      {this.config.encodings.map((e, ei) => {
+                        return (
+                          <Encoding
+                            key={ei}
+                            fields={this.schema.fields}
+                            encoding={e}
+                          />
+                        )
+                      })}
+                      <div>
+                        <Button
+                          bsSize="xs"
+                          onClick={() =>
+                            this.config.encodings.push(createBlankEncLine())
+                          }
+                        >
+                          add encoding
+                        </Button>
+                      </div>
+                      <div>
+                        <Button bsSize="xs" onClick={this.search}>
+                          i'm feeling lucky
+                        </Button>
+                      </div>
+                    </React.Fragment>
+                  )}
+                </Tab>
+                <Tab
+                  eventKey={2}
+                  title="Spec"
+                  disabled={!this.hasPossiblyValidChart}
+                >
+                  {this.hasPossiblyValidChart && (
+                    <Editor
+                      onChange={(e) => console.log(e)}
+                      value={JSON.stringify(this.buildSchema(false), null, 2)}
+                    />
+                  )}
+                </Tab>
+              </Tabs>
             </Col>
-            <Col xs={6}>
+            <Col xs={8}>
               <VizCard>
                 {(this.data &&
                   this.schema &&

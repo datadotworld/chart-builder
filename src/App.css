@@ -28,3 +28,24 @@
   line-height: 22px;
   text-align: center;
 }
+
+.App-editTab .nav {
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  border: 1px solid #a3afbf;
+  background-color: #f7f7f7;
+  background-image: none;
+  border: 1px solid #a3afbf;
+  border-radius: 0.25rem;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.25s ease-in-out;
+}
+
+.App-editTab .tab-content {
+  border: 1px solid #a3afbf;
+  border-top: none;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+  padding: 8px;
+}
