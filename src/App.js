@@ -691,7 +691,7 @@ class App extends Component {
 
     return (
       <React.Fragment>
-        <DevTools />
+        {process.env.NODE_ENV === 'development' && <DevTools />}
         <Header />
         <Grid style={{ marginTop: 32 }}>
           <Row>
