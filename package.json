@@ -23,9 +23,17 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "flow": "flow"
+    "flow": "flow",
+    "precommit": "pretty-quick --staged"
   },
   "devDependencies": {
-    "mobx-react-devtools": "^4.2.15"
+    "husky": "^0.14.3",
+    "mobx-react-devtools": "^4.2.15",
+    "prettier": "^1.10.2",
+    "pretty-quick": "^1.4.1"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
   }
 }
