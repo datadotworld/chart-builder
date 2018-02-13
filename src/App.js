@@ -8,6 +8,7 @@ import DevTools from 'mobx-react-devtools'
 import { Grid, Row, Button, Col, Tabs, Tab } from 'react-bootstrap'
 import './App.css'
 import 'vega-tooltip/build/vega-tooltip.css'
+import { API_HOST } from './constants'
 import Header from './Header'
 import VizCard from './VizCard'
 import Editor from './Editor'
@@ -28,15 +29,6 @@ const MARKS = [
   'square'
 ]
 
-const CHALLENGE =
-  'aad90d4da7e171d262df33cf031dbbc65603b67d386f25f4e0792a55a82efcaf'
-
-const CLIENT_ID = String(process.env.REACT_APP_CLIENT_ID)
-const CLIENT_SECRET = String(process.env.REACT_APP_CLIENT_SECRET)
-const REDIRECT_URI = String(process.env.REACT_APP_REDIRECT_URI)
-const API_HOST = 'https://api.data.world'
-const OAUTH_HOST = 'https://data.world'
-
 class App extends Component<{
   history: Object,
   location: Object
@@ -52,9 +44,9 @@ class App extends Component<{
   token: string
   parsedUrlQuery: Object
 
-  loading: bool
-  saving: bool
-  saved: bool
+  loading: boolean
+  saving: boolean
+  saved: boolean
 
   constructor(props) {
     super(props)
@@ -66,6 +58,7 @@ class App extends Component<{
       saved: false,
       config: {
         encodings: [],
+        manualSpec: null,
         mark: 'bar'
       },
 
@@ -99,12 +92,6 @@ class App extends Component<{
 
     if (this.isValidPage && this.token) {
       this.fetchQuery()
-    }
-
-    if (this.parsedUrlQuery.code) {
-      this.makeVerifyRequest()
-    } else if (!this.token) {
-      this.redirectToOauth()
     }
   }
 
@@ -155,7 +142,8 @@ class App extends Component<{
           new EncLine({ channel: 'y' }),
           new EncLine({ channel: 'color' })
         ],
-        mark: 'bar'
+        mark: 'bar',
+        manualSpec: null
       }
     })
   }
@@ -181,6 +169,18 @@ class App extends Component<{
 
   buildSchema(includeValues = true) {
     const { config } = this
+    if (config.manualSpec) {
+      try {
+        const obj = JSON.parse(config.manualSpec)
+        obj.data = includeValues
+          ? {
+              values: toJS(this.data)
+            }
+          : { name: 'source' }
+        return obj
+      } catch (e) {}
+    }
+
     const encoding = {}
     config.encodings.forEach(e => {
       if (e.field) {
@@ -204,16 +204,11 @@ class App extends Component<{
       $schema: 'https://vega.github.io/schema/vega-lite/v2.json',
       mark: config.mark,
       encoding,
-      data: {
-        values: includeValues ? toJS(this.data) : ['...']
-      },
-      config: {
-        title: {
-          color: '#323D48',
-          font: 'Lato',
-          fontSize: 22
-        }
-      }
+      data: includeValues
+        ? {
+            values: toJS(this.data)
+          }
+        : { name: 'source' }
     }
   }
 
@@ -255,46 +250,11 @@ class App extends Component<{
     return this.config.encodings.some(e => e.field)
   }
 
-  redirectToOauth = () => {
-    const params = new URLSearchParams({
-      client_id: CLIENT_ID,
-      redirect_uri: REDIRECT_URI,
-      response_type: 'code',
-      code_challenge_method: 'plain',
-      code_challenge: CHALLENGE,
-      state: encodeURIComponent(this.props.location.search)
-    })
-
-    window.open(`${OAUTH_HOST}/oauth/authorize?${params.toString()}`, '_self')
-  }
-
-  makeVerifyRequest = async () => {
-    const code = this.parsedUrlQuery.code
-
-    const params = new URLSearchParams({
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      grant_type: 'authorization_code',
-      code,
-      code_verifier: CHALLENGE
-    })
-    const d = await fetch(`${OAUTH_HOST}/oauth/access_token`, {
-      method: 'POST',
-      body: params
-    }).then(r => r.json())
-    console.log(d)
-    window.localStorage.setItem('token', d.access_token)
-    this.token = d.access_token
-    this.props.history.push({
-      path: '/',
-      search: this.parsedUrlQuery.state
-    })
-  }
-
   render() {
     if (!this.isValidPage) {
       return (
         <Fragment>
+          {process.env.NODE_ENV === 'development' && <DevTools />}
           <Header />
           <Grid style={{ marginTop: 32 }}>
             <Row>
@@ -319,7 +279,7 @@ class App extends Component<{
     if (this.loading) {
       return (
         <Fragment>
-          <DevTools />
+          {process.env.NODE_ENV === 'development' && <DevTools />}
           <Header />
           <Grid style={{ marginTop: 32 }}>
             <Row>
@@ -339,7 +299,7 @@ class App extends Component<{
       )
     }
 
-    const {schema} = this
+    const { schema } = this
 
     return (
       <Fragment>
@@ -423,7 +383,9 @@ class App extends Component<{
                 >
                   {this.hasPossiblyValidChart && (
                     <Editor
-                      onChange={e => console.log(e)}
+                      onChange={e => {
+                        this.config.manualSpec = e
+                      }}
                       value={JSON.stringify(this.buildSchema(false), null, 2)}
                     />
                   )}

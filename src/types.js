@@ -69,7 +69,8 @@ export type TimeUnitType =
   | 'minutesseconds'
   | 'secondsmilliseconds'
 
-export type ConfigType = {
+export type ConfigType = {|
   mark: MarkType,
-  encodings: Array<EncLine>
-}
+  encodings: Array<EncLine>,
+  manualSpec: null | string
+|}

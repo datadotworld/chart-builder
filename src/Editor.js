@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react'
+import { debounce } from 'lodash'
 import MonacoEditor from 'react-monaco-editor'
 
 const vegaLiteSchema = require('./vega-lite-schema-v2.json')
@@ -8,22 +9,6 @@ const monacoJsonSchema = {
   uri: 'https://vega.github.io/schema/vega-lite/v2.json',
   schema: vegaLiteSchema,
   fileMatch: ['*']
-}
-
-function debounce(func, wait, immediate) {
-  let timeout
-  return function() {
-    const context = this,
-      args = arguments
-    const later = () => {
-      timeout = null
-      if (!immediate) func.apply(context, args)
-    }
-    const callNow = immediate && !timeout
-    timeout && clearTimeout(timeout)
-    timeout = setTimeout(later, wait)
-    if (callNow) func.apply(context, args)
-  }
 }
 
 const requireConfig = {
@@ -50,13 +35,10 @@ export default class Editor extends Component<Props, State> {
     editor.focus()
   }
 
-  handleEditorChange = (spec: string) => {
-    // if (this.props.autoParse) {
-    //   this.updateSpec(spec)
-    // } else {
-    //   this.props.updateEditorString(spec)
-    // }
-  }
+  handleEditorChange = debounce((spec: string) => {
+    this.setState({ code: spec })
+    this.props.onChange(spec)
+  }, 700)
 
   editorWillMount = (monaco: any) => {
     monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
@@ -84,7 +66,7 @@ export default class Editor extends Component<Props, State> {
             lineNumbersMinChars: 4
           }}
           value={code}
-          onChange={debounce(this.handleEditorChange, 700)}
+          onChange={this.handleEditorChange}
           requireConfig={requireConfig}
           editorWillMount={this.editorWillMount}
           editorDidMount={this.editorDidMount}
