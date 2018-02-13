@@ -3,8 +3,16 @@ import React, { PureComponent } from 'react'
 import { Navbar } from 'react-bootstrap'
 import logo from './logo.png'
 
-export default class extends PureComponent<{}> {
+export default class extends PureComponent<{
+  agentid?: string,
+  datasetid?: string
+}> {
   render() {
+    const { agentid, datasetid } = this.props
+    const href =
+      agentid && datasetid
+        ? `https://data.world/${agentid}/${datasetid}`
+        : 'https://data.world'
     return (
       <Navbar inverse staticTop>
         <Navbar.Header>
@@ -18,7 +26,7 @@ export default class extends PureComponent<{}> {
           <Navbar.Text>Vega-Lite Explorer</Navbar.Text>
         </Navbar.Header>
         <Navbar.Text pullRight>
-          <Navbar.Link href="https://data.world">Back to data.world</Navbar.Link>
+          <Navbar.Link href={href}>Back to data.world</Navbar.Link>
         </Navbar.Text>
       </Navbar>
     )

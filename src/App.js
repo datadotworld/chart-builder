@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+// @flow
+import React, { Fragment, Component } from 'react'
 import { toJS, extendObservable, runInAction } from 'mobx'
 import { observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
@@ -30,21 +31,30 @@ const MARKS = [
 const CHALLENGE =
   'aad90d4da7e171d262df33cf031dbbc65603b67d386f25f4e0792a55a82efcaf'
 
-const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
-const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET
-const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI
+const CLIENT_ID = String(process.env.REACT_APP_CLIENT_ID)
+const CLIENT_SECRET = String(process.env.REACT_APP_CLIENT_SECRET)
+const REDIRECT_URI = String(process.env.REACT_APP_REDIRECT_URI)
 const API_HOST = 'https://api.data.world'
 const OAUTH_HOST = 'https://data.world'
 
-class App extends Component {
+class App extends Component<{
+  history: Object,
+  location: Object
+}> {
   config: ConfigType
   schema: ?Schema
+  data: ?Object
 
   agentid: string
   datasetid: string
   query: string
-  isValidPage: bool
+  isValidPage: boolean
   token: string
+  parsedUrlQuery: Object
+
+  loading: bool
+  saving: bool
+  saved: bool
 
   constructor(props) {
     super(props)
@@ -282,7 +292,7 @@ class App extends Component {
   render() {
     if (!this.isValidPage) {
       return (
-        <React.Fragment>
+        <Fragment>
           <Header />
           <Grid style={{ marginTop: 32 }}>
             <Row>
@@ -300,13 +310,13 @@ class App extends Component {
               </Col>
             </Row>
           </Grid>
-        </React.Fragment>
+        </Fragment>
       )
     }
 
     if (this.loading) {
       return (
-        <React.Fragment>
+        <Fragment>
           <DevTools />
           <Header />
           <Grid style={{ marginTop: 32 }}>
@@ -323,14 +333,16 @@ class App extends Component {
               </Col>
             </Row>
           </Grid>
-        </React.Fragment>
+        </Fragment>
       )
     }
 
+    const {schema} = this
+
     return (
-      <React.Fragment>
+      <Fragment>
         {process.env.NODE_ENV === 'development' && <DevTools />}
-        <Header />
+        <Header agentid={this.agentid} datasetid={this.datasetid} />
         <Grid style={{ marginTop: 32 }}>
           <Row>
             <Col xs={8}>
@@ -373,13 +385,13 @@ class App extends Component {
                     onChange={e => (this.config.mark = e)}
                   />
                   <div className="App-title">Configure Chart</div>
-                  {this.schema && (
-                    <React.Fragment>
+                  {schema && (
+                    <Fragment>
                       {this.config.encodings.map((e, ei) => {
                         return (
                           <Encoding
                             key={ei}
-                            fields={this.schema.fields}
+                            fields={schema.fields}
                             encoding={e}
                           />
                         )
@@ -399,7 +411,7 @@ class App extends Component {
                           i'm feeling lucky
                         </Button>
                       </div>
-                    </React.Fragment>
+                    </Fragment>
                   )}
                 </Tab>
                 <Tab
@@ -419,7 +431,7 @@ class App extends Component {
             <Col xs={8}>
               <VizCard>
                 {(this.data &&
-                  this.schema &&
+                  schema &&
                   this.hasPossiblyValidChart && (
                     <div style={{ transform: 'translateZ(0)' }}>
                       {
@@ -443,7 +455,7 @@ class App extends Component {
             </Col>
           </Row>
         </Grid>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

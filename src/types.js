@@ -1,4 +1,6 @@
 // @flow
+import type EncLine from './EncLine'
+
 export type Field = {
   name: string,
   type: string,
@@ -43,18 +45,7 @@ export type EncodingType =
   | 'nominal'
   | 'temporal'
 
-export type EncLineType = {
-  field: ?Field,
-  channel: EncodingChannel,
-  type: string,
-
-  bin: boolean,
-  aggregate: string,
-  zero: boolean,
-  scale: string
-}
-
 export type ConfigType = {
   mark: MarkType,
-  encodings: Array<EncLineType>
+  encodings: Array<EncLine>
 }
