@@ -53,7 +53,6 @@ export default class VegaLiteEmbed extends Component<Props> {
     view.width(width).height(height)
 
     this.view = view
-
     await view.runAsync()
   }
 

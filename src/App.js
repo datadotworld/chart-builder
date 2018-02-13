@@ -3,7 +3,6 @@ import React, { Fragment, Component } from 'react'
 import { toJS, extendObservable, runInAction } from 'mobx'
 import { observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
-import * as cql from 'compassql'
 import DevTools from 'mobx-react-devtools'
 import { Grid, Row, Button, Col, Tabs, Tab } from 'react-bootstrap'
 import './App.css'
@@ -212,40 +211,6 @@ class App extends Component<{
     }
   }
 
-  search = () => {
-    const rows = toJS(this.data)
-    const query = {
-      spec: cql.query.spec.fromSpec(this.buildSchema()),
-      // groupBy: 'fieldTransform',
-      // orderBy: ['fieldOrder', 'aggregationQuality', 'effectiveness'],
-      chooseBy: ['aggregationQuality', 'effectiveness']
-      // config: { omitTableWithOcclusion: false, autoAddCount: false }
-    }
-    query.spec.mark = '?'
-    // query.spec.encodings = query.spec.encoding
-    delete query.spec.encoding
-    var schema = cql.schema.build(rows)
-    var output = cql.recommend(query, schema, {})
-    // var result = output.result // recommendation result
-
-    const specs = []
-    const result = cql.result.mapLeaves(output.result, item => {
-      const s = item.toSpec()
-      specs.push(s)
-      return s
-    })
-    // var vlTree = cql.result.mapLeaves(result, function(item) {
-    //   return item.toSpec()
-    // })
-    // var topVlSpec = vlTree.items[0]
-    console.log(result)
-    console.log(specs)
-    const [sp] = specs
-    if (sp) {
-      this.config.mark = sp.mark
-    }
-  }
-
   get hasPossiblyValidChart() {
     return this.config.encodings.some(e => e.field)
   }
@@ -366,11 +331,6 @@ class App extends Component<{
                           }
                         >
                           add encoding
-                        </Button>
-                      </div>
-                      <div>
-                        <Button bsSize="xs" onClick={this.search}>
-                          i'm feeling lucky
                         </Button>
                       </div>
                     </Fragment>
