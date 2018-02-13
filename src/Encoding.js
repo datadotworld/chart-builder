@@ -119,9 +119,7 @@ class Encoding extends Component<EncodingProps> {
                     'nominal',
                     'temporal'
                   ]}
-                  labels={[
-                    `auto (${encoding.autoType})`,
-                  ]}
+                  labels={[`auto (${encoding.autoType})`]}
                   value={encoding.type}
                   onChange={t => (encoding.type = t)}
                 />
@@ -207,16 +205,54 @@ class Encoding extends Component<EncodingProps> {
               <label>
                 sort:
                 <SimpleSelect
-                  values={[
-                    'none',
-                    'ascending',
-                    'descending'
-                  ]}
+                  values={['ascending', 'descending']}
                   value={encoding.sort}
                   onChange={t => (encoding.sort = t)}
                 />
               </label>
             </div>
+            {(encoding.type === 'temporal' ||
+              encoding.autoType === 'temporal') && (
+              <div>
+                <label>
+                  time unit:
+                  <SimpleSelect
+                    values={[
+                      'auto',
+
+                      'year',
+                      'quarter',
+                      'month',
+                      'day',
+                      'date',
+                      'hours',
+                      'minutes',
+                      'seconds',
+                      'milliseconds',
+                      'yearquarter',
+                      'yearquartermonth',
+                      'yearmonth',
+                      'yearmonthdate',
+                      'yearmonthdatehours',
+                      'yearmonthdatehoursminutes',
+                      'yearmonthdatehoursminutesseconds',
+                      'quartermonth',
+                      'monthdate',
+                      'hoursminutes',
+                      'hoursminutesseconds',
+                      'minutesseconds',
+                      'secondsmilliseconds'
+                    ]}
+                    value={encoding.timeUnit || 'auto'}
+                    onChange={t =>
+                      t === 'auto'
+                        ? (encoding.timeUnit = null)
+                        : (encoding.timeUnit = t)
+                    }
+                  />
+                </label>
+              </div>
+            )}
           </div>
         )}
       </div>

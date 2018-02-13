@@ -1,10 +1,10 @@
 // @flow
 import { extendObservable } from 'mobx'
-import type { Field, EncodingChannel, EncodingType } from './types'
+import type { Field, EncodingChannel, EncodingType, TimeUnitType } from './types'
 
 import sparqlTypeToVegaType from './sparqlTypeToVegaType'
 
-type SortType = 'none' | 'ascending' | 'descending'
+type SortType = 'ascending' | 'descending'
 
 type OptsType = {
   field?: null | Field,
@@ -15,7 +15,8 @@ type OptsType = {
   aggregate?: string,
   zero?: boolean,
   scale?: string,
-  sort?: SortType
+  sort?: SortType,
+  timeUnit?: TimeUnitType
 }
 
 export default class EncLine {
@@ -28,6 +29,7 @@ export default class EncLine {
   zero: boolean
   scale: string
   sort: SortType
+  timeUnit: null | TimeUnitType
 
   autoType: EncodingType
 
@@ -41,7 +43,8 @@ export default class EncLine {
       aggregate: opts.aggregate || 'none',
       zero: opts.zero || true,
       scale: opts.scale || 'linear',
-      sort: opts.sort || 'none',
+      sort: opts.sort || 'ascending',
+      timeUnit: opts.timeUnit || null,
 
       get autoType() {
         return this.field ? sparqlTypeToVegaType(this.field.rdfType) : null

@@ -45,6 +45,30 @@ export type EncodingType =
   | 'nominal'
   | 'temporal'
 
+export type TimeUnitType =
+  | 'year'
+  | 'quarter'
+  | 'month'
+  | 'day'
+  | 'date'
+  | 'hours'
+  | 'minutes'
+  | 'seconds'
+  | 'milliseconds'
+  | 'yearquarter'
+  | 'yearquartermonth'
+  | 'yearmonth'
+  | 'yearmonthdate'
+  | 'yearmonthdatehours'
+  | 'yearmonthdatehoursminutes'
+  | 'yearmonthdatehoursminutesseconds'
+  | 'quartermonth'
+  | 'monthdate'
+  | 'hoursminutes'
+  | 'hoursminutesseconds'
+  | 'minutesseconds'
+  | 'secondsmilliseconds'
+
 export type ConfigType = {
   mark: MarkType,
   encodings: Array<EncLine>
