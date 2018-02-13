@@ -1,0 +1,15 @@
+.Encoding-bar {
+  display: flex;
+  align-items: center;
+}
+
+.Encoding-bar select {
+  height: 28px;
+}
+
+.Encoding-bar select:nth-child(2) {
+  flex-grow: 1;
+}
+
+.Encoding-advanced {
+}

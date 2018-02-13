@@ -3,9 +3,12 @@ import React, { Component } from 'react'
 import SimpleSelect from './SimpleSelect'
 import { extendObservable } from 'mobx'
 import { observer } from 'mobx-react'
-import { Button } from 'react-bootstrap'
+import { Button, Form, FormGroup, Col, ControlLabel } from 'react-bootstrap'
+
 import type EncLine from './EncLine'
 import type { EncodingChannel, Field } from './types'
+
+import './Encoding.css'
 
 const ENCODINGS = [
   'x',
@@ -86,31 +89,31 @@ class Encoding extends Component<EncodingProps> {
     const { fields, encoding } = this.props
     return (
       <div style={{ margin: '1rem 0' }}>
-        <EncodingSelect
-          encodings={ENCODINGS}
-          value={encoding.channel}
-          onChange={e => (encoding.channel = e)}
-        />
-        <FieldSelect
-          fields={fields}
-          value={encoding.field}
-          onChange={f => (encoding.field = f)}
-        />
-        <Button
-          bsSize="xs"
-          onClick={() => (this.showAdvanced = !this.showAdvanced)}
-        >
-          {this.showAdvanced ? 'hide advanced' : 'show advanced'}
-        </Button>
-        {this.showAdvanced && (
-          <div
-            style={{
-              width: 300
-            }}
+        <div className="Encoding-bar">
+          <EncodingSelect
+            encodings={ENCODINGS}
+            value={encoding.channel}
+            onChange={e => (encoding.channel = e)}
+          />
+          <FieldSelect
+            fields={fields}
+            value={encoding.field}
+            onChange={f => (encoding.field = f)}
+          />
+          <Button
+            bsSize="xs"
+            onClick={() => (this.showAdvanced = !this.showAdvanced)}
           >
-            <div>
-              <label>
+            {this.showAdvanced ? 'hide advanced' : 'show advanced'}
+          </Button>
+        </div>
+        {this.showAdvanced && (
+          <Form horizontal className="Encoding-advanced">
+            <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+              <Col componentClass={ControlLabel} sm={3}>
                 type:
+              </Col>
+              <Col sm={9}>
                 <SimpleSelect
                   values={[
                     'auto',
@@ -123,21 +126,25 @@ class Encoding extends Component<EncodingProps> {
                   value={encoding.type}
                   onChange={t => (encoding.type = t)}
                 />
-              </label>
-            </div>
-            <div>
-              <label>
+              </Col>
+            </FormGroup>
+            <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+              <Col componentClass={ControlLabel} sm={3}>
                 bin:
+              </Col>
+              <Col sm={9}>
                 <input
                   type="checkbox"
                   checked={encoding.bin}
                   onChange={() => (encoding.bin = !encoding.bin)}
                 />
-              </label>
-            </div>
-            <div>
-              <label>
+              </Col>
+            </FormGroup>
+            <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+              <Col componentClass={ControlLabel} sm={3}>
                 aggregate:
+              </Col>
+              <Col sm={9}>
                 <SimpleSelect
                   values={[
                     'none',
@@ -166,21 +173,25 @@ class Encoding extends Component<EncodingProps> {
                   value={encoding.aggregate}
                   onChange={t => (encoding.aggregate = t)}
                 />
-              </label>
-            </div>
-            <div>
-              <label>
+              </Col>
+            </FormGroup>
+            <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+              <Col componentClass={ControlLabel} sm={3}>
                 zero:
+              </Col>
+              <Col sm={9}>
                 <input
                   type="checkbox"
                   checked={encoding.zero}
                   onChange={() => (encoding.zero = !encoding.zero)}
                 />
-              </label>
-            </div>
-            <div>
-              <label>
+              </Col>
+            </FormGroup>
+            <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+              <Col componentClass={ControlLabel} sm={3}>
                 scale:
+              </Col>
+              <Col sm={9}>
                 <SimpleSelect
                   values={[
                     'linear',
@@ -199,23 +210,27 @@ class Encoding extends Component<EncodingProps> {
                   value={encoding.scale}
                   onChange={t => (encoding.scale = t)}
                 />
-              </label>
-            </div>
-            <div>
-              <label>
+              </Col>
+            </FormGroup>
+            <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+              <Col componentClass={ControlLabel} sm={3}>
                 sort:
+              </Col>
+              <Col sm={9}>
                 <SimpleSelect
                   values={['ascending', 'descending']}
                   value={encoding.sort}
                   onChange={t => (encoding.sort = t)}
                 />
-              </label>
-            </div>
+              </Col>
+            </FormGroup>
             {(encoding.type === 'temporal' ||
               encoding.autoType === 'temporal') && (
-              <div>
-                <label>
+              <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+                <Col componentClass={ControlLabel} sm={3}>
                   time unit:
+                </Col>
+                <Col sm={9}>
                   <SimpleSelect
                     values={[
                       'auto',
@@ -250,10 +265,10 @@ class Encoding extends Component<EncodingProps> {
                         : (encoding.timeUnit = t)
                     }
                   />
-                </label>
-              </div>
+                </Col>
+              </FormGroup>
             )}
-          </div>
+          </Form>
         )}
       </div>
     )

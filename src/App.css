@@ -50,3 +50,10 @@
   border-bottom-right-radius: 0.25rem;
   padding: 8px;
 }
+
+.form-horizontal .control-label {
+  padding-top: 7px;
+}
+.form-horizontal .form-group {
+  margin-bottom: 0;
+}

@@ -85,8 +85,6 @@ class App extends Component<{
       },
 
       token: window.localStorage.getItem('token')
-
-      // s: null
     })
 
     if (this.isValidPage && this.token) {
