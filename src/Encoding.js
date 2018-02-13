@@ -1,10 +1,9 @@
 // @flow
 import React, { Component } from 'react'
 import SimpleSelect from './SimpleSelect'
-import { extendObservable, runInAction } from 'mobx'
+import { extendObservable } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button } from 'react-bootstrap'
-import sparqlTypeToVegaType from './sparqlTypeToVegaType'
 import type EncLine from './EncLine'
 import type { EncodingChannel, Field } from './types'
 

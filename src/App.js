@@ -27,17 +27,6 @@ const MARKS = [
   'square'
 ]
 
-const createBlankEncLine = () => ({
-  field: null,
-  channel: 'x',
-  type: 'auto',
-
-  bin: false,
-  aggregate: 'none',
-  zero: true,
-  scale: 'linear'
-})
-
 const CHALLENGE =
   'aad90d4da7e171d262df33cf031dbbc65603b67d386f25f4e0792a55a82efcaf'
 
@@ -154,7 +143,7 @@ class App extends Component {
 
   uploadFile = async () => {
     this.saving = true
-    const data = await fetch(this.getUploadUrl(), {
+    await fetch(this.getUploadUrl(), {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
