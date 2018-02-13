@@ -203,6 +203,20 @@ class Encoding extends Component<EncodingProps> {
                 />
               </label>
             </div>
+            <div>
+              <label>
+                sort:
+                <SimpleSelect
+                  values={[
+                    'none',
+                    'ascending',
+                    'descending'
+                  ]}
+                  value={encoding.sort}
+                  onChange={t => (encoding.sort = t)}
+                />
+              </label>
+            </div>
           </div>
         )}
       </div>

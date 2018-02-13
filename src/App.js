@@ -189,6 +189,7 @@ class App extends Component<{
           type: e.type === 'auto' ? e.autoType : e.type,
           bin: e.bin || undefined,
           aggregate: e.aggregate === 'none' ? undefined : e.aggregate,
+          sort: e.sort === 'none' ? undefined : e.sort,
           scale: {
             type: e.scale,
             zero: e.zero

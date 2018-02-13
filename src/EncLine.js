@@ -4,6 +4,8 @@ import type { Field, EncodingChannel, EncodingType } from './types'
 
 import sparqlTypeToVegaType from './sparqlTypeToVegaType'
 
+type SortType = 'none' | 'ascending' | 'descending'
+
 type OptsType = {
   field?: null | Field,
   channel?: EncodingChannel,
@@ -12,7 +14,8 @@ type OptsType = {
   bin?: boolean,
   aggregate?: string,
   zero?: boolean,
-  scale?: string
+  scale?: string,
+  sort?: SortType
 }
 
 export default class EncLine {
@@ -24,6 +27,7 @@ export default class EncLine {
   aggregate: string
   zero: boolean
   scale: string
+  sort: SortType
 
   autoType: EncodingType
 
@@ -37,6 +41,7 @@ export default class EncLine {
       aggregate: opts.aggregate || 'none',
       zero: opts.zero || true,
       scale: opts.scale || 'linear',
+      sort: opts.sort || 'none',
 
       get autoType() {
         return this.field ? sparqlTypeToVegaType(this.field.rdfType) : null
