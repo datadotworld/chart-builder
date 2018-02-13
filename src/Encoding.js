@@ -28,7 +28,7 @@ const ENCODINGS = [
 type FieldSelectProps = {
   fields: Array<Field>,
   value: ?Field,
-  onChange: (f: Field) => mixed
+  onChange: (f: null | Field) => mixed
 }
 
 class FieldSelect extends Component<FieldSelectProps> {
@@ -38,9 +38,7 @@ class FieldSelect extends Component<FieldSelectProps> {
         value={this.props.value ? this.props.value.name : ''}
         onChange={e => {
           const found = this.props.fields.find(f => f.name === e.target.value)
-          if (found) {
-            this.props.onChange(found)
-          }
+          this.props.onChange(found || null)
         }}
       >
         <option value="">Choose a column</option>

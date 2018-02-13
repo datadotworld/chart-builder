@@ -127,7 +127,16 @@ class App extends Component {
     }).then(r => r.json())
     const [dschema, ...rows] = data
     runInAction(() => {
-      this.schema = dschema
+      this.schema = {
+        fields: [
+          ...dschema.fields,
+          {
+            name: '*',
+            rdfType: 'http://www.w3.org/2001/XMLSchema#string',
+            type: 'string'
+          }
+        ]
+      }
       this.data = rows
       this.loading = false
       this.config = {
