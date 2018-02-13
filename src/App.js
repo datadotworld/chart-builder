@@ -178,7 +178,7 @@ class App extends Component {
       if (e.field) {
         const enc = {
           field: e.field.name,
-          type: e.type === 'auto' ? undefined : e.type,
+          type: e.type === 'auto' ? e.autoType : e.type,
           bin: e.bin || undefined,
           aggregate: e.aggregate === 'none' ? undefined : e.aggregate,
           scale: {
