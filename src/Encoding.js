@@ -39,6 +39,7 @@ class FieldSelect extends Component<FieldSelectProps> {
     return (
       <select
         className="form-control"
+        style={{ margin: '0 .5rem' }}
         value={this.props.value ? this.props.value.name : ''}
         onChange={e => {
           const found = this.props.fields.find(f => f.name === e.target.value)
