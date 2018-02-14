@@ -38,6 +38,7 @@ class FieldSelect extends Component<FieldSelectProps> {
   render() {
     return (
       <select
+        className="form-control"
         value={this.props.value ? this.props.value.name : ''}
         onChange={e => {
           const found = this.props.fields.find(f => f.name === e.target.value)
@@ -66,7 +67,14 @@ type EncodingSelectProps = {
 class EncodingSelect extends Component<EncodingSelectProps> {
   render() {
     const { encodings, value, onChange } = this.props
-    return <SimpleSelect values={encodings} value={value} onChange={onChange} />
+    return (
+      <SimpleSelect
+        values={encodings}
+        value={value}
+        onChange={onChange}
+        style={{ width: 80 }}
+      />
+    )
   }
 }
 
@@ -109,7 +117,14 @@ class Encoding extends Component<EncodingProps> {
         </div>
         {this.showAdvanced && (
           <Form horizontal className="Encoding-advanced">
-            <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+            <FormGroup
+              bsSize="xs"
+              style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                marginRight: '-0.5rem'
+              }}
+            >
               <Col componentClass={ControlLabel} sm={3}>
                 type:
               </Col>
@@ -128,7 +143,14 @@ class Encoding extends Component<EncodingProps> {
                 />
               </Col>
             </FormGroup>
-            <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+            <FormGroup
+              bsSize="xs"
+              style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                marginRight: '-0.5rem'
+              }}
+            >
               <Col componentClass={ControlLabel} sm={3}>
                 bin:
               </Col>
@@ -140,7 +162,14 @@ class Encoding extends Component<EncodingProps> {
                 />
               </Col>
             </FormGroup>
-            <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+            <FormGroup
+              bsSize="xs"
+              style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                marginRight: '-0.5rem'
+              }}
+            >
               <Col componentClass={ControlLabel} sm={3}>
                 aggregate:
               </Col>
@@ -175,7 +204,14 @@ class Encoding extends Component<EncodingProps> {
                 />
               </Col>
             </FormGroup>
-            <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+            <FormGroup
+              bsSize="xs"
+              style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                marginRight: '-0.5rem'
+              }}
+            >
               <Col componentClass={ControlLabel} sm={3}>
                 zero:
               </Col>
@@ -187,7 +223,14 @@ class Encoding extends Component<EncodingProps> {
                 />
               </Col>
             </FormGroup>
-            <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+            <FormGroup
+              bsSize="xs"
+              style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                marginRight: '-0.5rem'
+              }}
+            >
               <Col componentClass={ControlLabel} sm={3}>
                 scale:
               </Col>
@@ -212,7 +255,14 @@ class Encoding extends Component<EncodingProps> {
                 />
               </Col>
             </FormGroup>
-            <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+            <FormGroup
+              bsSize="xs"
+              style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                marginRight: '-0.5rem'
+              }}
+            >
               <Col componentClass={ControlLabel} sm={3}>
                 sort:
               </Col>
@@ -226,7 +276,14 @@ class Encoding extends Component<EncodingProps> {
             </FormGroup>
             {(encoding.type === 'temporal' ||
               encoding.autoType === 'temporal') && (
-              <FormGroup style={{ display: 'flex', alignItems: 'baseline' }}>
+              <FormGroup
+                bsSize="xs"
+                style={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  marginRight: '-0.5rem'
+                }}
+              >
                 <Col componentClass={ControlLabel} sm={3}>
                   time unit:
                 </Col>

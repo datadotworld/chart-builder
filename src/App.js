@@ -1,10 +1,12 @@
 // @flow
 import React, { Fragment, Component } from 'react'
-import { toJS, extendObservable, runInAction } from 'mobx'
+import { extendObservable, runInAction } from 'mobx'
 import { observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
 import DevTools from 'mobx-react-devtools'
-import { Grid, Row, Button, Col, Tabs, Tab } from 'react-bootstrap'
+import { Grid, Row, Button, Col, Tabs, Tab, ButtonGroup } from 'react-bootstrap'
+import SaveAsFileModal from './SaveAsFileModal'
+import SaveAsInsightModal from './SaveAsInsightModal'
 import './App.css'
 import 'vega-tooltip/build/vega-tooltip.css'
 import { API_HOST } from './constants'
@@ -34,7 +36,7 @@ class App extends Component<{
 }> {
   config: ConfigType
   schema: ?Schema
-  data: ?Object
+  data: ?Array<Object>
 
   agentid: string
   datasetid: string
@@ -46,6 +48,8 @@ class App extends Component<{
   loading: boolean
   saving: boolean
   saved: boolean
+
+  saveModalOpen: false | 'insight' | 'file'
 
   constructor(props) {
     super(props)
@@ -60,6 +64,7 @@ class App extends Component<{
         manualSpec: null,
         mark: 'bar'
       },
+      saveModalOpen: false,
 
       get parsedUrlQuery() {
         const query = new URLSearchParams(this.props.location.search)
@@ -164,16 +169,12 @@ class App extends Component<{
     })
   }
 
-  buildSchema(includeValues = true) {
+  buildSchema() {
     const { config } = this
     if (config.manualSpec) {
       try {
         const obj = JSON.parse(config.manualSpec)
-        obj.data = includeValues
-          ? {
-              values: toJS(this.data)
-            }
-          : { name: 'source' }
+        obj.data = { name: 'source' }
         return obj
       } catch (e) {}
     }
@@ -201,16 +202,40 @@ class App extends Component<{
       $schema: 'https://vega.github.io/schema/vega-lite/v2.json',
       mark: config.mark,
       encoding,
-      data: includeValues
-        ? {
-            values: toJS(this.data)
-          }
-        : { name: 'source' }
+      data: { name: 'source' }
     }
   }
 
   get hasPossiblyValidChart() {
     return this.config.encodings.some(e => e.field)
+  }
+
+  renderEmbed() {
+    const { data, schema } = this
+    return (
+      (data &&
+        schema &&
+        this.hasPossiblyValidChart && (
+          <div style={{ transform: 'translateZ(0)' }}>
+            {
+              <VegaLiteEmbed
+                spec={this.buildSchema()}
+                data={data}
+                key={JSON.stringify(this.buildSchema())}
+                width={681}
+                height={510}
+              />
+            }
+          </div>
+        )) || (
+        <div className="App-vizPlaceholder">
+          <div className="App-vizPlaceholderText">
+            Choose a chart type and columns <br />to the left and your chart
+            will appear.<br />Like magic ✨
+          </div>
+        </div>
+      )
+    )
   }
 
   render() {
@@ -277,18 +302,22 @@ class App extends Component<{
             </Col>
             <Col xs={4}>
               <div className="pull-right">
-                {this.saved && (
-                  <small>
-                    saved to {this.agentid}/{this.datasetid}/vega-lite.vl.json
-                  </small>
-                )}
-                <Button
-                  bsSize="xs"
-                  onClick={this.uploadFile}
-                  disabled={!this.hasPossiblyValidChart || this.saving}
-                >
-                  {this.saving ? 'saving to dataset' : 'save to dataset'}
-                </Button>
+                <ButtonGroup>
+                  <Button
+                    bsSize="xs"
+                    onClick={() => (this.saveModalOpen = 'file')}
+                    disabled={!this.hasPossiblyValidChart}
+                  >
+                    save as file
+                  </Button>
+                  <Button
+                    bsSize="xs"
+                    onClick={() => (this.saveModalOpen = 'insight')}
+                    disabled={!this.hasPossiblyValidChart}
+                  >
+                    save as insight
+                  </Button>
+                </ButtonGroup>
               </div>
             </Col>
           </Row>
@@ -344,39 +373,31 @@ class App extends Component<{
                       onChange={e => {
                         this.config.manualSpec = e
                       }}
-                      value={JSON.stringify(this.buildSchema(false), null, 2)}
+                      value={JSON.stringify(this.buildSchema(), null, 2)}
                     />
                   )}
                 </Tab>
               </Tabs>
             </Col>
             <Col xs={8}>
-              <VizCard>
-                {(this.data &&
-                  schema &&
-                  this.hasPossiblyValidChart && (
-                    <div style={{ transform: 'translateZ(0)' }}>
-                      {
-                        <VegaLiteEmbed
-                          spec={this.buildSchema()}
-                          key={JSON.stringify(this.buildSchema(false))}
-                          width={681}
-                          height={510}
-                        />
-                      }
-                    </div>
-                  )) || (
-                  <div className="App-vizPlaceholder">
-                    <div className="App-vizPlaceholderText">
-                      Choose a chart type and columns <br />to the left and your
-                      chart will appear.<br />Like magic ✨
-                    </div>
-                  </div>
-                )}
-              </VizCard>
+              <VizCard>{this.renderEmbed()}</VizCard>
             </Col>
           </Row>
         </Grid>
+        {this.saveModalOpen === 'insight' && (
+          <SaveAsInsightModal
+            onClose={() => (this.saveModalOpen = false)}
+            spec={this.buildSchema()}
+            data={this.data}
+          />
+        )}
+        {this.saveModalOpen === 'file' && (
+          <SaveAsFileModal
+            onClose={() => (this.saveModalOpen = false)}
+            spec={this.buildSchema()}
+            data={this.data}
+          />
+        )}
       </Fragment>
     )
   }

@@ -7,8 +7,12 @@ import * as VegaTooltip from 'vega-tooltip'
 const vega = vegaImport
 const vl = VegaLite
 
+/*
+expects a spec with a named source called `source`
+*/
 type Props = {
   spec: Object,
+  data: Array<Object>,
   width: number,
   height: number
 }
@@ -26,15 +30,10 @@ export default class VegaLiteEmbed extends Component<Props> {
   view: ?Object
 
   async constructView() {
-    let { spec, width, height } = this.props
+    let { spec, width, height, data } = this.props
     const loader = vega.loader()
     const logLevel = vega.Warn
     const renderer = 'svg'
-
-    const values = spec.data.values
-    spec.data = {
-      name: 'source'
-    }
 
     spec = vl.compile(spec).spec
 
@@ -44,13 +43,13 @@ export default class VegaLiteEmbed extends Component<Props> {
       loader,
       logLevel,
       renderer
-    }).initialize(this.node)
-
-    view.change('source', vega.changeset().insert(values))
+    })
+      .initialize(this.node)
+      .width(width)
+      .height(height)
+      .change('source', vega.changeset().insert(data))
 
     VegaTooltip.vegaLite(view, spec)
-
-    view.width(width).height(height)
 
     this.view = view
     await view.runAsync()
