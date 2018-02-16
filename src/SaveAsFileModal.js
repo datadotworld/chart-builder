@@ -14,7 +14,6 @@ import {
 import { extendObservable } from 'mobx'
 import { observer } from 'mobx-react'
 import { API_HOST } from './constants'
-import DatasetSelector from './DatasetSelector'
 import LoadingAnimation from './LoadingAnimation'
 import VegaLiteImage from './VegaLiteImage'
 import './SaveAsInsightModal.css'
