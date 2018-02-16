@@ -280,14 +280,14 @@ class App extends Component<{
                     onClick={() => (this.saveModalOpen = 'file')}
                     disabled={!this.hasPossiblyValidChart}
                   >
-                    save as file
+                    Save as file
                   </Button>
                   <Button
                     bsSize="xs"
                     onClick={() => (this.saveModalOpen = 'insight')}
                     disabled={!this.hasPossiblyValidChart}
                   >
-                    save as insight
+                    Save as insight
                   </Button>
                 </ButtonToolbar>
               </div>
@@ -329,7 +329,7 @@ class App extends Component<{
                   onChange={e => (this.config.mark = e)}
                 />
                 <div className="App-title">
-                  Configure Chart{' '}
+                  Configure Chart
                   <Button
                     bsStyle="link"
                     bsSize="xs"
@@ -337,7 +337,7 @@ class App extends Component<{
                     style={{ paddingLeft: 0, paddingRight: 0 }}
                     onClick={() => this.config.encodings.push(new EncLine())}
                   >
-                    add encoding
+                    Add encoding
                   </Button>
                 </div>
                 {schema && (
@@ -386,14 +386,18 @@ class App extends Component<{
           <SaveAsInsightModal
             onClose={() => (this.saveModalOpen = false)}
             spec={this.buildSchema()}
+            defaultId={this.agentid + '/' + this.datasetid}
             data={this.data}
+            token={this.token}
           />
         )}
         {this.saveModalOpen === 'file' && (
           <SaveAsFileModal
             onClose={() => (this.saveModalOpen = false)}
             spec={this.buildSchema()}
+            defaultId={this.agentid + '/' + this.datasetid}
             data={this.data}
+            token={this.token}
           />
         )}
       </Fragment>

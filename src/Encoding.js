@@ -63,10 +63,17 @@ class Encoding extends Component<EncodingProps> {
     })
   }
 
-  handleFieldChange = action('field change', (f: Field) => {
+  handleFieldChange = action('field change', (f: null | Field) => {
     const { encoding } = this.props
+    if (
+      encoding.field &&
+      encoding.field.name === '*' &&
+      encoding.aggregate === 'count'
+    ) {
+      encoding.aggregate = 'none'
+    }
     encoding.field = f
-    if (f.name === '*') {
+    if (f && f.name === '*') {
       encoding.aggregate = 'count'
     }
   })

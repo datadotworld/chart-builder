@@ -32,6 +32,7 @@
   background-color: #f7f7f7;
   background-image: none;
   transition: border-color 0.15s ease-in-out, box-shadow 0.25s ease-in-out;
+  padding-left: 1.5rem;
 }
 
 .App-editTab .tab-content {

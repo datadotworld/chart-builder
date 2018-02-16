@@ -15,6 +15,7 @@ import { extendObservable } from 'mobx'
 import { observer } from 'mobx-react'
 import filepicker from 'filepicker-js'
 import { API_HOST } from './constants'
+import DatasetSelector from './DatasetSelector'
 import LoadingAnimation from './LoadingAnimation'
 import VegaLiteImage from './VegaLiteImage'
 import './SaveAsInsightModal.css'
@@ -22,7 +23,9 @@ import './SaveAsInsightModal.css'
 type Props = {
   onClose: Function,
   spec: Object,
-  data: Array<Object>
+  data: Array<Object>,
+  defaultId: string,
+  token: string
 }
 
 function storeBlob(blob: Blob): Promise<{ url: string }> {
@@ -46,7 +49,7 @@ class SaveAsInsightModal extends Component<Props> {
     super(props)
 
     extendObservable(this, {
-      id: 'rgrochowicz/test-prj-2',
+      id: '',
       title: '',
       comment: '',
       img: null,
@@ -129,11 +132,12 @@ class SaveAsInsightModal extends Component<Props> {
               <Col md={4} sm={5} xs={12}>
                 <FormGroup controlId="insight-agentiddatasetid">
                   <ControlLabel>Agent ID/Project ID</ControlLabel>
-                  <FormControl
-                    type="text"
+                  <DatasetSelector
+                    token={this.props.token}
+                    defaultValue={this.props.defaultId}
                     value={this.id}
-                    placeholder="Enter text"
-                    onChange={e => (this.id = e.target.value)}
+                    limitToProjects
+                    onChange={id => (this.id = id)}
                   />
                 </FormGroup>
                 <FormGroup controlId="insight-title">
@@ -171,7 +175,7 @@ class SaveAsInsightModal extends Component<Props> {
             <Button
               bsStyle="primary"
               onClick={this.handleSave}
-              disabled={this.saving}
+              disabled={this.saving || !this.id}
             >
               Save
             </Button>
