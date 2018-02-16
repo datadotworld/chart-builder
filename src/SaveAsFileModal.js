@@ -115,7 +115,6 @@ class SaveAsFileModal extends Component<Props> {
               <Col md={4} sm={5} xs={12}>
                 <FormGroup controlId="insight-agentiddatasetid">
                   <ControlLabel>Agent ID/Dataset ID</ControlLabel>
-                  <DatasetSelector token={this.props.token} />
                   <FormControl
                     type="text"
                     value={this.id}
