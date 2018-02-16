@@ -4,7 +4,15 @@ import { extendObservable, runInAction } from 'mobx'
 import { observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
 import DevTools from 'mobx-react-devtools'
-import { Grid, Row, Button, Col, Tabs, Tab, ButtonGroup } from 'react-bootstrap'
+import {
+  Grid,
+  Row,
+  Button,
+  Col,
+  Tabs,
+  Tab,
+  ButtonToolbar
+} from 'react-bootstrap'
 import SaveAsFileModal from './SaveAsFileModal'
 import SaveAsInsightModal from './SaveAsInsightModal'
 import './App.css'
@@ -17,6 +25,7 @@ import VegaLiteEmbed from './VegaLiteEmbed'
 import SimpleSelect from './SimpleSelect'
 import Encoding from './Encoding'
 import EncLine from './EncLine'
+import VizEmpty from './VizEmpty'
 import type { ConfigType, Schema } from './types'
 
 const MARKS = [
@@ -46,8 +55,6 @@ class App extends Component<{
   parsedUrlQuery: Object
 
   loading: boolean
-  saving: boolean
-  saved: boolean
 
   saveModalOpen: false | 'insight' | 'file'
 
@@ -57,8 +64,6 @@ class App extends Component<{
       schema: null,
       // data: null,
       loading: true,
-      saving: false,
-      saved: false,
       config: {
         encodings: [],
         manualSpec: null,
@@ -103,12 +108,6 @@ class App extends Component<{
     }?includeTableSchema=true`
   }
 
-  getUploadUrl() {
-    return `${API_HOST}/v0/uploads/${this.agentid}/${
-      this.datasetid
-    }/files/vega-lite.vl.json`
-  }
-
   fetchQuery = async () => {
     runInAction(() => {
       this.schema = null
@@ -131,6 +130,7 @@ class App extends Component<{
           ...dschema.fields,
           {
             name: '*',
+            label: 'COUNT(*)',
             rdfType: 'http://www.w3.org/2001/XMLSchema#string',
             type: 'string'
           }
@@ -150,31 +150,11 @@ class App extends Component<{
     })
   }
 
-  uploadFile = async () => {
-    this.saving = true
-    await fetch(this.getUploadUrl(), {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${this.token}`,
-        'Content-Type': 'application/octet-stream'
-      },
-      body: JSON.stringify(this.buildSchema())
-    }).then(r => r.json())
-    runInAction(() => {
-      this.saving = false
-      this.saved = true
-
-      setTimeout(() => (this.saved = false), 1000)
-    })
-  }
-
   buildSchema() {
     const { config } = this
     if (config.manualSpec) {
       try {
         const obj = JSON.parse(config.manualSpec)
-        obj.data = { name: 'source' }
         return obj
       } catch (e) {}
     }
@@ -202,7 +182,8 @@ class App extends Component<{
       $schema: 'https://vega.github.io/schema/vega-lite/v2.json',
       mark: config.mark,
       encoding,
-      data: { name: 'source' }
+      data: { name: 'source' },
+      config: { background: '#ffffff', padding: 20 }
     }
   }
 
@@ -227,14 +208,7 @@ class App extends Component<{
               />
             }
           </div>
-        )) || (
-        <div className="App-vizPlaceholder">
-          <div className="App-vizPlaceholderText">
-            Choose a chart type and columns <br />to the left and your chart
-            will appear.<br />Like magic ✨
-          </div>
-        </div>
-      )
+        )) || <VizEmpty />
     )
   }
 
@@ -293,16 +267,14 @@ class App extends Component<{
       <Fragment>
         {process.env.NODE_ENV === 'development' && <DevTools />}
         <Header agentid={this.agentid} datasetid={this.datasetid} />
-        <Grid style={{ marginTop: 32 }}>
+        <Grid fluid className="App-topBar">
           <Row>
-            <Col xs={8}>
-              <h3>
+            <Col xs={12} className="App-topBarCol">
+              <div className="App-topBarHeader">
                 {this.agentid}/{this.datasetid}
-              </h3>
-            </Col>
-            <Col xs={4}>
-              <div className="pull-right">
-                <ButtonGroup>
+              </div>
+              <div className="App-topBarButtons">
+                <ButtonToolbar>
                   <Button
                     bsSize="xs"
                     onClick={() => (this.saveModalOpen = 'file')}
@@ -317,73 +289,99 @@ class App extends Component<{
                   >
                     save as insight
                   </Button>
-                </ButtonGroup>
+                </ButtonToolbar>
               </div>
             </Col>
           </Row>
-          <Row>
-            <Col xs={4}>
-              <Tabs
-                defaultActiveKey={1}
-                id="configure-tabs"
-                animation={false}
-                className="App-editTab"
-                unmountOnExit
-              >
-                <Tab eventKey={1} title="Configure">
-                  <h4>Build your chart</h4>
-                  <div className="App-title">Marks</div>
-                  <SimpleSelect
-                    values={MARKS}
-                    value={this.config.mark}
-                    onChange={e => (this.config.mark = e)}
-                  />
-                  <div className="App-title">Configure Chart</div>
-                  {schema && (
-                    <Fragment>
-                      {this.config.encodings.map((e, ei) => {
-                        return (
-                          <Encoding
-                            key={ei}
-                            fields={schema.fields}
-                            encoding={e}
-                          />
-                        )
-                      })}
-                      <div>
-                        <Button
-                          bsSize="xs"
-                          onClick={() =>
-                            this.config.encodings.push(new EncLine())
-                          }
-                        >
-                          add encoding
-                        </Button>
-                      </div>
-                    </Fragment>
-                  )}
-                </Tab>
-                <Tab
-                  eventKey={2}
-                  title="Spec"
-                  disabled={!this.hasPossiblyValidChart}
-                >
-                  {this.hasPossiblyValidChart && (
-                    <Editor
-                      onChange={e => {
-                        this.config.manualSpec = e
-                      }}
-                      value={JSON.stringify(this.buildSchema(), null, 2)}
-                    />
-                  )}
-                </Tab>
-              </Tabs>
-            </Col>
-            <Col xs={8}>
-              <VizCard>{this.renderEmbed()}</VizCard>
-            </Col>
-          </Row>
         </Grid>
+        <div
+          style={{
+            flexGrow: 1,
+            display: 'flex'
+          }}
+        >
+          <div
+            style={{
+              overflowY: 'auto',
+              width: 400,
+              backgroundColor: '#fff',
+              boxShadow: '2px 0 4px 0 rgba(0,0,0,.1)',
+              flexShrink: 0,
+              zIndex: 4
+            }}
+          >
+            <Tabs
+              defaultActiveKey={1}
+              id="configure-tabs"
+              animation={false}
+              className="App-editTab"
+              unmountOnExit
+            >
+              <Tab
+                eventKey={1}
+                title="Visual Builder"
+                className="App-builderTab"
+              >
+                <div className="App-title">Marks</div>
+                <SimpleSelect
+                  values={MARKS}
+                  value={this.config.mark}
+                  onChange={e => (this.config.mark = e)}
+                />
+                <div className="App-title">
+                  Configure Chart{' '}
+                  <Button
+                    bsStyle="link"
+                    bsSize="xs"
+                    className="pull-right"
+                    style={{ paddingLeft: 0, paddingRight: 0 }}
+                    onClick={() => this.config.encodings.push(new EncLine())}
+                  >
+                    add encoding
+                  </Button>
+                </div>
+                {schema && (
+                  <Fragment>
+                    {this.config.encodings.map((e, ei) => {
+                      return (
+                        <Encoding
+                          key={ei}
+                          fields={schema.fields}
+                          encoding={e}
+                        />
+                      )
+                    })}
+                    <div />
+                  </Fragment>
+                )}
+              </Tab>
+              <Tab
+                eventKey={2}
+                title="Vega-Lite Editor"
+                disabled={!this.hasPossiblyValidChart}
+              >
+                {this.hasPossiblyValidChart && (
+                  <Editor
+                    onChange={e => {
+                      this.config.manualSpec = e
+                    }}
+                    value={JSON.stringify(this.buildSchema(), null, 2)}
+                  />
+                )}
+              </Tab>
+            </Tabs>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexGrow: 1,
+              flexDirection: 'column',
+              minWidth: 0
+            }}
+          >
+            <VizCard>{this.renderEmbed()}</VizCard>
+          </div>
+        </div>
         {this.saveModalOpen === 'insight' && (
           <SaveAsInsightModal
             onClose={() => (this.saveModalOpen = false)}

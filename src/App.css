@@ -2,12 +2,10 @@
 }
 
 .App-title {
-  color: #8c9caf;
   font-family: Lato;
-  font-size: 13px;
+  font-size: 1.25rem;
   font-weight: 600;
   line-height: 20px;
-  text-transform: uppercase;
   margin: 1rem 0;
 }
 
@@ -31,24 +29,13 @@
 }
 
 .App-editTab .nav {
-  border: 1px solid #bbb;
-  border-radius: 2px;
-  border: 1px solid #a3afbf;
   background-color: #f7f7f7;
   background-image: none;
-  border: 1px solid #a3afbf;
-  border-radius: 0.25rem;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
   transition: border-color 0.15s ease-in-out, box-shadow 0.25s ease-in-out;
 }
 
 .App-editTab .tab-content {
-  border: 1px solid #a3afbf;
   border-top: none;
-  border-bottom-left-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
-  padding: 8px;
 }
 
 .form-horizontal .control-label {
@@ -56,4 +43,42 @@
 }
 .form-horizontal .form-group {
   margin-bottom: 0;
+}
+
+.App-topBar {
+  background-color: #fff;
+  box-shadow: inset 0 -1px 0 0 #dfdfdf, inset 1px 0 0 0 #dfdfdf;
+  height: 3.5rem;
+  position: relative;
+  width: 100%;
+}
+
+.App-topBarCol {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 3.5rem;
+}
+
+.App-topBarHeader {
+  color: #4e5057;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.App-topBarButtons {
+  flex-shrink: 0;
+}
+
+.navbar-right {
+  margin-right: 0;
+}
+
+.App-builderTab {
+  padding: 0.875rem;
 }

@@ -14,7 +14,7 @@ export default class extends PureComponent<{
         ? `https://data.world/${agentid}/${datasetid}`
         : 'https://data.world'
     return (
-      <Navbar inverse staticTop>
+      <Navbar inverse staticTop fluid>
         <Navbar.Header>
           <Navbar.Brand>
             <img

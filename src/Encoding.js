@@ -1,32 +1,21 @@
 // @flow
 import React, { Component } from 'react'
 import SimpleSelect from './SimpleSelect'
-import { extendObservable } from 'mobx'
+import { extendObservable, action } from 'mobx'
 import { observer } from 'mobx-react'
-import { Button, Form, FormGroup, Col, ControlLabel } from 'react-bootstrap'
+import {
+  Button,
+  Form,
+  FormGroup,
+  Col,
+  ControlLabel,
+  Radio
+} from 'react-bootstrap'
 
 import type EncLine from './EncLine'
-import type { EncodingChannel, Field } from './types'
+import type { Field } from './types'
 
 import './Encoding.css'
-
-const ENCODINGS = [
-  'x',
-  'y',
-  'x2',
-  'y2',
-  'color',
-  'opacity',
-  'size',
-  'shape',
-  'text',
-  'tooltip',
-  'href',
-  'order',
-  'detail',
-  'row',
-  'column'
-]
 
 type FieldSelectProps = {
   fields: Array<Field>,
@@ -39,7 +28,7 @@ class FieldSelect extends Component<FieldSelectProps> {
     return (
       <select
         className="form-control"
-        style={{ margin: '0 .5rem' }}
+        style={{ margin: '0 .5rem', marginLeft: 11 }}
         value={this.props.value ? this.props.value.name : ''}
         onChange={e => {
           const found = this.props.fields.find(f => f.name === e.target.value)
@@ -50,31 +39,11 @@ class FieldSelect extends Component<FieldSelectProps> {
         {this.props.fields.map(f => {
           return (
             <option key={f.name} value={f.name}>
-              {f.name}
+              {f.label || f.name}
             </option>
           )
         })}
       </select>
-    )
-  }
-}
-
-type EncodingSelectProps = {
-  encodings: Array<EncodingChannel>,
-  value: EncodingChannel,
-  onChange: (e: EncodingChannel) => mixed
-}
-
-class EncodingSelect extends Component<EncodingSelectProps> {
-  render() {
-    const { encodings, value, onChange } = this.props
-    return (
-      <SimpleSelect
-        values={encodings}
-        value={value}
-        onChange={onChange}
-        style={{ width: 80 }}
-      />
     )
   }
 }
@@ -94,24 +63,64 @@ class Encoding extends Component<EncodingProps> {
     })
   }
 
+  handleFieldChange = action('field change', (f: Field) => {
+    const { encoding } = this.props
+    encoding.field = f
+    if (f.name === '*') {
+      encoding.aggregate = 'count'
+    }
+  })
+
   render() {
     const { fields, encoding } = this.props
     return (
       <div style={{ margin: '1rem 0' }}>
         <div className="Encoding-bar">
-          <EncodingSelect
-            encodings={ENCODINGS}
+          <select
+            className="form-control"
             value={encoding.channel}
-            onChange={e => (encoding.channel = e)}
-          />
+            onChange={e => (encoding.channel = e.target.value)}
+            style={{ width: 80 }}
+          >
+            <optgroup label="Position">
+              <option value="x">x</option>
+              <option value="y">y</option>
+              <option value="x2">x2</option>
+              <option value="y2">y2</option>
+            </optgroup>
+            <optgroup label="Mark Properties">
+              <option value="color">color</option>
+              <option value="opacity">opacity</option>
+              <option value="size">size</option>
+              <option value="shape">shape</option>
+            </optgroup>
+            <optgroup label="Text and Tooltip">
+              <option value="text">text</option>
+              <option value="tooltip">tooltip</option>
+            </optgroup>
+            <optgroup label="Hyperlink">
+              <option value="href">href</option>
+            </optgroup>
+            <optgroup label="Order">
+              <option value="order">order</option>
+            </optgroup>
+            <optgroup label="Level of Detail">
+              <option value="detail">detail</option>
+            </optgroup>
+            <optgroup label="Facet">
+              <option value="row">row</option>
+              <option value="column">column</option>
+            </optgroup>
+          </select>
           <FieldSelect
             fields={fields}
             value={encoding.field}
-            onChange={f => (encoding.field = f)}
+            onChange={this.handleFieldChange}
           />
           <Button
             bsSize="xs"
             onClick={() => (this.showAdvanced = !this.showAdvanced)}
+            style={{ width: 120, flexShrink: 0 }}
           >
             {this.showAdvanced ? 'hide advanced' : 'show advanced'}
           </Button>
@@ -141,25 +150,6 @@ class Encoding extends Component<EncodingProps> {
                   labels={[`auto (${encoding.autoType})`]}
                   value={encoding.type}
                   onChange={t => (encoding.type = t)}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup
-              bsSize="xs"
-              style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                marginRight: '-0.5rem'
-              }}
-            >
-              <Col componentClass={ControlLabel} sm={3}>
-                bin:
-              </Col>
-              <Col sm={9}>
-                <input
-                  type="checkbox"
-                  checked={encoding.bin}
-                  onChange={() => (encoding.bin = !encoding.bin)}
                 />
               </Col>
             </FormGroup>
@@ -202,6 +192,25 @@ class Encoding extends Component<EncodingProps> {
                   ]}
                   value={encoding.aggregate}
                   onChange={t => (encoding.aggregate = t)}
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup
+              bsSize="xs"
+              style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                marginRight: '-0.5rem'
+              }}
+            >
+              <Col componentClass={ControlLabel} sm={3}>
+                bin:
+              </Col>
+              <Col sm={9}>
+                <input
+                  type="checkbox"
+                  checked={encoding.bin}
+                  onChange={() => (encoding.bin = !encoding.bin)}
                 />
               </Col>
             </FormGroup>
@@ -268,11 +277,24 @@ class Encoding extends Component<EncodingProps> {
                 sort:
               </Col>
               <Col sm={9}>
-                <SimpleSelect
-                  values={['ascending', 'descending']}
-                  value={encoding.sort}
-                  onChange={t => (encoding.sort = t)}
-                />
+                <FormGroup style={{ paddingLeft: 16, display: 'inline-block' }}>
+                  <Radio
+                    name="advanced-sort"
+                    checked={encoding.sort === 'ascending'}
+                    onChange={() => (encoding.sort = 'ascending')}
+                    inline
+                  >
+                    ascending
+                  </Radio>{' '}
+                  <Radio
+                    name="advanced-sort"
+                    checked={encoding.sort === 'descending'}
+                    onChange={() => (encoding.sort = 'descending')}
+                    inline
+                  >
+                    descending
+                  </Radio>
+                </FormGroup>
               </Col>
             </FormGroup>
             {(encoding.type === 'temporal' ||

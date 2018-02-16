@@ -1,12 +1,9 @@
 // @flow
 import { extendObservable } from 'mobx'
 import React, { Component } from 'react'
-import * as vegaImport from 'vega'
-import * as VegaLite from 'vega-lite'
+import * as vega from 'vega'
+import * as vl from 'vega-lite'
 import { observer } from 'mobx-react'
-
-const vega = vegaImport
-const vl = VegaLite
 
 type Props = {
   spec: Object,

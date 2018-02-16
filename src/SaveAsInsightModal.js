@@ -128,7 +128,7 @@ class SaveAsInsightModal extends Component<Props> {
               </Col>
               <Col md={4} sm={5} xs={12}>
                 <FormGroup controlId="insight-agentiddatasetid">
-                  <ControlLabel>agentid/projectid</ControlLabel>
+                  <ControlLabel>Agent ID/Project ID</ControlLabel>
                   <FormControl
                     type="text"
                     value={this.id}

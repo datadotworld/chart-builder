@@ -3,6 +3,7 @@ import type EncLine from './EncLine'
 
 export type Field = {
   name: string,
+  label?: string,
   type: string,
   rdfType: string
 }

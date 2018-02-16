@@ -14,6 +14,7 @@ import {
 import { extendObservable } from 'mobx'
 import { observer } from 'mobx-react'
 import { API_HOST } from './constants'
+import DatasetSelector from './DatasetSelector'
 import LoadingAnimation from './LoadingAnimation'
 import VegaLiteImage from './VegaLiteImage'
 import './SaveAsInsightModal.css'
@@ -114,7 +115,8 @@ class SaveAsFileModal extends Component<Props> {
               </Col>
               <Col md={4} sm={5} xs={12}>
                 <FormGroup controlId="insight-agentiddatasetid">
-                  <ControlLabel>agentid/datasetid</ControlLabel>
+                  <ControlLabel>Agent ID/Dataset ID</ControlLabel>
+                  <DatasetSelector token={this.props.token} />
                   <FormControl
                     type="text"
                     value={this.id}

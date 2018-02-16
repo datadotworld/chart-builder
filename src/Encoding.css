@@ -13,3 +13,11 @@
 
 .Encoding-advanced {
 }
+
+.Encoding-advanced .radio-inline {
+  padding-top: 0;
+}
+
+.Encoding-advanced label {
+  font-size: 14px;
+}
