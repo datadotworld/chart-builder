@@ -6,7 +6,6 @@ const typeMap: { [string]: ?EncodingType } = {
   boolean: 'nominal',
   duration: 'nominal',
   time: 'nominal',
-  date: 'nominal',
   gYearMonth: 'nominal',
   gYear: 'nominal',
   gMonthDay: 'nominal',
@@ -38,6 +37,7 @@ const typeMap: { [string]: ?EncodingType } = {
   unsignedByte: 'quantitative',
   positiveInteger: 'quantitative',
 
+  date: 'temporal',
   dateTime: 'temporal',
   dateTimeStamp: 'temporal'
 }

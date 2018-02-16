@@ -303,6 +303,7 @@ class App extends Component<{
           <div
             style={{
               overflowY: 'auto',
+              overflowX: 'hidden',
               width: 400,
               backgroundColor: '#fff',
               boxShadow: '2px 0 4px 0 rgba(0,0,0,.1)',

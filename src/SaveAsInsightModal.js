@@ -81,9 +81,7 @@ class SaveAsInsightModal extends Component<Props> {
         body: {
           imageUrl: uploadRes.url
         },
-        sourceLink: `https://vega-lite-explorer.data.world/?state=${encodeURIComponent(
-          this.title
-        )}`
+        sourceLink: `https://vega-lite-explorer.data.world/`
       })
     }).then(r => r.json())
 
