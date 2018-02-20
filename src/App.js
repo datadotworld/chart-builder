@@ -1,7 +1,7 @@
 // @flow
 import React, { Fragment, Component } from 'react'
 import { extendObservable, runInAction } from 'mobx'
-import { observer } from 'mobx-react'
+import { observer, inject } from 'mobx-react'
 import { Link } from 'react-router-dom'
 import DevTools from 'mobx-react-devtools'
 import {
@@ -11,7 +11,8 @@ import {
   Col,
   Tabs,
   Tab,
-  ButtonToolbar
+  ButtonToolbar,
+  Alert
 } from 'react-bootstrap'
 import SaveAsFileModal from './SaveAsFileModal'
 import SaveAsInsightModal from './SaveAsInsightModal'
@@ -21,12 +22,11 @@ import { API_HOST } from './constants'
 import Header from './Header'
 import VizCard from './VizCard'
 import Editor from './Editor'
-import VegaLiteEmbed from './VegaLiteEmbed'
 import SimpleSelect from './SimpleSelect'
 import Encoding from './Encoding'
-import EncLine from './EncLine'
 import VizEmpty from './VizEmpty'
-import type { ConfigType, Schema } from './types'
+import ResizableVegaLiteEmbed from './ResizableVegaLiteEmbed'
+import type { StoreType } from './Store'
 
 const MARKS = [
   'area',
@@ -41,18 +41,10 @@ const MARKS = [
 
 class App extends Component<{
   history: Object,
-  location: Object
+  location: Object,
+  store: StoreType
 }> {
-  config: ConfigType
-  schema: ?Schema
   data: ?Array<Object>
-
-  agentid: string
-  datasetid: string
-  query: string
-  isValidPage: boolean
-  token: string
-  parsedUrlQuery: Object
 
   loading: boolean
 
@@ -61,56 +53,27 @@ class App extends Component<{
   constructor(props) {
     super(props)
     extendObservable(this, {
-      schema: null,
       // data: null,
       loading: true,
-      config: {
-        encodings: [],
-        manualSpec: null,
-        mark: 'bar'
-      },
-      saveModalOpen: false,
-
-      get parsedUrlQuery() {
-        const query = new URLSearchParams(this.props.location.search)
-        const obj = {}
-        for (let entry of query) {
-          obj[entry[0]] = entry[1]
-        }
-        return obj
-      },
-
-      get agentid() {
-        return this.parsedUrlQuery.agentid
-      },
-      get datasetid() {
-        return this.parsedUrlQuery.datasetid
-      },
-      get query() {
-        return this.parsedUrlQuery.query
-      },
-
-      get isValidPage() {
-        return !!this.agentid && !!this.datasetid && !!this.query
-      },
-
-      token: window.localStorage.getItem('token')
+      saveModalOpen: false
     })
 
-    if (this.isValidPage && this.token) {
+    if (this.props.store.hasValidParams) {
       this.fetchQuery()
     }
   }
 
   getQueryUrl() {
-    return `${API_HOST}/v0/sql/${this.agentid}/${
-      this.datasetid
+    const { store } = this.props
+    return `${API_HOST}/v0/sql/${store.agentid}/${
+      store.datasetid
     }?includeTableSchema=true`
   }
 
   fetchQuery = async () => {
+    const { store } = this.props
     runInAction(() => {
-      this.schema = null
+      store.setFields([])
       this.data = null
       this.loading = true
     })
@@ -118,102 +81,51 @@ class App extends Component<{
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${store.token}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: new URLSearchParams({ query: this.query }).toString()
+      body: new URLSearchParams({ query: store.query }).toString()
     }).then(r => r.json())
     const [dschema, ...rows] = data
     runInAction(() => {
-      this.schema = {
-        fields: [
-          ...dschema.fields,
-          {
-            name: '*',
-            label: 'COUNT(*)',
-            rdfType: 'http://www.w3.org/2001/XMLSchema#string',
-            type: 'string'
-          }
-        ]
-      }
+      store.setFields([
+        ...dschema.fields,
+        {
+          name: '*',
+          label: 'COUNT(*)',
+          rdfType: 'http://www.w3.org/2001/XMLSchema#string',
+          type: 'string'
+        }
+      ])
       this.data = rows
       this.loading = false
-      this.config = {
-        encodings: [
-          new EncLine({ channel: 'x' }),
-          new EncLine({ channel: 'y' }),
-          new EncLine({ channel: 'color' })
-        ],
-        mark: 'bar',
-        manualSpec: null
-      }
+      this.props.store.reset()
     })
-  }
-
-  buildSchema() {
-    const { config } = this
-    if (config.manualSpec) {
-      try {
-        const obj = JSON.parse(config.manualSpec)
-        return obj
-      } catch (e) {}
-    }
-
-    const encoding = {}
-    config.encodings.forEach(e => {
-      if (e.field) {
-        const enc = {
-          field: e.field.name,
-          type: e.type === 'auto' ? e.autoType : e.type,
-          bin: e.bin || undefined,
-          aggregate: e.aggregate === 'none' ? undefined : e.aggregate,
-          sort: e.sort === 'ascending' ? undefined : e.sort,
-          timeUnit: e.timeUnit || undefined,
-          scale: {
-            type: e.scale,
-            zero: e.zero
-          }
-        }
-        encoding[e.channel] = enc
-      }
-    })
-
-    return {
-      $schema: 'https://vega.github.io/schema/vega-lite/v2.json',
-      mark: config.mark,
-      encoding,
-      data: { name: 'source' },
-      config: { background: '#ffffff', padding: 20 }
-    }
-  }
-
-  get hasPossiblyValidChart() {
-    return this.config.encodings.some(e => e.field)
   }
 
   renderEmbed() {
-    const { data, schema } = this
+    const { data } = this
+    const { store } = this.props
     return (
       (data &&
-        schema &&
-        this.hasPossiblyValidChart && (
-          <div style={{ transform: 'translateZ(0)' }}>
-            {
-              <VegaLiteEmbed
-                spec={this.buildSchema()}
-                data={data}
-                key={JSON.stringify(this.buildSchema())}
-                width={681}
-                height={510}
-              />
+        store.fields &&
+        store.config.hasPossiblyValidChart && (
+          <ResizableVegaLiteEmbed
+            spec={store.config.generatedSpec}
+            data={data}
+            setDimensions={store.config.setDimensions}
+            showResize={
+              !store.config.hasManualSpec && !store.config.hasFacetField
             }
-          </div>
+          />
         )) || <VizEmpty />
     )
   }
 
   render() {
-    if (!this.isValidPage) {
+    const { store } = this.props
+
+    if (!store.hasValidParams) {
       return (
         <Fragment>
           {process.env.NODE_ENV === 'development' && <DevTools />}
@@ -247,7 +159,7 @@ class App extends Component<{
             <Row>
               <Col xs={12}>
                 <h3>
-                  {this.agentid}/{this.datasetid}
+                  {store.agentid}/{store.datasetid}
                 </h3>
               </Col>
             </Row>
@@ -261,31 +173,31 @@ class App extends Component<{
       )
     }
 
-    const { schema } = this
+    const { fields } = store
 
     return (
       <Fragment>
         {process.env.NODE_ENV === 'development' && <DevTools />}
-        <Header agentid={this.agentid} datasetid={this.datasetid} />
+        <Header agentid={store.agentid} datasetid={store.datasetid} />
         <Grid fluid className="App-topBar">
           <Row>
             <Col xs={12} className="App-topBarCol">
               <div className="App-topBarHeader">
-                {this.agentid}/{this.datasetid}
+                {store.agentid}/{store.datasetid}
               </div>
               <div className="App-topBarButtons">
                 <ButtonToolbar>
                   <Button
                     bsSize="xs"
                     onClick={() => (this.saveModalOpen = 'file')}
-                    disabled={!this.hasPossiblyValidChart}
+                    disabled={!store.config.hasPossiblyValidChart}
                   >
                     Save as file
                   </Button>
                   <Button
                     bsSize="xs"
                     onClick={() => (this.saveModalOpen = 'insight')}
-                    disabled={!this.hasPossiblyValidChart}
+                    disabled={!store.config.hasPossiblyValidChart}
                   >
                     Save as insight
                   </Button>
@@ -302,13 +214,14 @@ class App extends Component<{
         >
           <div
             style={{
-              overflowY: 'auto',
               overflowX: 'hidden',
               width: 400,
               backgroundColor: '#fff',
               boxShadow: '2px 0 4px 0 rgba(0,0,0,.1)',
               flexShrink: 0,
-              zIndex: 4
+              zIndex: 4,
+              display: 'flex',
+              flexDirection: 'column'
             }}
           >
             <Tabs
@@ -323,11 +236,24 @@ class App extends Component<{
                 title="Visual Builder"
                 className="App-builderTab"
               >
+                {store.config.hasManualSpec && (
+                  <Alert className="App-manualAlert">
+                    You've manually edited the spec, so you can't modify these
+                    fields.
+                    <Button
+                      bsStyle="link"
+                      onClick={() => store.config.setManualSpec(null)}
+                    >
+                      Reset
+                    </Button>
+                  </Alert>
+                )}
                 <div className="App-title">Marks</div>
                 <SimpleSelect
                   values={MARKS}
-                  value={this.config.mark}
-                  onChange={e => (this.config.mark = e)}
+                  value={store.config.mark}
+                  onChange={e => store.config.setMark(e)}
+                  disabled={store.config.hasManualSpec}
                 />
                 <div className="App-title">
                   Configure Chart
@@ -336,19 +262,21 @@ class App extends Component<{
                     bsSize="xs"
                     className="pull-right"
                     style={{ paddingLeft: 0, paddingRight: 0 }}
-                    onClick={() => this.config.encodings.push(new EncLine())}
+                    onClick={() => store.config.addEncoding()}
+                    disabled={store.config.hasManualSpec}
                   >
                     Add encoding
                   </Button>
                 </div>
-                {schema && (
+                {fields && (
                   <Fragment>
-                    {this.config.encodings.map((e, ei) => {
+                    {store.config.encodings.map((e, ei) => {
                       return (
                         <Encoding
                           key={ei}
-                          fields={schema.fields}
+                          fields={fields}
                           encoding={e}
+                          disabled={store.config.hasManualSpec}
                         />
                       )
                     })}
@@ -359,14 +287,14 @@ class App extends Component<{
               <Tab
                 eventKey={2}
                 title="Vega-Lite Editor"
-                disabled={!this.hasPossiblyValidChart}
+                disabled={!store.config.hasPossiblyValidChart}
               >
-                {this.hasPossiblyValidChart && (
+                {store.config.hasPossiblyValidChart && (
                   <Editor
                     onChange={e => {
-                      this.config.manualSpec = e
+                      this.props.store.config.setManualSpec(e)
                     }}
-                    value={JSON.stringify(this.buildSchema(), null, 2)}
+                    value={JSON.stringify(store.config.generatedSpec, null, 2)}
                   />
                 )}
               </Tab>
@@ -386,19 +314,17 @@ class App extends Component<{
         {this.saveModalOpen === 'insight' && (
           <SaveAsInsightModal
             onClose={() => (this.saveModalOpen = false)}
-            spec={this.buildSchema()}
-            defaultId={this.agentid + '/' + this.datasetid}
+            spec={store.config.generatedSpec}
+            defaultId={store.agentid + '/' + store.datasetid}
             data={this.data}
-            token={this.token}
           />
         )}
         {this.saveModalOpen === 'file' && (
           <SaveAsFileModal
             onClose={() => (this.saveModalOpen = false)}
-            spec={this.buildSchema()}
-            defaultId={this.agentid + '/' + this.datasetid}
+            spec={store.config.generatedSpec}
+            defaultId={store.agentid + '/' + store.datasetid}
             data={this.data}
-            token={this.token}
           />
         )}
       </Fragment>
@@ -406,4 +332,4 @@ class App extends Component<{
   }
 }
 
-export default observer(App)
+export default inject('store')(observer(App))

@@ -1,17 +1,4 @@
 // @flow
-import type EncLine from './EncLine'
-
-export type Field = {
-  name: string,
-  label?: string,
-  type: string,
-  rdfType: string
-}
-
-export type Schema = {
-  fields: Array<Field>
-}
-
 export type EncodingChannel =
   | 'x'
   | 'y'
@@ -70,8 +57,4 @@ export type TimeUnitType =
   | 'minutesseconds'
   | 'secondsmilliseconds'
 
-export type ConfigType = {|
-  mark: MarkType,
-  encodings: Array<EncLine>,
-  manualSpec: null | string
-|}
+export type SortType = 'ascending' | 'descending'

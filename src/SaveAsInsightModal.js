@@ -12,20 +12,21 @@ import {
   Grid
 } from 'react-bootstrap'
 import { extendObservable } from 'mobx'
-import { observer } from 'mobx-react'
+import { observer, inject } from 'mobx-react'
 import filepicker from 'filepicker-js'
 import { API_HOST } from './constants'
 import DatasetSelector from './DatasetSelector'
 import LoadingAnimation from './LoadingAnimation'
 import VegaLiteImage from './VegaLiteImage'
 import './SaveAsInsightModal.css'
+import type { StoreType } from './Store'
 
 type Props = {
   onClose: Function,
   spec: Object,
   data: Array<Object>,
   defaultId: string,
-  token: string
+  store: StoreType
 }
 
 function storeBlob(blob: Blob): Promise<{ url: string }> {
@@ -72,7 +73,7 @@ class SaveAsInsightModal extends Component<Props> {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        Authorization: `Bearer ${window.localStorage.getItem('token')}`,
+        Authorization: `Bearer ${this.props.store.token}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -131,7 +132,7 @@ class SaveAsInsightModal extends Component<Props> {
                 <FormGroup controlId="insight-agentiddatasetid">
                   <ControlLabel>Agent ID/Project ID</ControlLabel>
                   <DatasetSelector
-                    token={this.props.token}
+                    token={this.props.store.token}
                     defaultValue={this.props.defaultId}
                     value={this.id}
                     limitToProjects
@@ -184,4 +185,4 @@ class SaveAsInsightModal extends Component<Props> {
   }
 }
 
-export default observer(SaveAsInsightModal)
+export default inject('store')(observer(SaveAsInsightModal))

@@ -6,12 +6,13 @@ type Props<T> = {
   labels?: Array<string>,
   value: T,
   style?: Object,
+  disabled?: boolean,
   onChange: (e: T) => any
 }
 
 export default class SimpleSelect extends Component<Props<*>> {
   render() {
-    const { value, onChange, values, labels, style } = this.props
+    const { value, onChange, values, labels, style, disabled } = this.props
     return (
       <select
         className="form-control"
@@ -20,6 +21,7 @@ export default class SimpleSelect extends Component<Props<*>> {
           onChange(e.target.value)
         }}
         style={style}
+        disabled={disabled}
       >
         {values.map((e, i) => {
           return (

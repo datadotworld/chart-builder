@@ -1,7 +1,7 @@
 // @flow
 import React, { Fragment, Component } from 'react'
 import { extendObservable } from 'mobx'
-import { observer } from 'mobx-react'
+import { observer, inject } from 'mobx-react'
 import DevTools from 'mobx-react-devtools'
 import { Grid, Row, Col } from 'react-bootstrap'
 import App from './App'
@@ -13,6 +13,7 @@ import {
   API_HOST
 } from './constants'
 import Header from './Header'
+import type { StoreType } from './Store'
 
 // if no token, redirect to oauth
 // if token, call /user to verify token
@@ -87,7 +88,8 @@ async function verifyToken(token: string) {
 
 class AuthGate extends Component<{
   history: Object,
-  location: Object
+  location: Object,
+  store: StoreType
 }> {
   hasValidToken: boolean
 
@@ -118,8 +120,10 @@ class AuthGate extends Component<{
 
     try {
       const data = await fetchToken(code)
+      const token = data.access_token
 
-      localStorage.setItem('token', data.access_token)
+      localStorage.setItem('token', token)
+      this.props.store.setToken(token)
       this.hasValidToken = true
       this.props.history.push({
         path: '/',
@@ -139,6 +143,7 @@ class AuthGate extends Component<{
         throw new Error('no token')
       }
       await verifyToken(token)
+      this.props.store.setToken(token)
       this.hasValidToken = true
     } catch (e) {
       localStorage.removeItem('token')
@@ -167,4 +172,4 @@ class AuthGate extends Component<{
   }
 }
 
-export default observer(AuthGate)
+export default inject('store')(observer(AuthGate))

@@ -9,9 +9,7 @@ expects a spec with a named source called `source`
 */
 type Props = {
   spec: Object,
-  data: Array<Object>,
-  width: number,
-  height: number
+  data: Array<Object>
 }
 
 export default class VegaLiteEmbed extends Component<Props> {
@@ -27,7 +25,7 @@ export default class VegaLiteEmbed extends Component<Props> {
   view: ?Object
 
   async constructView() {
-    let { spec, width, height, data } = this.props
+    let { spec, data } = this.props
     const loader = vega.loader()
     const logLevel = vega.Warn
     const renderer = 'svg'
@@ -42,8 +40,6 @@ export default class VegaLiteEmbed extends Component<Props> {
       renderer
     })
       .initialize(this.node)
-      .width(width)
-      .height(height)
       .change('source', vega.changeset().insert(data))
 
     VegaTooltip.vegaLite(view, spec)

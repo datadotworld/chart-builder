@@ -1,14 +1,18 @@
 // @flow
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { Navbar } from 'react-bootstrap'
+import { observer, inject } from 'mobx-react'
 import logo from './logo.png'
 
-export default class extends PureComponent<{
-  agentid?: string,
-  datasetid?: string
+import type { StoreType } from './Store'
+
+class Header extends Component<{
+  store: StoreType
 }> {
   render() {
-    const { agentid, datasetid } = this.props
+    const { store } = this.props
+    const { agentid, datasetid } = store
+
     const href =
       agentid && datasetid
         ? `https://data.world/${agentid}/${datasetid}`
@@ -32,3 +36,5 @@ export default class extends PureComponent<{
     )
   }
 }
+
+export default inject('store')(observer(Header))

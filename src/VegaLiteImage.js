@@ -39,9 +39,7 @@ class VegaLiteImage extends Component<Props> {
       loader,
       logLevel,
       renderer
-    })
-      .initialize()
-      .width(640)
+    }).initialize()
 
     view.change('source', vega.changeset().insert(data))
 

@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react'
 import SimpleSelect from './SimpleSelect'
-import { extendObservable, action } from 'mobx'
+import { extendObservable } from 'mobx'
 import { observer } from 'mobx-react'
 import {
   Button,
@@ -12,15 +12,15 @@ import {
   Radio
 } from 'react-bootstrap'
 
-import type EncLine from './EncLine'
-import type { Field } from './types'
+import type { EncLineType, FieldType } from './Store'
 
 import './Encoding.css'
 
 type FieldSelectProps = {
-  fields: Array<Field>,
-  value: ?Field,
-  onChange: (f: null | Field) => mixed
+  fields: Array<FieldType>,
+  value: ?FieldType,
+  disabled: boolean,
+  onChange: (f: null | FieldType) => mixed
 }
 
 class FieldSelect extends Component<FieldSelectProps> {
@@ -34,6 +34,7 @@ class FieldSelect extends Component<FieldSelectProps> {
           const found = this.props.fields.find(f => f.name === e.target.value)
           this.props.onChange(found || null)
         }}
+        disabled={this.props.disabled}
       >
         <option value="">Choose a column</option>
         {this.props.fields.map(f => {
@@ -49,8 +50,9 @@ class FieldSelect extends Component<FieldSelectProps> {
 }
 
 type EncodingProps = {
-  fields: Array<Field>,
-  encoding: EncLine
+  fields: Array<FieldType>,
+  encoding: EncLineType,
+  disabled: boolean
 }
 
 class Encoding extends Component<EncodingProps> {
@@ -63,31 +65,17 @@ class Encoding extends Component<EncodingProps> {
     })
   }
 
-  handleFieldChange = action('field change', (f: null | Field) => {
-    const { encoding } = this.props
-    if (
-      encoding.field &&
-      encoding.field.name === '*' &&
-      encoding.aggregate === 'count'
-    ) {
-      encoding.aggregate = 'none'
-    }
-    encoding.field = f
-    if (f && f.name === '*') {
-      encoding.aggregate = 'count'
-    }
-  })
-
   render() {
-    const { fields, encoding } = this.props
+    const { fields, encoding, disabled } = this.props
     return (
       <div style={{ margin: '1rem 0' }}>
         <div className="Encoding-bar">
           <select
             className="form-control"
             value={encoding.channel}
-            onChange={e => (encoding.channel = e.target.value)}
+            onChange={e => encoding.setChannel(e.target.value)}
             style={{ width: 80 }}
+            disabled={disabled}
           >
             <optgroup label="Position">
               <option value="x">x</option>
@@ -122,190 +110,21 @@ class Encoding extends Component<EncodingProps> {
           <FieldSelect
             fields={fields}
             value={encoding.field}
-            onChange={this.handleFieldChange}
+            onChange={encoding.setField}
+            disabled={disabled}
           />
           <Button
             bsSize="xs"
             onClick={() => (this.showAdvanced = !this.showAdvanced)}
             style={{ width: 120, flexShrink: 0 }}
+            disabled={disabled}
           >
-            {this.showAdvanced ? 'hide advanced' : 'show advanced'}
+            {this.showAdvanced ? 'Hide advanced' : 'Show advanced'}
           </Button>
         </div>
-        {this.showAdvanced && (
-          <Form horizontal className="Encoding-advanced">
-            <FormGroup
-              bsSize="xs"
-              style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                marginRight: '-0.5rem'
-              }}
-            >
-              <Col componentClass={ControlLabel} sm={3}>
-                type:
-              </Col>
-              <Col sm={9}>
-                <SimpleSelect
-                  values={[
-                    'auto',
-                    'quantitative',
-                    'ordinal',
-                    'nominal',
-                    'temporal'
-                  ]}
-                  labels={[`auto (${encoding.autoType})`]}
-                  value={encoding.type}
-                  onChange={t => (encoding.type = t)}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup
-              bsSize="xs"
-              style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                marginRight: '-0.5rem'
-              }}
-            >
-              <Col componentClass={ControlLabel} sm={3}>
-                aggregate:
-              </Col>
-              <Col sm={9}>
-                <SimpleSelect
-                  values={[
-                    'none',
-                    'argmax',
-                    'argmin',
-                    'average',
-                    'count',
-                    'distinct',
-                    'max',
-                    'mean',
-                    'median',
-                    'min',
-                    'missing',
-                    'q1',
-                    'q3',
-                    'ci0',
-                    'ci1',
-                    'stdev',
-                    'stdevp',
-                    'sum',
-                    'valid',
-                    'values',
-                    'variance',
-                    'variancep'
-                  ]}
-                  value={encoding.aggregate}
-                  onChange={t => (encoding.aggregate = t)}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup
-              bsSize="xs"
-              style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                marginRight: '-0.5rem'
-              }}
-            >
-              <Col componentClass={ControlLabel} sm={3}>
-                bin:
-              </Col>
-              <Col sm={9}>
-                <input
-                  type="checkbox"
-                  checked={encoding.bin}
-                  onChange={() => (encoding.bin = !encoding.bin)}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup
-              bsSize="xs"
-              style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                marginRight: '-0.5rem'
-              }}
-            >
-              <Col componentClass={ControlLabel} sm={3}>
-                zero:
-              </Col>
-              <Col sm={9}>
-                <input
-                  type="checkbox"
-                  checked={encoding.zero}
-                  onChange={() => (encoding.zero = !encoding.zero)}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup
-              bsSize="xs"
-              style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                marginRight: '-0.5rem'
-              }}
-            >
-              <Col componentClass={ControlLabel} sm={3}>
-                scale:
-              </Col>
-              <Col sm={9}>
-                <SimpleSelect
-                  values={[
-                    'linear',
-                    'bin-linear',
-                    'log',
-                    'pow',
-                    'sqrt',
-                    'time',
-                    'utc',
-                    'sequential',
-                    'ordinal',
-                    'bin-ordinal',
-                    'point',
-                    'band'
-                  ]}
-                  value={encoding.scale}
-                  onChange={t => (encoding.scale = t)}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup
-              bsSize="xs"
-              style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                marginRight: '-0.5rem'
-              }}
-            >
-              <Col componentClass={ControlLabel} sm={3}>
-                sort:
-              </Col>
-              <Col sm={9}>
-                <FormGroup style={{ paddingLeft: 16, display: 'inline-block' }}>
-                  <Radio
-                    name="advanced-sort"
-                    checked={encoding.sort === 'ascending'}
-                    onChange={() => (encoding.sort = 'ascending')}
-                    inline
-                  >
-                    ascending
-                  </Radio>{' '}
-                  <Radio
-                    name="advanced-sort"
-                    checked={encoding.sort === 'descending'}
-                    onChange={() => (encoding.sort = 'descending')}
-                    inline
-                  >
-                    descending
-                  </Radio>
-                </FormGroup>
-              </Col>
-            </FormGroup>
-            {(encoding.type === 'temporal' ||
-              encoding.autoType === 'temporal') && (
+        {this.showAdvanced &&
+          !disabled && (
+            <Form horizontal className="Encoding-advanced">
               <FormGroup
                 bsSize="xs"
                 style={{
@@ -315,48 +134,220 @@ class Encoding extends Component<EncodingProps> {
                 }}
               >
                 <Col componentClass={ControlLabel} sm={3}>
-                  time unit:
+                  Type:
                 </Col>
                 <Col sm={9}>
                   <SimpleSelect
                     values={[
                       'auto',
-
-                      'year',
-                      'quarter',
-                      'month',
-                      'day',
-                      'date',
-                      'hours',
-                      'minutes',
-                      'seconds',
-                      'milliseconds',
-                      'yearquarter',
-                      'yearquartermonth',
-                      'yearmonth',
-                      'yearmonthdate',
-                      'yearmonthdatehours',
-                      'yearmonthdatehoursminutes',
-                      'yearmonthdatehoursminutesseconds',
-                      'quartermonth',
-                      'monthdate',
-                      'hoursminutes',
-                      'hoursminutesseconds',
-                      'minutesseconds',
-                      'secondsmilliseconds'
+                      'quantitative',
+                      'ordinal',
+                      'nominal',
+                      'temporal'
                     ]}
-                    value={encoding.timeUnit || 'auto'}
-                    onChange={t =>
-                      t === 'auto'
-                        ? (encoding.timeUnit = null)
-                        : (encoding.timeUnit = t)
-                    }
+                    labels={[`auto (${encoding.autoType})`]}
+                    value={encoding.type}
+                    onChange={encoding.setType}
                   />
                 </Col>
               </FormGroup>
-            )}
-          </Form>
-        )}
+              <FormGroup
+                bsSize="xs"
+                style={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  marginRight: '-0.5rem'
+                }}
+              >
+                <Col componentClass={ControlLabel} sm={3}>
+                  Aggregate:
+                </Col>
+                <Col sm={9}>
+                  <SimpleSelect
+                    values={[
+                      'none',
+                      'argmax',
+                      'argmin',
+                      'average',
+                      'count',
+                      'distinct',
+                      'max',
+                      'mean',
+                      'median',
+                      'min',
+                      'missing',
+                      'q1',
+                      'q3',
+                      'ci0',
+                      'ci1',
+                      'stdev',
+                      'stdevp',
+                      'sum',
+                      'valid',
+                      'values',
+                      'variance',
+                      'variancep'
+                    ]}
+                    value={encoding.aggregate}
+                    onChange={encoding.setAggregate}
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup
+                bsSize="xs"
+                style={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  marginRight: '-0.5rem'
+                }}
+              >
+                <Col componentClass={ControlLabel} sm={3}>
+                  Bin:
+                </Col>
+                <Col sm={9}>
+                  <input
+                    type="checkbox"
+                    checked={encoding.bin}
+                    onChange={() => encoding.setBin(!encoding.bin)}
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup
+                bsSize="xs"
+                style={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  marginRight: '-0.5rem'
+                }}
+              >
+                <Col componentClass={ControlLabel} sm={3}>
+                  Zero:
+                </Col>
+                <Col sm={9}>
+                  <input
+                    type="checkbox"
+                    checked={encoding.zero}
+                    onChange={() => encoding.setZero(!encoding.zero)}
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup
+                bsSize="xs"
+                style={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  marginRight: '-0.5rem'
+                }}
+              >
+                <Col componentClass={ControlLabel} sm={3}>
+                  Scale:
+                </Col>
+                <Col sm={9}>
+                  <SimpleSelect
+                    values={[
+                      'linear',
+                      'bin-linear',
+                      'log',
+                      'pow',
+                      'sqrt',
+                      'time',
+                      'utc',
+                      'sequential',
+                      'ordinal',
+                      'bin-ordinal',
+                      'point',
+                      'band'
+                    ]}
+                    value={encoding.scale}
+                    onChange={encoding.setScale}
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup
+                bsSize="xs"
+                style={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  marginRight: '-0.5rem'
+                }}
+              >
+                <Col componentClass={ControlLabel} sm={3}>
+                  Sort:
+                </Col>
+                <Col sm={9}>
+                  <FormGroup
+                    style={{ paddingLeft: 16, display: 'inline-block' }}
+                  >
+                    <Radio
+                      name="advanced-sort"
+                      checked={encoding.sort === 'ascending'}
+                      onChange={() => encoding.setSort('ascending')}
+                      inline
+                    >
+                      Ascending
+                    </Radio>{' '}
+                    <Radio
+                      name="advanced-sort"
+                      checked={encoding.sort === 'descending'}
+                      onChange={() => encoding.setSort('descending')}
+                      inline
+                    >
+                      Descending
+                    </Radio>
+                  </FormGroup>
+                </Col>
+              </FormGroup>
+              {(encoding.type === 'temporal' ||
+                encoding.autoType === 'temporal') && (
+                <FormGroup
+                  bsSize="xs"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    marginRight: '-0.5rem'
+                  }}
+                >
+                  <Col componentClass={ControlLabel} sm={3}>
+                    Time unit:
+                  </Col>
+                  <Col sm={9}>
+                    <SimpleSelect
+                      values={[
+                        'auto',
+
+                        'year',
+                        'quarter',
+                        'month',
+                        'day',
+                        'date',
+                        'hours',
+                        'minutes',
+                        'seconds',
+                        'milliseconds',
+                        'yearquarter',
+                        'yearquartermonth',
+                        'yearmonth',
+                        'yearmonthdate',
+                        'yearmonthdatehours',
+                        'yearmonthdatehoursminutes',
+                        'yearmonthdatehoursminutesseconds',
+                        'quartermonth',
+                        'monthdate',
+                        'hoursminutes',
+                        'hoursminutesseconds',
+                        'minutesseconds',
+                        'secondsmilliseconds'
+                      ]}
+                      value={encoding.timeUnit || 'auto'}
+                      onChange={t =>
+                        encoding.setTimeUnit(t === 'auto' ? null : t)
+                      }
+                    />
+                  </Col>
+                </FormGroup>
+              )}
+            </Form>
+          )}
       </div>
     )
   }

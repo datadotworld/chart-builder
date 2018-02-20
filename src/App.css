@@ -28,15 +28,24 @@
   text-align: center;
 }
 
+.App-editTab {
+  display: flex;
+  flex-direction: column;
+}
+
 .App-editTab .nav {
   background-color: #f7f7f7;
   background-image: none;
   transition: border-color 0.15s ease-in-out, box-shadow 0.25s ease-in-out;
   padding-left: 1.5rem;
+  flex-shrink: 0;
 }
 
 .App-editTab .tab-content {
   border-top: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1 1 auto;
 }
 
 .form-horizontal .control-label {
@@ -82,4 +91,17 @@
 
 .App-builderTab {
   padding: 0.875rem;
+}
+
+.App-manualAlert {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.App-manualAlert .btn {
+  padding: 0;
+  margin-left: 0.5rem;
+  line-height: 1;
+  height: auto;
+  vertical-align: inherit;
 }
