@@ -1,7 +1,8 @@
 // @flow
 import React, { Component } from 'react'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import MonacoEditor from 'react-monaco-editor'
+import { Measure } from 'react-measure'
 
 const vegaLiteSchema = require('./vega-lite-schema-v2.json')
 
@@ -49,29 +50,40 @@ export default class Editor extends Component<Props, State> {
   }
 
   render() {
-    const code = this.state.code
+    const { code } = this.state
 
     return (
-      <div style={{ height: 600 }}>
-        <MonacoEditor
-          language="json"
-          options={{
-            folding: true,
-            scrollBeyondLastLine: true,
-            wordWrap: true,
-            wrappingIndent: 'same',
-            automaticLayout: true,
-            autoIndent: true,
-            cursorBlinking: 'smooth',
-            lineNumbersMinChars: 4
-          }}
-          value={code}
-          onChange={this.handleEditorChange}
-          requireConfig={requireConfig}
-          editorWillMount={this.editorWillMount}
-          editorDidMount={this.editorDidMount}
-        />
-      </div>
+      <Measure bounds>
+        {({ bind, measurements }) => (
+          <div
+            {...bind('container')}
+            style={{ overflow: 'hidden', flex: '1 1 auto' }}
+          >
+            {measurements && measurements.container.height ? (
+              <MonacoEditor
+                width={measurements.container.width}
+                height={measurements.container.height}
+                language="json"
+                options={{
+                  folding: true,
+                  scrollBeyondLastLine: true,
+                  wordWrap: true,
+                  wrappingIndent: 'same',
+                  automaticLayout: true,
+                  autoIndent: true,
+                  cursorBlinking: 'smooth',
+                  lineNumbersMinChars: 4
+                }}
+                value={code}
+                onChange={this.handleEditorChange}
+                requireConfig={requireConfig}
+                editorWillMount={this.editorWillMount}
+                editorDidMount={this.editorDidMount}
+              />
+            ) : null}
+          </div>
+        )}
+      </Measure>
     )
   }
 }
