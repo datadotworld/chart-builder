@@ -235,11 +235,12 @@ export type StoreType = {
   query: string,
 
   // actions
-  syncQueryParams: Object => mixed,
-  reset: () => mixed,
-  setToken: string => mixed,
-  setFields: (Array<FieldType>) => mixed,
-  addBrowserHistoryListener: Object => mixed
+  syncQueryParams: Object => void,
+  reset: () => void,
+  setToken: string => void,
+  setFields: (Array<FieldType>) => void,
+  setBrowserLocation: Object => void,
+  addBrowserHistoryListener: Object => void
 }
 
 const Store: ModelType<StoreType> = types
@@ -295,12 +296,13 @@ const Store: ModelType<StoreType> = types
     setFields(f: Array<FieldType>) {
       self.fields = f
     },
+    setBrowserLocation(location: Object) {
+      self.location = location
+    },
     addBrowserHistoryListener(history: any) {
-      self.location = history.location
+      self.setBrowserLocation(history.location)
 
-      history.listen(loc => {
-        self.location = loc
-      })
+      history.listen(self.setBrowserLocation)
     }
   }))
 
