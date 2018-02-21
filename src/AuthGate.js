@@ -13,6 +13,7 @@ import {
   API_HOST
 } from './constants'
 import Header from './Header'
+import StateRestorationGate from './StateRestorationGate'
 import type { StoreType } from './Store'
 
 // if no token, redirect to oauth
@@ -124,11 +125,11 @@ class AuthGate extends Component<{
 
       localStorage.setItem('token', token)
       this.props.store.setToken(token)
-      this.hasValidToken = true
       this.props.history.push({
         path: '/',
         search: parsedParams.get('state')
       })
+      this.hasValidToken = true
     } catch (e) {
       localStorage.removeItem('token')
       redirectToOauth()
@@ -153,7 +154,11 @@ class AuthGate extends Component<{
 
   render() {
     if (this.hasValidToken) {
-      return <App {...this.props} key={this.props.location.search} />
+      return (
+        <StateRestorationGate {...this.props}>
+          <App {...this.props} key={this.props.location.search} />
+        </StateRestorationGate>
+      )
     }
 
     return (

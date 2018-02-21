@@ -1,6 +1,7 @@
 // @flow
 import { types } from 'mobx-state-tree'
 import sparqlTypeToVegaType from './sparqlTypeToVegaType'
+import { parseParams } from './util'
 import type {
   EncodingChannel,
   EncodingType,
@@ -16,7 +17,6 @@ export type FieldType = {
   // model
   name: string,
   label: ?string,
-  type: string,
   rdfType: string,
 
   // views
@@ -27,7 +27,6 @@ const Field: ModelType<FieldType> = types
   .model('Field', {
     name: types.identifier(types.string),
     label: types.maybe(types.string),
-    type: types.string,
     rdfType: types.string
   })
   .views(self => ({
@@ -37,6 +36,7 @@ const Field: ModelType<FieldType> = types
   }))
 
 export type EncLineType = {
+  _id: number,
   field: null | FieldType,
   channel: EncodingChannel,
   type: EncodingType,
@@ -63,8 +63,12 @@ export type EncLineType = {
   setTimeUnit: (t: null | string) => void
 }
 
+let currentEncLineID = 0
+
 const EncLine: ModelType<EncLineType> = types
   .model('EncLine', {
+    _id: types.optional(types.number, () => currentEncLineID++),
+
     field: types.maybe(types.reference(Field)),
     channel: types.optional(types.string, 'x'),
     type: types.optional(types.string, 'auto'),
@@ -212,6 +216,9 @@ const ChartConfig = types
     addEncoding() {
       self.encodings.push(EncLine.create())
     },
+    removeEncoding(e: EncLineType) {
+      ;(self.encodings: any).remove(e)
+    },
     setManualSpec(s: null | string) {
       self.manualSpec = s
     },
@@ -258,12 +265,7 @@ const Store: ModelType<StoreType> = types
     },
 
     get parsedUrlQuery() {
-      const query = new URLSearchParams(self.location.search)
-      const obj = {}
-      for (let entry of query) {
-        obj[entry[0]] = entry[1]
-      }
-      return obj
+      return parseParams(self.location.search)
     },
 
     get agentid() {

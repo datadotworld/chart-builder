@@ -12,7 +12,9 @@ import {
   Tabs,
   Tab,
   ButtonToolbar,
-  Alert
+  Alert,
+  OverlayTrigger,
+  Popover
 } from 'react-bootstrap'
 import SaveAsFileModal from './SaveAsFileModal'
 import SaveAsInsightModal from './SaveAsInsightModal'
@@ -20,12 +22,14 @@ import './App.css'
 import 'vega-tooltip/build/vega-tooltip.css'
 import { API_HOST } from './constants'
 import Header from './Header'
+import { getStateUrl } from './urlState'
 import VizCard from './VizCard'
 import Editor from './Editor'
 import SimpleSelect from './SimpleSelect'
 import Encoding from './Encoding'
 import VizEmpty from './VizEmpty'
 import ResizableVegaLiteEmbed from './ResizableVegaLiteEmbed'
+import CopyField from './CopyField'
 import type { StoreType } from './Store'
 
 const MARKS = [
@@ -47,6 +51,7 @@ class App extends Component<{
   data: ?Array<Object>
 
   loading: boolean
+  errorLoading: boolean
 
   saveModalOpen: false | 'insight' | 'file'
 
@@ -55,6 +60,7 @@ class App extends Component<{
     extendObservable(this, {
       // data: null,
       loading: true,
+      errorLoading: false,
       saveModalOpen: false
     })
 
@@ -77,7 +83,7 @@ class App extends Component<{
       this.data = null
       this.loading = true
     })
-    const data = await fetch(this.getQueryUrl(), {
+    const res = await fetch(this.getQueryUrl(), {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -85,22 +91,42 @@ class App extends Component<{
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: new URLSearchParams({ query: store.query }).toString()
-    }).then(r => r.json())
+    })
+    if (!res.ok) {
+      runInAction(() => {
+        this.loading = false
+        this.errorLoading = true
+      })
+      return
+    }
+    const data = await res.json()
     const [dschema, ...rows] = data
     runInAction(() => {
       store.setFields([
-        ...dschema.fields,
+        ...dschema.fields.map(f => ({
+          name: f.name,
+          rdfType: f.rdfType
+        })),
         {
           name: '*',
           label: 'COUNT(*)',
-          rdfType: 'http://www.w3.org/2001/XMLSchema#string',
-          type: 'string'
+          rdfType: 'http://www.w3.org/2001/XMLSchema#string'
         }
       ])
       this.data = rows
       this.loading = false
-      this.props.store.reset()
+      if (this.props.store.config.encodings.length === 0) {
+        this.props.store.reset()
+      }
     })
+  }
+
+  renderShareOverlay() {
+    return (
+      <Popover id="popover-share-url" title="Share URL">
+        <CopyField getValue={() => getStateUrl(this.props.store)} />
+      </Popover>
+    )
   }
 
   renderEmbed() {
@@ -133,7 +159,7 @@ class App extends Component<{
           <Grid style={{ marginTop: 32 }}>
             <Row>
               <Col xs={12}>
-                <h3>Valid params required</h3>
+                <h3>Valid parameters required</h3>
                 <Link
                   to={{
                     pathname: '/',
@@ -141,7 +167,7 @@ class App extends Component<{
                       '?agentid=data-society&datasetid=iris-species&query=SELECT+%2A%0AFROM+iris'
                   }}
                 >
-                  Here are some
+                  Here's an example
                 </Link>
               </Col>
             </Row>
@@ -150,7 +176,7 @@ class App extends Component<{
       )
     }
 
-    if (this.loading) {
+    if (this.loading || this.errorLoading) {
       return (
         <Fragment>
           {process.env.NODE_ENV === 'development' && <DevTools />}
@@ -165,7 +191,11 @@ class App extends Component<{
             </Row>
             <Row>
               <Col xs={6}>
-                <h4>Loading...</h4>
+                {this.loading ? (
+                  <h4>Loading...</h4>
+                ) : (
+                  <h4>Error loading data</h4>
+                )}
               </Col>
             </Row>
           </Grid>
@@ -187,6 +217,19 @@ class App extends Component<{
               </div>
               <div className="App-topBarButtons">
                 <ButtonToolbar>
+                  <OverlayTrigger
+                    trigger="click"
+                    rootClose
+                    placement="bottom"
+                    overlay={this.renderShareOverlay()}
+                  >
+                    <Button
+                      bsSize="xs"
+                      disabled={!store.config.hasPossiblyValidChart}
+                    >
+                      Share URL
+                    </Button>
+                  </OverlayTrigger>
                   <Button
                     bsSize="xs"
                     onClick={() => (this.saveModalOpen = 'file')}
@@ -269,10 +312,10 @@ class App extends Component<{
                 </div>
                 {fields && (
                   <Fragment>
-                    {store.config.encodings.map((e, ei) => {
+                    {store.config.encodings.map(e => {
                       return (
                         <Encoding
-                          key={ei}
+                          key={e._id}
                           fields={fields}
                           encoding={e}
                           disabled={store.config.hasManualSpec}

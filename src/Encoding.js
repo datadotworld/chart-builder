@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import SimpleSelect from './SimpleSelect'
 import { extendObservable } from 'mobx'
 import { observer } from 'mobx-react'
+import { getParent } from 'mobx-state-tree'
 import {
   Button,
   Form,
@@ -56,13 +57,19 @@ type EncodingProps = {
 }
 
 class Encoding extends Component<EncodingProps> {
-  showAdvanced: boolean
+  showConfig: boolean
 
   constructor() {
     super()
     extendObservable(this, {
-      showAdvanced: false
+      showConfig: false
     })
+  }
+
+  handleRemove = () => {
+    const { encoding } = this.props
+    const config = getParent(encoding, 2)
+    config.removeEncoding(encoding)
   }
 
   render() {
@@ -115,14 +122,14 @@ class Encoding extends Component<EncodingProps> {
           />
           <Button
             bsSize="xs"
-            onClick={() => (this.showAdvanced = !this.showAdvanced)}
-            style={{ width: 120, flexShrink: 0 }}
+            onClick={() => (this.showConfig = !this.showConfig)}
+            style={{ width: 102, flexShrink: 0 }}
             disabled={disabled}
           >
-            {this.showAdvanced ? 'Hide advanced' : 'Show advanced'}
+            {this.showConfig ? 'Hide config' : 'Show config'}
           </Button>
         </div>
-        {this.showAdvanced &&
+        {this.showConfig &&
           !disabled && (
             <Form horizontal className="Encoding-advanced">
               <FormGroup
@@ -145,7 +152,7 @@ class Encoding extends Component<EncodingProps> {
                       'nominal',
                       'temporal'
                     ]}
-                    labels={[`auto (${encoding.autoType})`]}
+                    labels={[`auto (${encoding.autoType || 'n/a'})`]}
                     value={encoding.type}
                     onChange={encoding.setType}
                   />
@@ -346,6 +353,25 @@ class Encoding extends Component<EncodingProps> {
                   </Col>
                 </FormGroup>
               )}
+              <FormGroup
+                bsSize="xs"
+                style={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  marginRight: '-0.5rem',
+                  marginTop: 8
+                }}
+              >
+                <Col sm={9} smOffset={3}>
+                  <FormGroup
+                    style={{ paddingLeft: 16, display: 'inline-block' }}
+                  >
+                    <Button bsSize="xs" onClick={this.handleRemove}>
+                      Remove encoding
+                    </Button>
+                  </FormGroup>
+                </Col>
+              </FormGroup>
             </Form>
           )}
       </div>
