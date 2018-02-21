@@ -202,7 +202,7 @@ const ChartConfig = types
                 contains: 'padding'
               }
             : undefined,
-        mark: self.mark,
+        mark: { type: self.mark },
         encoding,
         data: { name: 'source' },
         config: { background: '#ffffff', padding: 20 }

@@ -267,7 +267,7 @@ class App extends Component<{
             }}
           >
             <Tabs
-              defaultActiveKey={1}
+              defaultActiveKey={store.config.hasManualSpec ? 2 : 1}
               id="configure-tabs"
               animation={false}
               className="App-editTab"
