@@ -28,7 +28,16 @@ class CopyField extends Component<{ getValue: () => string }> {
 
   handleCopy = (text: string, result: boolean) => {
     this.copied = result ? 'Copied!' : 'Ctrl+C to copy'
+    this.input && this.input.select()
     setTimeout(() => (this.copied = null), 700)
+  }
+
+  input: ?HTMLInputElement
+  handleInputRef = (r: HTMLInputElement) => {
+    this.input = r
+    if (r) {
+      r.select()
+    }
   }
 
   render() {
@@ -43,7 +52,12 @@ class CopyField extends Component<{ getValue: () => string }> {
     return (
       <FormGroup bsSize="xs" style={{ marginBottom: 0 }}>
         <InputGroup>
-          <FormControl type="text" value={value} readOnly />
+          <FormControl
+            type="text"
+            value={value}
+            readOnly
+            inputRef={this.handleInputRef}
+          />
           <InputGroup.Button bsSize="xs">
             <CopyToClipboard text={value} onCopy={this.handleCopy}>
               <Button bsSize="xs" ref={r => (this.copyButton = r)}>

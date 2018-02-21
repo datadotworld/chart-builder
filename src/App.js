@@ -286,7 +286,7 @@ class App extends Component<{
                       bsStyle="link"
                       onClick={() => store.config.setManualSpec(null)}
                     >
-                      Reset
+                      Undo manual modifications
                     </Button>
                   </Alert>
                 )}

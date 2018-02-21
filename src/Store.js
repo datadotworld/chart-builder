@@ -78,7 +78,7 @@ const EncLine: ModelType<EncLineType> = types
     zero: types.optional(types.boolean, true),
     scale: types.optional(types.string, 'linear'),
     sort: types.optional(
-      types.enumeration(['ascending', 'descending']),
+      types.enumeration(['none', 'ascending', 'descending']),
       'ascending'
     ),
     timeUnit: types.maybe(types.string)
@@ -180,7 +180,10 @@ const ChartConfig = types
             type: e.type === 'auto' ? e.autoType : e.type,
             bin: e.bin || undefined,
             aggregate: e.aggregate === 'none' ? undefined : e.aggregate,
-            sort: e.sort === 'ascending' ? undefined : e.sort,
+            sort:
+              e.sort === 'none'
+                ? null
+                : e.sort === 'ascending' ? undefined : e.sort,
             timeUnit: e.timeUnit || undefined,
             scale: {
               type: e.scale,

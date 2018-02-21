@@ -300,6 +300,14 @@ class Encoding extends Component<EncodingProps> {
                       inline
                     >
                       Descending
+                    </Radio>{' '}
+                    <Radio
+                      name="advanced-sort"
+                      checked={encoding.sort === 'none'}
+                      onChange={() => encoding.setSort('none')}
+                      inline
+                    >
+                      None
                     </Radio>
                   </FormGroup>
                 </Col>
