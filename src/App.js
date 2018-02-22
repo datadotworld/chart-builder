@@ -16,10 +16,10 @@ import {
   OverlayTrigger,
   Popover
 } from 'react-bootstrap'
+import { css } from 'emotion'
+import LoadingAnimation from './LoadingAnimation'
 import SaveAsFileModal from './SaveAsFileModal'
 import SaveAsInsightModal from './SaveAsInsightModal'
-import './App.css'
-import 'vega-tooltip/build/vega-tooltip.css'
 import { API_HOST } from './constants'
 import Header from './Header'
 import { getStateUrl } from './urlState'
@@ -31,6 +31,108 @@ import VizEmpty from './VizEmpty'
 import ResizableVegaLiteEmbed from './ResizableVegaLiteEmbed'
 import CopyField from './CopyField'
 import type { StoreType } from './Store'
+
+const classes = {
+  builderTab: css`
+    padding: 0.875rem;
+  `,
+
+  editTab: css`
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+
+    & .nav {
+      background-color: #f7f7f7;
+      background-image: none;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.25s ease-in-out;
+      padding-left: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    & .tab-content {
+      border-top: none;
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex: 1 1 auto;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    & #configure-tabs-pane-2 {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+    }
+  `,
+
+  manualAlert: css`
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    & .btn {
+      padding: 0;
+      margin-left: 0.5rem;
+      line-height: 1;
+      height: auto;
+      vertical-align: inherit;
+    }
+  `,
+
+  title: css`
+    font-family: Lato;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 20px;
+    margin: 1rem 0;
+  `,
+
+  topBar: css`
+    background-color: #fff;
+    box-shadow: inset 0 -1px 0 0 #dfdfdf, inset 1px 0 0 0 #dfdfdf;
+    height: 3.5rem;
+    position: relative;
+    width: 100%;
+  `,
+  topBarButtons: css`
+    flex-shrink: 0;
+  `,
+  topBarCol: css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 3.5rem;
+  `,
+  topBarHeader: css`
+    color: #4e5057;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 0;
+  `,
+  sidebar: css`
+    width: 400px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.1) 2px 0px 4px 0px;
+    flex-shrink: 0;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+  `,
+  embed: css`
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    min-width: 0px;
+  `,
+  main: css`
+    flex-grow: 1;
+    display: flex;
+  `
+}
 
 const MARKS = [
   'area',
@@ -182,22 +284,11 @@ class App extends Component<{
           {process.env.NODE_ENV === 'development' && <DevTools />}
           <Header />
           <Grid style={{ marginTop: 32 }}>
-            <Row>
-              <Col xs={12}>
-                <h3>
-                  {store.agentid}/{store.datasetid}
-                </h3>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={6}>
-                {this.loading ? (
-                  <h4>Loading...</h4>
-                ) : (
-                  <h4>Error loading data</h4>
-                )}
-              </Col>
-            </Row>
+            {this.loading ? (
+              <LoadingAnimation hideOverlay />
+            ) : (
+              <h4>Error loading data</h4>
+            )}
           </Grid>
         </Fragment>
       )
@@ -209,13 +300,13 @@ class App extends Component<{
       <Fragment>
         {process.env.NODE_ENV === 'development' && <DevTools />}
         <Header agentid={store.agentid} datasetid={store.datasetid} />
-        <Grid fluid className="App-topBar">
+        <Grid fluid className={classes.topBar}>
           <Row>
-            <Col xs={12} className="App-topBarCol">
-              <div className="App-topBarHeader">
+            <Col xs={12} className={classes.topBarCol}>
+              <div className={classes.topBarHeader}>
                 {store.agentid}/{store.datasetid}
               </div>
-              <div className="App-topBarButtons">
+              <div className={classes.topBarButtons}>
                 <ButtonToolbar>
                   <OverlayTrigger
                     trigger="click"
@@ -249,37 +340,22 @@ class App extends Component<{
             </Col>
           </Row>
         </Grid>
-        <div
-          style={{
-            flexGrow: 1,
-            display: 'flex'
-          }}
-        >
-          <div
-            style={{
-              width: 400,
-              backgroundColor: '#fff',
-              boxShadow: '2px 0 4px 0 rgba(0,0,0,.1)',
-              flexShrink: 0,
-              zIndex: 4,
-              display: 'flex',
-              flexDirection: 'column'
-            }}
-          >
+        <div className={classes.main}>
+          <div className={classes.sidebar}>
             <Tabs
               defaultActiveKey={store.config.hasManualSpec ? 2 : 1}
               id="configure-tabs"
               animation={false}
-              className="App-editTab"
+              className={classes.editTab}
               unmountOnExit
             >
               <Tab
                 eventKey={1}
                 title="Visual Builder"
-                className="App-builderTab"
+                className={classes.builderTab}
               >
                 {store.config.hasManualSpec && (
-                  <Alert className="App-manualAlert">
+                  <Alert className={classes.manualAlert}>
                     You've manually edited the spec, so you can't modify these
                     fields.
                     <Button
@@ -290,14 +366,14 @@ class App extends Component<{
                     </Button>
                   </Alert>
                 )}
-                <div className="App-title">Marks</div>
+                <div className={classes.title}>Marks</div>
                 <SimpleSelect
                   values={MARKS}
                   value={store.config.mark}
                   onChange={e => store.config.setMark(e)}
                   disabled={store.config.hasManualSpec}
                 />
-                <div className="App-title">
+                <div className={classes.title}>
                   Configure Chart
                   <Button
                     bsStyle="link"
@@ -342,14 +418,7 @@ class App extends Component<{
               </Tab>
             </Tabs>
           </div>
-          <div
-            style={{
-              display: 'flex',
-              flexGrow: 1,
-              flexDirection: 'column',
-              minWidth: 0
-            }}
-          >
+          <div className={classes.embed}>
             <VizCard>{this.renderEmbed()}</VizCard>
           </div>
         </div>

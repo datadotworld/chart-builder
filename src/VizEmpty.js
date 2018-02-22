@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react'
+import { css } from 'emotion'
 
 const svg = (
   <svg
@@ -75,12 +76,32 @@ const svg = (
   </svg>
 )
 
+const classes = {
+  container: css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  `,
+  text: css`
+    margin-top: 1rem;
+    height: 66px;
+    width: 310px;
+    color: #5d6f85;
+    font-family: Lato;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+  `
+}
+
 export default class VizEmpty extends Component<{}> {
   render() {
     return (
-      <div className="App-vizPlaceholder">
+      <div className={classes.container}>
         {svg}
-        <div className="App-vizPlaceholderText">
+        <div className={classes.text}>
           Choose a chart type and columns <br />to the left and your chart will
           appear.<br />Like magic ✨
         </div>

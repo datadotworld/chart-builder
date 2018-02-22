@@ -13,12 +13,11 @@ import {
 } from 'react-bootstrap'
 import { extendObservable } from 'mobx'
 import { observer, inject } from 'mobx-react'
-import filepicker from 'filepicker-js'
 import { API_HOST } from './constants'
 import DatasetSelector from './DatasetSelector'
 import LoadingAnimation from './LoadingAnimation'
 import VegaLiteImage from './VegaLiteImage'
-import './SaveAsInsightModal.css'
+import classes from './ModalClasses'
 import type { StoreType } from './Store'
 
 type Props = {
@@ -30,6 +29,7 @@ type Props = {
 }
 
 function storeBlob(blob: Blob): Promise<{ url: string }> {
+  const filepicker = require('filepicker-js')
   return new Promise((resolve, reject) => {
     filepicker.setKey('Al0jca1QpS4iGpimTNsAqz')
     filepicker.store(blob, resolve, reject)
@@ -96,7 +96,7 @@ class SaveAsInsightModal extends Component<Props> {
         show
         onHide={this.props.onClose}
         backdrop="static"
-        className="modal"
+        className={classes.modal}
       >
         <Modal.Header closeButton>
           <Modal.Title>Save as insight</Modal.Title>
@@ -117,13 +117,13 @@ class SaveAsInsightModal extends Component<Props> {
           <Grid>
             <Row>
               <Col md={8} sm={7} xs={12}>
-                <div className="imageHolder">
+                <div className={classes.imageHolder}>
                   <div style={{ overflow: 'auto' }}>
                     <VegaLiteImage
                       spec={this.props.spec}
                       data={this.props.data}
                       onRender={e => (this.img = e)}
-                      className="anyImage"
+                      className={classes.anyImage}
                     />
                   </div>
                 </div>

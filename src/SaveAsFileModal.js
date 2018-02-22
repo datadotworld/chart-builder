@@ -17,7 +17,7 @@ import { API_HOST } from './constants'
 import DatasetSelector from './DatasetSelector'
 import LoadingAnimation from './LoadingAnimation'
 import VegaLiteImage from './VegaLiteImage'
-import './SaveAsInsightModal.css'
+import classes from './ModalClasses'
 import type { StoreType } from './Store'
 
 type Props = {
@@ -86,7 +86,7 @@ class SaveAsFileModal extends Component<Props> {
         show
         onHide={this.props.onClose}
         backdrop="static"
-        className="modal"
+        className={classes.modal}
       >
         <Modal.Header closeButton>
           <Modal.Title>Save as file</Modal.Title>
@@ -107,12 +107,12 @@ class SaveAsFileModal extends Component<Props> {
           <Grid>
             <Row>
               <Col md={8} sm={7} xs={12}>
-                <div className="imageHolder">
+                <div className={classes.imageHolder}>
                   <div style={{ overflow: 'auto' }}>
                     <VegaLiteImage
                       spec={this.props.spec}
                       data={this.props.data}
-                      className="anyImage"
+                      className={classes.anyImage}
                     />
                   </div>
                 </div>

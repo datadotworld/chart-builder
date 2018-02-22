@@ -3,7 +3,7 @@ import React, { Fragment, Component } from 'react'
 import { extendObservable } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import DevTools from 'mobx-react-devtools'
-import { Grid, Row, Col } from 'react-bootstrap'
+import { Grid } from 'react-bootstrap'
 import App from './App'
 import {
   REDIRECT_URI,
@@ -13,6 +13,7 @@ import {
   API_HOST
 } from './constants'
 import Header from './Header'
+import LoadingAnimation from './LoadingAnimation'
 import StateRestorationGate from './StateRestorationGate'
 import type { StoreType } from './Store'
 
@@ -166,11 +167,7 @@ class AuthGate extends Component<{
         {process.env.NODE_ENV === 'development' && <DevTools />}
         <Header />
         <Grid style={{ marginTop: 32 }}>
-          <Row>
-            <Col xs={6}>
-              <h4>Verifying credentials...</h4>
-            </Col>
-          </Row>
+          <LoadingAnimation hideOverlay />
         </Grid>
       </Fragment>
     )

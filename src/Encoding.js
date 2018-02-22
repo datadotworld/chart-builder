@@ -10,45 +10,59 @@ import {
   FormGroup,
   Col,
   ControlLabel,
-  Radio
+  Radio,
+  FormControl
 } from 'react-bootstrap'
+import { css } from 'emotion'
+import styled from 'react-emotion'
 
+import FieldSelect from './FieldSelect'
 import type { EncLineType, FieldType } from './Store'
 
-import './Encoding.css'
+const classes = {
+  container: css`
+    margin: 1rem 0;
+  `,
+  bar: css`
+    display: flex;
+    align-items: center;
 
-type FieldSelectProps = {
-  fields: Array<FieldType>,
-  value: ?FieldType,
-  disabled: boolean,
-  onChange: (f: null | FieldType) => mixed
+    select {
+      height: 28px;
+    }
+
+    select:nth-child(2) {
+      flex-grow: 1;
+    }
+  `,
+  advanced: css`
+    .radio-inline {
+      padding-top: 0;
+    }
+
+    label {
+      font-size: 14px;
+    }
+  `,
+  removeGroup: css`
+    margin-right: -0.5rem;
+    margin-top: 8px;
+  `,
+  channelSelect: css`
+    width: 80px;
+  `
 }
 
-class FieldSelect extends Component<FieldSelectProps> {
-  render() {
-    return (
-      <select
-        className="form-control"
-        style={{ margin: '0 .5rem', marginLeft: 11 }}
-        value={this.props.value ? this.props.value.name : ''}
-        onChange={e => {
-          const found = this.props.fields.find(f => f.name === e.target.value)
-          this.props.onChange(found || null)
-        }}
-        disabled={this.props.disabled}
-      >
-        <option value="">Choose a column</option>
-        {this.props.fields.map(f => {
-          return (
-            <option key={f.name} value={f.name}>
-              {f.label || f.name}
-            </option>
-          )
-        })}
-      </select>
-    )
-  }
-}
+const AdvancedFormGroup = styled(FormGroup)`
+  display: flex;
+  align-items: baseline;
+  margin-right: -0.5rem;
+`
+
+const InlineFormGroup = styled(FormGroup)`
+  padding-left: 16px;
+  display: inline-block;
+`
 
 type EncodingProps = {
   fields: Array<FieldType>,
@@ -75,13 +89,13 @@ class Encoding extends Component<EncodingProps> {
   render() {
     const { fields, encoding, disabled } = this.props
     return (
-      <div style={{ margin: '1rem 0' }}>
-        <div className="Encoding-bar">
-          <select
-            className="form-control"
+      <div className={classes.container}>
+        <div className={classes.bar}>
+          <FormControl
+            componentClass="select"
+            className={classes.channelSelect}
             value={encoding.channel}
             onChange={e => encoding.setChannel(e.target.value)}
-            style={{ width: 80 }}
             disabled={disabled}
           >
             <optgroup label="Position">
@@ -113,7 +127,7 @@ class Encoding extends Component<EncodingProps> {
               <option value="row">row</option>
               <option value="column">column</option>
             </optgroup>
-          </select>
+          </FormControl>
           <FieldSelect
             fields={fields}
             value={encoding.field}
@@ -131,15 +145,8 @@ class Encoding extends Component<EncodingProps> {
         </div>
         {this.showConfig &&
           !disabled && (
-            <Form horizontal className="Encoding-advanced">
-              <FormGroup
-                bsSize="xs"
-                style={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  marginRight: '-0.5rem'
-                }}
-              >
+            <Form horizontal className={classes.advanced}>
+              <AdvancedFormGroup bsSize="xs">
                 <Col componentClass={ControlLabel} sm={3}>
                   Type:
                 </Col>
@@ -157,15 +164,8 @@ class Encoding extends Component<EncodingProps> {
                     onChange={encoding.setType}
                   />
                 </Col>
-              </FormGroup>
-              <FormGroup
-                bsSize="xs"
-                style={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  marginRight: '-0.5rem'
-                }}
-              >
+              </AdvancedFormGroup>
+              <AdvancedFormGroup bsSize="xs">
                 <Col componentClass={ControlLabel} sm={3}>
                   Aggregate:
                 </Col>
@@ -199,15 +199,8 @@ class Encoding extends Component<EncodingProps> {
                     onChange={encoding.setAggregate}
                   />
                 </Col>
-              </FormGroup>
-              <FormGroup
-                bsSize="xs"
-                style={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  marginRight: '-0.5rem'
-                }}
-              >
+              </AdvancedFormGroup>
+              <AdvancedFormGroup bsSize="xs">
                 <Col componentClass={ControlLabel} sm={3}>
                   Bin:
                 </Col>
@@ -218,15 +211,8 @@ class Encoding extends Component<EncodingProps> {
                     onChange={() => encoding.setBin(!encoding.bin)}
                   />
                 </Col>
-              </FormGroup>
-              <FormGroup
-                bsSize="xs"
-                style={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  marginRight: '-0.5rem'
-                }}
-              >
+              </AdvancedFormGroup>
+              <AdvancedFormGroup bsSize="xs">
                 <Col componentClass={ControlLabel} sm={3}>
                   Zero:
                 </Col>
@@ -237,15 +223,8 @@ class Encoding extends Component<EncodingProps> {
                     onChange={() => encoding.setZero(!encoding.zero)}
                   />
                 </Col>
-              </FormGroup>
-              <FormGroup
-                bsSize="xs"
-                style={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  marginRight: '-0.5rem'
-                }}
-              >
+              </AdvancedFormGroup>
+              <AdvancedFormGroup bsSize="xs">
                 <Col componentClass={ControlLabel} sm={3}>
                   Scale:
                 </Col>
@@ -269,22 +248,13 @@ class Encoding extends Component<EncodingProps> {
                     onChange={encoding.setScale}
                   />
                 </Col>
-              </FormGroup>
-              <FormGroup
-                bsSize="xs"
-                style={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  marginRight: '-0.5rem'
-                }}
-              >
+              </AdvancedFormGroup>
+              <AdvancedFormGroup bsSize="xs">
                 <Col componentClass={ControlLabel} sm={3}>
                   Sort:
                 </Col>
                 <Col sm={9}>
-                  <FormGroup
-                    style={{ paddingLeft: 16, display: 'inline-block' }}
-                  >
+                  <InlineFormGroup>
                     <Radio
                       name="advanced-sort"
                       checked={encoding.sort === 'ascending'}
@@ -309,19 +279,12 @@ class Encoding extends Component<EncodingProps> {
                     >
                       None
                     </Radio>
-                  </FormGroup>
+                  </InlineFormGroup>
                 </Col>
-              </FormGroup>
+              </AdvancedFormGroup>
               {(encoding.type === 'temporal' ||
                 encoding.autoType === 'temporal') && (
-                <FormGroup
-                  bsSize="xs"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'baseline',
-                    marginRight: '-0.5rem'
-                  }}
-                >
+                <AdvancedFormGroup bsSize="xs">
                   <Col componentClass={ControlLabel} sm={3}>
                     Time unit:
                   </Col>
@@ -359,25 +322,15 @@ class Encoding extends Component<EncodingProps> {
                       }
                     />
                   </Col>
-                </FormGroup>
+                </AdvancedFormGroup>
               )}
-              <FormGroup
-                bsSize="xs"
-                style={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  marginRight: '-0.5rem',
-                  marginTop: 8
-                }}
-              >
+              <FormGroup bsSize="xs" className={classes.removeGroup}>
                 <Col sm={9} smOffset={3}>
-                  <FormGroup
-                    style={{ paddingLeft: 16, display: 'inline-block' }}
-                  >
+                  <InlineFormGroup>
                     <Button bsSize="xs" onClick={this.handleRemove}>
                       Remove encoding
                     </Button>
-                  </FormGroup>
+                  </InlineFormGroup>
                 </Col>
               </FormGroup>
             </Form>

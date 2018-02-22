@@ -1,8 +1,16 @@
 // @flow
 import React, { Component } from 'react'
+import { css } from 'emotion'
 import debounce from 'lodash/debounce'
 import MonacoEditor from 'react-monaco-editor'
 import { Measure } from 'react-measure'
+
+const classes = {
+  container: css`
+    overflow: hidden;
+    flex: 1 1 auto;
+  `
+}
 
 const vegaLiteSchema = require('./vega-lite-schema-v2.json')
 
@@ -18,6 +26,7 @@ const requireConfig = {
     vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.10.1/min/vs'
   }
 }
+
 type Props = {
   value: string,
   onChange: (s: string) => mixed
@@ -55,10 +64,7 @@ export default class Editor extends Component<Props, State> {
     return (
       <Measure bounds>
         {({ bind, measurements }) => (
-          <div
-            {...bind('container')}
-            style={{ overflow: 'hidden', flex: '1 1 auto' }}
-          >
+          <div {...bind('container')} className={classes.container}>
             {measurements && measurements.container.height ? (
               <MonacoEditor
                 width={measurements.container.width}
