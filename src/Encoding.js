@@ -33,6 +33,8 @@ const classes = {
 
     select:nth-child(2) {
       flex-grow: 1;
+      padding-top: 0;
+      padding-bottom: 0;
     }
   `,
   advanced: css`
@@ -50,6 +52,7 @@ const classes = {
   `,
   channelSelect: css`
     width: 80px;
+    flex-shrink: 0;
   `
 }
 
