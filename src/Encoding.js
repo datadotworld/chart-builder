@@ -29,12 +29,12 @@ const classes = {
 
     select {
       height: 28px;
+      padding-top: 0;
+      padding-bottom: 0;
     }
 
     select:nth-child(2) {
       flex-grow: 1;
-      padding-top: 0;
-      padding-bottom: 0;
     }
   `,
   advanced: css`
