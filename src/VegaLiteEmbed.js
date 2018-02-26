@@ -9,7 +9,8 @@ expects a spec with a named source called `source`
 */
 type Props = {
   spec: Object,
-  data: Array<Object>
+  data: Array<Object>,
+  onViewRender: (v: Object) => void
 }
 
 export default class VegaLiteEmbed extends Component<Props> {
@@ -25,7 +26,7 @@ export default class VegaLiteEmbed extends Component<Props> {
   view: ?Object
 
   async constructView() {
-    let { spec, data } = this.props
+    let { spec, data, onViewRender } = this.props
     const loader = vega.loader()
     const logLevel = vega.Warn
     const renderer = 'svg'
@@ -46,6 +47,7 @@ export default class VegaLiteEmbed extends Component<Props> {
 
     this.view = view
     await view.runAsync()
+    onViewRender && onViewRender(view)
   }
 
   componentWillUnmount() {

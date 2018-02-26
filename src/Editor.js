@@ -27,6 +27,17 @@ const requireConfig = {
   }
 }
 
+const MONACO_OPTIONS = {
+  folding: true,
+  scrollBeyondLastLine: true,
+  wordWrap: true,
+  wrappingIndent: 'same',
+  automaticLayout: true,
+  autoIndent: true,
+  cursorBlinking: 'smooth',
+  lineNumbersMinChars: 4
+}
+
 type Props = {
   value: string,
   onChange: (s: string) => mixed
@@ -41,14 +52,21 @@ export default class Editor extends Component<Props, State> {
     code: this.props.value
   }
 
-  editorDidMount(editor: any) {
+  editor: any
+  editorDidMount = (editor: any) => {
     editor.focus()
+    this.editor = editor
   }
 
-  handleEditorChange = debounce((spec: string) => {
-    this.setState({ code: spec })
+  changedDebounced = debounce((spec: string) => {
     this.props.onChange(spec)
+    this.editor.focus()
   }, 700)
+
+  handleEditorChange = (spec: string) => {
+    this.setState({ code: spec })
+    this.changedDebounced(spec)
+  }
 
   editorWillMount = (monaco: any) => {
     monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
@@ -70,16 +88,7 @@ export default class Editor extends Component<Props, State> {
                 width={measurements.container.width}
                 height={measurements.container.height}
                 language="json"
-                options={{
-                  folding: true,
-                  scrollBeyondLastLine: true,
-                  wordWrap: true,
-                  wrappingIndent: 'same',
-                  automaticLayout: true,
-                  autoIndent: true,
-                  cursorBlinking: 'smooth',
-                  lineNumbersMinChars: 4
-                }}
+                options={MONACO_OPTIONS}
                 value={code}
                 onChange={this.handleEditorChange}
                 requireConfig={requireConfig}

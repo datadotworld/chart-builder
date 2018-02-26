@@ -31,6 +31,7 @@ const classes = {
 type Props = {
   spec: Object,
   data: Array<Object>,
+  onViewRender: (v: Object) => void,
   showResize: boolean,
   setDimensions: (width: number, height: number) => mixed
 }

@@ -14,9 +14,12 @@ import {
   ButtonToolbar,
   Alert,
   OverlayTrigger,
-  Popover
+  Popover,
+  DropdownButton,
+  MenuItem
 } from 'react-bootstrap'
 import { css } from 'emotion'
+import DownloadButton from './DownloadButton'
 import LoadingAnimation from './LoadingAnimation'
 import SaveAsFileModal from './SaveAsFileModal'
 import SaveAsInsightModal from './SaveAsInsightModal'
@@ -131,6 +134,16 @@ const classes = {
   main: css`
     flex-grow: 1;
     display: flex;
+  `,
+  dropdownButton: css`
+    & + .dropdown-menu {
+      min-width: 10rem;
+    }
+  `,
+  bottomBar: css`
+    padding: 0.5rem 0.875rem;
+    border-top: 1px solid #dfdfdf;
+    flex-shrink: 0;
   `
 }
 
@@ -223,9 +236,14 @@ class App extends Component<{
     })
   }
 
+  vegaView: Object
+  handleViewRender = v => {
+    this.vegaView = v
+  }
+
   renderShareOverlay() {
     return (
-      <Popover id="popover-share-url" title="Share URL">
+      <Popover id="popover-share-url" title="Share Link">
         <CopyField getValue={() => getStateUrl(this.props.store)} />
       </Popover>
     )
@@ -241,6 +259,7 @@ class App extends Component<{
           <ResizableVegaLiteEmbed
             spec={store.config.generatedSpec}
             data={data}
+            onViewRender={this.handleViewRender}
             setDimensions={store.config.setDimensions}
             showResize={
               !store.config.hasManualSpec && !store.config.hasFacetField
@@ -318,23 +337,24 @@ class App extends Component<{
                       bsSize="xs"
                       disabled={!store.config.hasPossiblyValidChart}
                     >
-                      Share URL
+                      Share Link
                     </Button>
                   </OverlayTrigger>
-                  <Button
+                  <DownloadButton getVegaView={() => this.vegaView} />
+                  <DropdownButton
                     bsSize="xs"
-                    onClick={() => (this.saveModalOpen = 'file')}
+                    title="Save as..."
+                    id="dropdown-save-ddw"
                     disabled={!store.config.hasPossiblyValidChart}
+                    className={classes.dropdownButton}
+                    pullRight
+                    noCaret
+                    onSelect={ek => (this.saveModalOpen = ek)}
                   >
-                    Save as file
-                  </Button>
-                  <Button
-                    bsSize="xs"
-                    onClick={() => (this.saveModalOpen = 'insight')}
-                    disabled={!store.config.hasPossiblyValidChart}
-                  >
-                    Save as insight
-                  </Button>
+                    <MenuItem header>data.world</MenuItem>
+                    <MenuItem eventKey="file">File</MenuItem>
+                    <MenuItem eventKey="insight">Insight</MenuItem>
+                  </DropdownButton>
                 </ButtonToolbar>
               </div>
             </Col>
@@ -409,14 +429,17 @@ class App extends Component<{
               >
                 {store.config.hasPossiblyValidChart && (
                   <Editor
-                    onChange={e => {
-                      this.props.store.config.setManualSpec(e)
-                    }}
+                    onChange={store.config.setManualSpec}
                     value={JSON.stringify(store.config.generatedSpec, null, 2)}
                   />
                 )}
               </Tab>
             </Tabs>
+            <div className={classes.bottomBar}>
+              <a href="https://vega.github.io/vega-lite/docs/">
+                Vega-Lite docs
+              </a>
+            </div>
           </div>
           <div className={classes.embed}>
             <VizCard>{this.renderEmbed()}</VizCard>
