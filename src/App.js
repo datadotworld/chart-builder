@@ -33,6 +33,7 @@ import Encoding from './Encoding'
 import VizEmpty from './VizEmpty'
 import ResizableVegaLiteEmbed from './ResizableVegaLiteEmbed'
 import CopyField from './CopyField'
+import SidebarFooter from './SidebarFooter'
 import type { StoreType } from './Store'
 
 const classes = {
@@ -139,11 +140,6 @@ const classes = {
     & + .dropdown-menu {
       min-width: 10rem;
     }
-  `,
-  bottomBar: css`
-    padding: 0.5rem 0.875rem;
-    border-top: 1px solid #dfdfdf;
-    flex-shrink: 0;
   `
 }
 
@@ -435,11 +431,7 @@ class App extends Component<{
                 )}
               </Tab>
             </Tabs>
-            <div className={classes.bottomBar}>
-              <a href="https://vega.github.io/vega-lite/docs/">
-                Vega-Lite docs
-              </a>
-            </div>
+            <SidebarFooter />
           </div>
           <div className={classes.embed}>
             <VizCard>{this.renderEmbed()}</VizCard>
