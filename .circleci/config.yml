@@ -9,8 +9,11 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Clone build-scripts repo
+          command: git clone git@github.com:datadotworld/build-scripts.git
+      - run:
           name: Setup aws creds
-          command: ./cicd/setup_aws_credentials.sh
+          command: build-scripts/cicd/setup_aws_credentials.sh
       - restore_cache:
           keys:
             - v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
@@ -33,4 +36,6 @@ jobs:
           name: Sync to s3
           command: |
             aws configure set default.s3.multipart_threshold 64MB
-            aws s3 sync build s3://dataworld-vegaliteexplorer-us-east-1 --acl public-read
+            aws s3 sync build s3://dataworld-vegaliteexplorer-us-east-1
+          environment:
+            AWS_PROFILE: artifacts
