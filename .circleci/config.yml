@@ -36,6 +36,6 @@ jobs:
           name: Sync to s3
           command: |
             aws configure set default.s3.multipart_threshold 64MB
-            aws s3 sync build s3://dataworld-vegaliteexplorer-us-east-1
+            aws s3 sync build s3://dataworld-vegaliteexplorer-us-east-1 --acl public-read
           environment:
             AWS_PROFILE: artifacts
