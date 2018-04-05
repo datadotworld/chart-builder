@@ -1,0 +1,12 @@
+.bottomBar {
+  padding: 0.5rem 0.875rem;
+  border-top: 1px solid #dfdfdf;
+  flex-shrink: 0;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.name {
+  color: #8c9caf;
+}

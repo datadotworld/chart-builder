@@ -1,0 +1,180 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChartConfig sets a few encodings 1`] = `
+Object {
+  "config": Object {
+    "encodings": Array [
+      Object {
+        "_id": 7,
+        "aggregate": null,
+        "bin": false,
+        "channel": "x",
+        "field": "foo",
+        "scale": "linear",
+        "sort": "ascending",
+        "sortField": null,
+        "timeUnit": null,
+        "type": "auto",
+        "zero": true,
+      },
+      Object {
+        "_id": 9,
+        "aggregate": null,
+        "bin": false,
+        "channel": "y",
+        "field": null,
+        "scale": "linear",
+        "sort": "ascending",
+        "sortField": null,
+        "timeUnit": null,
+        "type": "auto",
+        "zero": true,
+      },
+      Object {
+        "_id": 11,
+        "aggregate": null,
+        "bin": false,
+        "channel": "color",
+        "field": null,
+        "scale": "linear",
+        "sort": "ascending",
+        "sortField": null,
+        "timeUnit": null,
+        "type": "auto",
+        "zero": true,
+      },
+    ],
+    "height": null,
+    "manualSpec": null,
+    "mark": "bar",
+    "title": null,
+    "width": null,
+  },
+  "fields": Array [
+    Object {
+      "label": null,
+      "name": "foo",
+      "rdfType": "http://www.w3.org/2001/XMLSchema#float",
+    },
+  ],
+  "location": undefined,
+  "token": "",
+}
+`;
+
+exports[`ChartConfig sets a few encodings 2`] = `
+Object {
+  "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+  "autosize": undefined,
+  "config": Object {
+    "background": "#ffffff",
+    "padding": 20,
+  },
+  "data": Object {
+    "name": "source",
+  },
+  "encoding": Object {
+    "x": Object {
+      "aggregate": undefined,
+      "bin": undefined,
+      "field": "foo",
+      "scale": Object {
+        "type": "linear",
+        "zero": true,
+      },
+      "sort": undefined,
+      "timeUnit": undefined,
+      "type": "quantitative",
+    },
+  },
+  "height": undefined,
+  "mark": Object {
+    "type": "bar",
+  },
+  "title": undefined,
+  "width": undefined,
+}
+`;
+
+exports[`ChartConfig sets a few encodings 3`] = `
+Array [
+  Object {
+    "foo": 1,
+  },
+]
+`;
+
+exports[`ChartConfig works 1`] = `
+Object {
+  "encodings": Array [],
+  "height": null,
+  "manualSpec": null,
+  "mark": "bar",
+  "title": null,
+  "width": null,
+}
+`;
+
+exports[`Store detects valid params 1`] = `
+Object {
+  "agentid": "foo",
+  "datasetid": "bar",
+  "query": "select",
+}
+`;
+
+exports[`Store works 1`] = `
+Object {
+  "config": Object {
+    "encodings": Array [
+      Object {
+        "_id": 1,
+        "aggregate": null,
+        "bin": false,
+        "channel": "x",
+        "field": null,
+        "scale": "linear",
+        "sort": "ascending",
+        "sortField": null,
+        "timeUnit": null,
+        "type": "auto",
+        "zero": true,
+      },
+      Object {
+        "_id": 3,
+        "aggregate": null,
+        "bin": false,
+        "channel": "y",
+        "field": null,
+        "scale": "linear",
+        "sort": "ascending",
+        "sortField": null,
+        "timeUnit": null,
+        "type": "auto",
+        "zero": true,
+      },
+      Object {
+        "_id": 5,
+        "aggregate": null,
+        "bin": false,
+        "channel": "color",
+        "field": null,
+        "scale": "linear",
+        "sort": "ascending",
+        "sortField": null,
+        "timeUnit": null,
+        "type": "auto",
+        "zero": true,
+      },
+    ],
+    "height": null,
+    "manualSpec": null,
+    "mark": "bar",
+    "title": null,
+    "width": null,
+  },
+  "fields": Array [],
+  "location": undefined,
+  "token": "",
+}
+`;

@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<react-select
+  isClearable={true}
+  isDisabled={false}
+  menuPortalTarget={<body />}
+  onChange={[Function]}
+  options={
+    Array [
+      Object {
+        "field": Object {
+          "label": "bar",
+          "name": "foo",
+          "rdfType": "http://www.w3.org/2001/XMLSchema#float",
+        },
+        "label": "bar",
+        "value": "foo",
+      },
+    ]
+  }
+  placeholder="Select a field..."
+  styles={
+    Object {
+      "clearIndicator": [Function],
+      "container": [Function],
+      "control": [Function],
+      "dropdownIndicator": [Function],
+      "menu": [Function],
+      "menuPortal": [Function],
+      "option": [Function],
+      "singleValue": [Function],
+      "valueContainer": [Function],
+    }
+  }
+  value={undefined}
+/>
+`;

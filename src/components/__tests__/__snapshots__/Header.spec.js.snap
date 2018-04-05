@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<nav
+  className="navbar navbar-inverse navbar-static-top"
+  style={
+    Object {
+      "border": 0,
+    }
+  }
+>
+  <div
+    className="container-fluid"
+  >
+    <div
+      className="navbar-header"
+    >
+      <img
+        alt="data.world logo"
+        className="navbar-brand"
+        src="logo.svg"
+        style={
+          Object {
+            "height": 40,
+            "marginLeft": "-0.5rem",
+            "marginTop": 9,
+            "width": 40,
+          }
+        }
+      />
+      <p
+        className="navbar-text"
+      >
+        Chart Builder
+      </p>
+    </div>
+    <p
+      className="navbar-text navbar-right"
+    >
+      <a
+        className="navbar-link"
+        href="https://data.world"
+      >
+        Back to data.world
+      </a>
+    </p>
+  </div>
+</nav>
+`;
+
+exports[`renders with agentid/datasetid 1`] = `
+<nav
+  className="navbar navbar-inverse navbar-static-top"
+  style={
+    Object {
+      "border": 0,
+    }
+  }
+>
+  <div
+    className="container-fluid"
+  >
+    <div
+      className="navbar-header"
+    >
+      <img
+        alt="data.world logo"
+        className="navbar-brand"
+        src="logo.svg"
+        style={
+          Object {
+            "height": 40,
+            "marginLeft": "-0.5rem",
+            "marginTop": 9,
+            "width": 40,
+          }
+        }
+      />
+      <p
+        className="navbar-text"
+      >
+        <span
+          style={
+            Object {
+              "color": "#a3afbf",
+            }
+          }
+        >
+          foo
+          /
+          bar
+        </span>
+        /Chart Builder
+      </p>
+    </div>
+    <p
+      className="navbar-text navbar-right"
+    >
+      <a
+        className="navbar-link"
+        href="https://data.world/foo/bar"
+      >
+        Back to data.world
+      </a>
+    </p>
+  </div>
+</nav>
+`;

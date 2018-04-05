@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createParams works with object 1`] = `
+Map {
+  "a" => "1",
+  "b" => "2",
+}
+`;
+
+exports[`createParams works with string 1`] = `
+Map {
+  "a" => "1",
+  "b" => "2",
+}
+`;
+
+exports[`getDownloadName works 1`] = `"base-name-2018-04-01T18-00-00-000Z.png"`;
+
+exports[`parseParams works 1`] = `
+Object {
+  "a": "1",
+  "b": "2",
+}
+`;

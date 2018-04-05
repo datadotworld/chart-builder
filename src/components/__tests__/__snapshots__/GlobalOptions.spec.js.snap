@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<div>
+  <div
+    className="dimensions"
+  >
+    <div
+      className="formGroup form-group form-group-sm"
+    >
+      <span
+        className="input-group"
+      >
+        <input
+          className="form-control"
+          id={undefined}
+          onChange={[Function]}
+          placeholder="Auto"
+          type="number"
+          value={100}
+        />
+        <span
+          className="help-block"
+        >
+          Width
+        </span>
+      </span>
+    </div>
+    <div
+      className="cross"
+    >
+      ×
+    </div>
+    <div
+      className="formGroup form-group form-group-sm"
+    >
+      <span
+        className="input-group"
+      >
+        <input
+          className="form-control"
+          id={undefined}
+          onChange={[Function]}
+          placeholder="Auto"
+          type="number"
+          value={100}
+        />
+        <span
+          className="help-block"
+        >
+          Height
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+`;

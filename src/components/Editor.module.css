@@ -1,0 +1,4 @@
+.container {
+  overflow: hidden;
+  flex: 1 1 auto;
+}

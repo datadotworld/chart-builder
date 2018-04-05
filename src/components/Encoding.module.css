@@ -1,0 +1,41 @@
+.container {
+  margin: 0.25rem 0;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+}
+
+.advanced {
+  margin: 0.5rem;
+}
+
+.advanced :global(.radio-inline) {
+  padding-top: 0;
+}
+
+.advanced label {
+  font-size: 14px;
+}
+
+.removeGroup {
+  margin-right: -0.5rem;
+  margin-top: 8px;
+}
+
+.channelSelect {
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.advancedFormGroup {
+  display: flex;
+  align-items: baseline;
+  margin-right: -0.5rem;
+}
+
+.inlineFormGroup {
+  padding-left: 16px;
+  display: inline-block;
+}

@@ -1,0 +1,13 @@
+.dimensions {
+  display: flex;
+}
+
+.dimensions :global(.help-block) {
+  margin-left: 0.125rem;
+}
+
+.cross {
+  margin: 0 0.5rem;
+  font-size: 1.5rem;
+  color: #8c9caf;
+}

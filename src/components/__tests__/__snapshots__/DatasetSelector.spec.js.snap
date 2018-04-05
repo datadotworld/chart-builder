@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders loading 1`] = `
+<select
+  className="form-control"
+  disabled={true}
+  onChange={[Function]}
+  value=""
+>
+  <option
+    disabled={true}
+    value=""
+  >
+    Loading...
+  </option>
+</select>
+`;

@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<div
+  className="container"
+>
+  <vega-lite-embed
+    data={
+      Array [
+        Object {
+          "data": 1,
+        },
+      ]
+    }
+    onViewRender={[Function]}
+    setDimensions={[Function]}
+    showResize={true}
+    spec={
+      Object {
+        "testspec": 1,
+      }
+    }
+  />
+  <draggable-core
+    onDrag={[Function]}
+  >
+    <span
+      className="handle"
+    />
+  </draggable-core>
+</div>
+`;
+
+exports[`renders without resize 1`] = `
+<div
+  className="container"
+>
+  <vega-lite-embed
+    data={
+      Array [
+        Object {
+          "data": 1,
+        },
+      ]
+    }
+    onViewRender={[Function]}
+    setDimensions={[Function]}
+    showResize={false}
+    spec={
+      Object {
+        "testspec": 1,
+      }
+    }
+  />
+</div>
+`;

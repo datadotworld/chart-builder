@@ -1,0 +1,198 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<div
+  className="sidebar"
+>
+  <div
+    className="editTab"
+    id="configure-tabs"
+    style={undefined}
+  >
+    <ul
+      className="nav nav-tabs"
+      role="tablist"
+    >
+      <li
+        className="active"
+        role="presentation"
+        style={undefined}
+      >
+        <a
+          aria-controls="configure-tabs-pane-builder"
+          aria-selected={true}
+          href="#"
+          id="configure-tabs-tab-builder"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="tab"
+          tabIndex={undefined}
+        >
+          Visual Builder
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+        style={undefined}
+      >
+        <a
+          aria-controls="configure-tabs-pane-editor"
+          aria-selected={false}
+          href="#"
+          id="configure-tabs-tab-editor"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="tab"
+          tabIndex={-1}
+        >
+          Vega-Lite Editor
+        </a>
+      </li>
+    </ul>
+    <div
+      className="tab-content"
+    >
+      <div
+        aria-hidden={false}
+        aria-labelledby="configure-tabs-tab-builder"
+        className="builderTab tab-pane active"
+        id="configure-tabs-pane-builder"
+        role="tabpanel"
+      >
+        <div
+          className="title"
+        >
+          Marks
+        </div>
+        <react-select
+          isClearable={undefined}
+          isDisabled={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Area",
+                "value": "area",
+              },
+              Object {
+                "label": "Bar",
+                "value": "bar",
+              },
+              Object {
+                "label": "Line",
+                "value": "line",
+              },
+              Object {
+                "label": "Point",
+                "value": "point",
+              },
+              Object {
+                "label": "Tick",
+                "value": "tick",
+              },
+              Object {
+                "label": "Rect",
+                "value": "rect",
+              },
+              Object {
+                "label": "Circle",
+                "value": "circle",
+              },
+              Object {
+                "label": "Square",
+                "value": "square",
+              },
+            ]
+          }
+          placeholder={undefined}
+          styles={
+            Object {
+              "clearIndicator": [Function],
+              "control": [Function],
+              "dropdownIndicator": [Function],
+              "menu": [Function],
+              "menuPortal": [Function],
+              "option": [Function],
+              "singleValue": [Function],
+              "valueContainer": [Function],
+            }
+          }
+          value={
+            Object {
+              "label": "Bar",
+              "value": "bar",
+            }
+          }
+        />
+        <div
+          className="title"
+        >
+          Configuration
+          <button
+            className="pull-right btn btn-xs btn-link"
+            data-test="add-encoding"
+            disabled={false}
+            onClick={[Function]}
+            style={
+              Object {
+                "paddingLeft": 0,
+                "paddingRight": 0,
+              }
+            }
+            type="button"
+          >
+            Add encoding
+          </button>
+        </div>
+        <div
+          data-test="encodings-list"
+        >
+          <div />
+        </div>
+        <div
+          className="title"
+        >
+          Global options
+        </div>
+        <global-options />
+      </div>
+    </div>
+  </div>
+  <div
+    className="bottomBar"
+  >
+    <div>
+      <a
+        href="https://vega.github.io/vega-lite/docs/"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Vega-Lite docs
+      </a>
+       | 
+      <a
+        data-test="license-open"
+        href=""
+        onClick={[Function]}
+      >
+        Licenses
+      </a>
+       | 
+      <a
+        href="https://github.com/datadotworld/chart-builder"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        GitHub
+      </a>
+    </div>
+    <small
+      className="name"
+    >
+      © data.world
+    </small>
+  </div>
+</div>
+`;

@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="center"
+  >
+    <div
+      className="loader"
+    >
+      Loading...
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders with a label 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="center"
+  >
+    <div
+      className="loader"
+    >
+      Loading...
+    </div>
+    <small>
+      foo
+    </small>
+  </div>
+</div>
+`;
+
+exports[`renders without overlay 1`] = `
+<div
+  className="container hideOverlay"
+>
+  <div
+    className="center"
+  >
+    <div
+      className="loader"
+    >
+      Loading...
+    </div>
+  </div>
+</div>
+`;

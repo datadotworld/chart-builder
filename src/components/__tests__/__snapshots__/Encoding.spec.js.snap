@@ -1,0 +1,184 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<div
+  className="container"
+  data-test="encoding-container"
+>
+  <div
+    className="bar"
+    data-test="encoding-bar"
+  >
+    <react-select
+      isDisabled={false}
+      menuPortalTarget={<body />}
+      onChange={[Function]}
+      options={
+        Array [
+          Object {
+            "label": "Position",
+            "options": Array [
+              Object {
+                "label": "X",
+                "value": "x",
+              },
+              Object {
+                "label": "Y",
+                "value": "y",
+              },
+              Object {
+                "label": "X2",
+                "value": "x2",
+              },
+              Object {
+                "label": "Y2",
+                "value": "y2",
+              },
+            ],
+          },
+          Object {
+            "label": "Mark Properties",
+            "options": Array [
+              Object {
+                "label": "Color",
+                "value": "color",
+              },
+              Object {
+                "label": "Opacity",
+                "value": "opacity",
+              },
+              Object {
+                "label": "Size",
+                "value": "size",
+              },
+              Object {
+                "label": "Shape",
+                "value": "shape",
+              },
+            ],
+          },
+          Object {
+            "label": "Text and Tooltip",
+            "options": Array [
+              Object {
+                "label": "Text",
+                "value": "text",
+              },
+              Object {
+                "label": "Tooltip",
+                "value": "tooltip",
+              },
+            ],
+          },
+          Object {
+            "label": "Hyperlink",
+            "options": Array [
+              Object {
+                "label": "Href",
+                "value": "href",
+              },
+            ],
+          },
+          Object {
+            "label": "Order",
+            "options": Array [
+              Object {
+                "label": "Order",
+                "value": "order",
+              },
+            ],
+          },
+          Object {
+            "label": "Level of Detail",
+            "options": Array [
+              Object {
+                "label": "Detail",
+                "value": "detail",
+              },
+            ],
+          },
+          Object {
+            "label": "Facet",
+            "options": Array [
+              Object {
+                "label": "Row",
+                "value": "row",
+              },
+              Object {
+                "label": "Column",
+                "value": "column",
+              },
+            ],
+          },
+        ]
+      }
+      styles={
+        Object {
+          "clearIndicator": [Function],
+          "control": [Function],
+          "dropdownIndicator": [Function],
+          "menu": [Function],
+          "menuPortal": [Function],
+          "option": [Function],
+          "singleValue": [Function],
+          "valueContainer": [Function],
+        }
+      }
+      value={
+        Object {
+          "label": "X",
+          "value": "x",
+        }
+      }
+    />
+    <react-select
+      isClearable={true}
+      isDisabled={false}
+      menuPortalTarget={<body />}
+      onChange={[Function]}
+      options={
+        Array [
+          Object {
+            "field": Object {
+              "label": "bar",
+              "name": "foo",
+              "rdfType": "http://www.w3.org/2001/XMLSchema#float",
+            },
+            "label": "bar",
+            "value": "foo",
+          },
+        ]
+      }
+      placeholder="Select a field..."
+      styles={
+        Object {
+          "clearIndicator": [Function],
+          "container": [Function],
+          "control": [Function],
+          "dropdownIndicator": [Function],
+          "menu": [Function],
+          "menuPortal": [Function],
+          "option": [Function],
+          "singleValue": [Function],
+          "valueContainer": [Function],
+        }
+      }
+      value={undefined}
+    />
+    <button
+      className="btn btn-xs btn-default"
+      data-test="toggle-adv-config"
+      disabled={false}
+      onClick={[Function]}
+      style={
+        Object {
+          "flexShrink": 0,
+        }
+      }
+      type="button"
+    >
+      Options
+    </button>
+  </div>
+</div>
+`;

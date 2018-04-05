@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getStateString works 1`] = `"N4IgbgpgTgzglgewHYgFwEYA0IDGyBmcA5mqAC5xkA2EaSArlVdgLYCGUA1miAEYchsEJHgAmcJERhoA2gF1WbBmyoBlAA4QcdRsxAB3OKLIALHU2wmIxE2XNUAvg6A"`;
+
+exports[`getStateUrl works 1`] = `"http://localhost/?s=N4IgbgpgTgzglgewHYgFwEYA0IDGyBmcA5mqAC5xkA2EaSArlVdgLYCGUA1miAEYchsEJHgAmcJERhoA2gF1WbBmyoBlAA4QcdRsxAB3OKLIALHU2wmIxE2XNUAvg6A"`;
+
+exports[`restoreFromStateString works 1`] = `
+Object {
+  "config": Object {
+    "encodings": Array [],
+    "height": null,
+    "manualSpec": null,
+    "mark": "line",
+    "title": null,
+    "width": null,
+  },
+  "fields": Array [],
+  "location": undefined,
+  "token": "",
+}
+`;

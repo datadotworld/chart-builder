@@ -1,0 +1,63 @@
+.topBar {
+  background-color: #fff;
+  border-bottom: 1px solid #dfdfdf;
+  height: 3.25rem;
+  position: relative;
+  width: 100%;
+
+  padding-left: 1rem;
+}
+.topBarButtons {
+  flex-shrink: 0;
+}
+.topBarCol {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 3.25rem;
+  padding-left: 0;
+}
+.topBarHeader {
+  color: #4e5057;
+  font-weight: 700;
+  line-height: 1.25rem;
+  flex-shrink: 0;
+  flex: 1 1 auto;
+  display: flex;
+}
+.topBarTitle {
+  appearance: none;
+  border: none;
+  font-size: 1.25rem;
+  padding: 0.5rem;
+  margin-right: 1rem;
+  flex: 1 1 auto;
+  transition: outline-color 0.1s;
+
+  outline-offset: -2px;
+  outline: white auto 5px;
+}
+.topBarTitle:hover,
+.topBarTitle:focus {
+  outline-color: rgb(59, 153, 252);
+}
+.topBarTitle::placeholder {
+  color: #323d48;
+  opacity: 0.5;
+  font-style: italic;
+  font-weight: normal;
+}
+
+.embed {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  min-width: 0px;
+}
+.main {
+  flex-grow: 1;
+  display: flex;
+}
+.dropdownButton + :global(.dropdown-menu) {
+  min-width: 10rem;
+}

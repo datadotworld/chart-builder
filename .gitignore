@@ -1,0 +1,8 @@
+node_modules
+.npmrc
+*.log
+/build
+
+cypress/videos/*
+cypress/screenshots/*
+cypress/junit-results/*

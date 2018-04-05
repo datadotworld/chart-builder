@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DownloadMenuItem renders 1`] = `
+<li
+  className=""
+  role="presentation"
+  style={undefined}
+>
+  <a
+    download="testing.json"
+    href="##"
+    onClick={[Function]}
+    onKeyDown={[Function]}
+    onMouseDown={[Function]}
+    role="menuitem"
+    tabIndex="-1"
+  >
+    <span>
+      hello
+    </span>
+  </a>
+</li>
+`;
+
+exports[`renders 1`] = `
+<div
+  className="dropdown disabled btn-group btn-group-xs"
+>
+  <button
+    aria-expanded={false}
+    aria-haspopup={true}
+    className="dropdownButton dropdown-toggle btn btn-xs btn-default"
+    disabled={true}
+    id="dropdown-download"
+    onClick={[Function]}
+    onKeyDown={[Function]}
+    role="button"
+    type="button"
+  >
+    Download
+  </button>
+  <ul
+    aria-labelledby="dropdown-download"
+    className="dropdown-menu dropdown-menu-right"
+    role="menu"
+  >
+    <li
+      className="dropdown-header"
+      onKeyDown={[Function]}
+      role="heading"
+      style={undefined}
+    >
+      JSON
+    </li>
+    <li
+      className=""
+      role="presentation"
+      style={undefined}
+    >
+      <a
+        download="vega-lite.vl.json"
+        href="##"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        role="menuitem"
+        tabIndex="-1"
+      >
+        Vega-Lite 
+        <span
+          className="text-muted"
+        >
+          (.vl.json)
+        </span>
+      </a>
+    </li>
+    <li
+      className=""
+      role="presentation"
+      style={undefined}
+    >
+      <a
+        download="vega.vg.json"
+        href="##"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        role="menuitem"
+        tabIndex="-1"
+      >
+        Vega 
+        <span
+          className="text-muted"
+        >
+          (.vg.json)
+        </span>
+      </a>
+    </li>
+    <li
+      className="dropdown-header"
+      onKeyDown={[Function]}
+      role="heading"
+      style={undefined}
+    >
+      Image
+    </li>
+    <li
+      className=""
+      role="presentation"
+      style={undefined}
+    >
+      <a
+        download="download.png"
+        href="##"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        role="menuitem"
+        tabIndex="-1"
+      >
+        PNG 
+        <span
+          className="text-muted"
+        >
+          (.png)
+        </span>
+      </a>
+    </li>
+    <li
+      className=""
+      role="presentation"
+      style={undefined}
+    >
+      <a
+        download="download.svg"
+        href="##"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        role="menuitem"
+        tabIndex="-1"
+      >
+        SVG 
+        <span
+          className="text-muted"
+        >
+          (.svg)
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>
+`;

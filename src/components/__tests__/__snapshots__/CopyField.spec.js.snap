@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<div
+  className="form-group form-group-xs"
+  style={
+    Object {
+      "marginBottom": 0,
+    }
+  }
+>
+  <span
+    className="input-group"
+  >
+    <input
+      className="form-control"
+      id={undefined}
+      readOnly={true}
+      type="text"
+      value="test copy"
+    />
+    <span
+      className="input-group-btn input-group-btn-xs"
+    >
+      <button
+        className="btn btn-xs btn-default"
+        disabled={false}
+        onClick={[Function]}
+        type="button"
+      >
+        Copy
+      </button>
+    </span>
+  </span>
+</div>
+`;

@@ -1,0 +1,72 @@
+.builderTab {
+  padding: 1.5rem;
+  padding-top: 0.5rem;
+}
+
+.editTab {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.editTab :global(.nav) {
+  background-image: none;
+  padding-left: 1rem;
+  flex-shrink: 0;
+  box-shadow: inset 0 -1px 0 0 #e0e4e8, inset 0 -2px 0 0 #c8d0d9;
+}
+
+.editTab :global(.nav > li > a) {
+  padding: 0.8125rem 0.125rem 0.875rem;
+  height: initial;
+}
+
+.editTab :global(.tab-content) {
+  border-top: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1 1 auto;
+
+  display: flex;
+  flex-direction: column;
+}
+
+:global(#configure-tabs-pane-editor) {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.manualAlert {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.manualAlert :global(.btn) {
+  padding: 0;
+  margin-left: 0.5rem;
+  line-height: 1;
+  height: auto;
+  vertical-align: inherit;
+}
+
+.title {
+  font-family: Lato;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 20px;
+  margin: 1rem 0;
+  margin-top: 1.5rem;
+}
+.title:first-of-type {
+  margin-top: 1rem;
+}
+.sidebar {
+  width: 400px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.1) 2px 0px 4px 0px;
+  flex-shrink: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+}

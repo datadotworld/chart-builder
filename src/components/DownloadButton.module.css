@@ -1,0 +1,3 @@
+.dropdownButton :global(.dropdown-menu) {
+  min-width: 10rem;
+}

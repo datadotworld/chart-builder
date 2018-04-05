@@ -1,0 +1,16 @@
+.modal :global(.modal-content) {
+  display: flex;
+  flex-direction: column;
+}
+.body {
+  flex: 1 1 auto;
+  overflow: auto;
+}
+.text {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 87.5%;
+  line-height: 1.5;
+  color: #333d49;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}

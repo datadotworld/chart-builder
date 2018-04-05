@@ -1,0 +1,6 @@
+.container {
+  height: 700px;
+  overflow: auto;
+  flex-grow: 1;
+  padding: 1rem;
+}

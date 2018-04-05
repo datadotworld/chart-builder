@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<div
+  className="bottomBar"
+>
+  <div>
+    <a
+      href="https://vega.github.io/vega-lite/docs/"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      Vega-Lite docs
+    </a>
+     | 
+    <a
+      data-test="license-open"
+      href=""
+      onClick={[Function]}
+    >
+      Licenses
+    </a>
+     | 
+    <a
+      href="https://github.com/datadotworld/chart-builder"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      GitHub
+    </a>
+  </div>
+  <small
+    className="name"
+  >
+    © data.world
+  </small>
+</div>
+`;
