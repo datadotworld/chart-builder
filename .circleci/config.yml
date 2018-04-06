@@ -25,7 +25,7 @@ jobs:
           command: yarn test
       - run:
           name: Generate license text
-          command: yarn licenses generate-disclaimer > src/generated/licenses.txt
+          command: yarn licenses generate-disclaimer --silent > src/generated/licenses.txt
       - run: yarn build
       - save_cache:
           key: v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
