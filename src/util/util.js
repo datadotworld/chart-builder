@@ -23,3 +23,7 @@ export function getDownloadName(baseName: string, extension: string) {
   const dateStr = new Date().toISOString().replace(/[.:]/g, '-')
   return `${baseName}-${dateStr}.${extension}`
 }
+
+export function encodeFieldName(name: string) {
+  return name.replace(/([.\[\]])/g, '\\$1')
+}

@@ -1,4 +1,9 @@
-import { parseParams, createParams, getDownloadName } from '../util'
+import {
+  parseParams,
+  createParams,
+  getDownloadName,
+  encodeFieldName
+} from '../util'
 
 describe('parseParams', () => {
   it('works', () => {
@@ -27,5 +32,19 @@ describe('getDownloadName', () => {
     }
 
     expect(getDownloadName('base-name', 'png')).toMatchSnapshot()
+  })
+})
+
+describe('encodeFieldName', () => {
+  const specs = [
+    [`normal.foo`, `normal\\.foo`],
+    [`normal.[]foo`, `normal\\.\\[\\]foo`],
+    [`normal`, `normal`]
+  ]
+
+  specs.forEach(([input, expected]) => {
+    it(`works for ${input}`, () => {
+      expect(encodeFieldName(input)).toBe(expected)
+    })
   })
 })

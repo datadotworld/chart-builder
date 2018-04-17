@@ -1,5 +1,7 @@
 # chart-builder
 
+[![CircleCI](https://circleci.com/gh/datadotworld/chart-builder.svg?style=svg)](https://circleci.com/gh/datadotworld/chart-builder)
+
 This is an app to generate Vega-Lite visualizations using data from a data.world query.
 
 ### Getting started

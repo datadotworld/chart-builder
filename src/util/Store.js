@@ -1,7 +1,7 @@
 // @flow
 import { types } from 'mobx-state-tree'
 import sparqlTypeToVegaType from './sparqlTypeToVegaType'
-import { parseParams } from './util'
+import { parseParams, encodeFieldName } from './util'
 import type {
   EncodingChannel,
   EncodingType,
@@ -214,7 +214,7 @@ export const ChartConfig = types
               : sortOrder
 
           const enc = {
-            field: e.field.name,
+            field: encodeFieldName(e.field.name),
             type: e.appliedType,
             bin: e.bin || undefined,
             aggregate: e.aggregate === null ? undefined : e.aggregate,
