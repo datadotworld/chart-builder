@@ -25,5 +25,5 @@ export function getDownloadName(baseName: string, extension: string) {
 }
 
 export function encodeFieldName(name: string) {
-  return name.replace(/([.\[\]])/g, '\\$1')
+  return name.replace(/([.[\]])/g, '\\$1')
 }
