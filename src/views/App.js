@@ -83,11 +83,25 @@ class App extends Component<{
       },
       body: createParams({ query: store.query }).toString()
     })
-    if (!res.ok || !res.body) {
+
+    const loadError = () =>
       runInAction(() => {
         this.loading = false
         this.errorLoading = true
       })
+
+    if (!res.ok) {
+      loadError()
+      return
+    }
+
+    // firefox fallback
+    if (!res.body) {
+      try {
+        this.handleData(await res.json())
+      } catch (e) {
+        loadError()
+      }
       return
     }
 
@@ -110,6 +124,12 @@ class App extends Component<{
     }
     const blob = new Blob(chunks, { type: 'application/json' })
     const data = await new Response(blob).json()
+
+    this.handleData(data)
+  }
+
+  handleData = (data: Array<Object>) => {
+    const { store } = this.props
 
     const [dschema, ...rows] = data
     runInAction(() => {

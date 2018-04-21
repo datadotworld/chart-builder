@@ -21,7 +21,8 @@ const sharedObj: StyleType = {
     paddingRight: 4
   }),
   valueContainer: () => ({
-    overflowX: 'hidden'
+    overflowX: 'hidden',
+    padding: '0 8px'
   }),
   menu: () => ({
     marginTop: 0
