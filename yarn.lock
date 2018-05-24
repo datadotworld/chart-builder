@@ -9920,8 +9920,8 @@ vega-statistics@^1.2:
     d3-array "1"
 
 vega-tooltip@^0.10.2:
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/vega-tooltip/-/vega-tooltip-0.10.2.tgz#832c73d5009603540bacbcc5584e097c03e1d593"
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/vega-tooltip/-/vega-tooltip-0.10.4.tgz#a465b7f714917e63d61d78f1fdd724f4b70c1b67"
   dependencies:
     vega-util "^1.7.0"
 

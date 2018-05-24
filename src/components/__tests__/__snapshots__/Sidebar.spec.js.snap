@@ -66,6 +66,7 @@ exports[`renders 1`] = `
           Marks
         </div>
         <react-select
+          classNamePrefix="react-select"
           isClearable={undefined}
           isDisabled={false}
           menuPortalTarget={<body />}

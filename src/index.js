@@ -9,7 +9,6 @@ import AuthGate from './views/AuthGate'
 import { unregister } from './registerServiceWorker'
 import Store from './util/Store'
 
-import 'vega-tooltip/vega-tooltip.css'
 import './index.css'
 
 const history = createBrowserHistory()

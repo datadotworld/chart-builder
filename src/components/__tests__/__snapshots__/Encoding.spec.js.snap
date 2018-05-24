@@ -10,6 +10,7 @@ exports[`renders 1`] = `
     data-test="encoding-bar"
   >
     <react-select
+      classNamePrefix="react-select"
       isDisabled={false}
       menuPortalTarget={<body />}
       onChange={[Function]}
@@ -132,6 +133,7 @@ exports[`renders 1`] = `
       }
     />
     <react-select
+      classNamePrefix="react-select"
       isClearable={true}
       isDisabled={false}
       menuPortalTarget={<body />}

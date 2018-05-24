@@ -199,7 +199,9 @@ export const ChartConfig = types
           const sortOrder =
             e.sort === 'none'
               ? null
-              : e.sort === 'ascending' ? undefined : e.sort
+              : e.sort === 'ascending'
+                ? undefined
+                : e.sort
 
           const sort =
             e.sortField && e.sortField.field
@@ -226,7 +228,17 @@ export const ChartConfig = types
               zero: e.zero
             }
           }
-          encoding[e.channel] = enc
+
+          // concat tooltips instead of overrriding
+          if (e.channel === 'tooltip' && encoding[e.channel]) {
+            const existing = encoding[e.channel]
+            encoding[e.channel] = [
+              ...(Array.isArray(enc) ? existing : [existing]),
+              enc
+            ]
+          } else {
+            encoding[e.channel] = enc
+          }
         }
       })
 
