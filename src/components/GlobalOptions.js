@@ -10,6 +10,12 @@ type Props = {
   store: StoreType
 }
 
+function getVal(val: string): null | number {
+  // allow backspace to reset to auto
+  if (val === '') return null
+  return parseInt(val, 10)
+}
+
 class GlobalOptions extends Component<Props> {
   render() {
     const { store } = this.props
@@ -23,7 +29,7 @@ class GlobalOptions extends Component<Props> {
                 placeholder="Auto"
                 value={store.config.width || ''}
                 onChange={e => {
-                  const val = parseInt(e.target.value)
+                  const val = getVal(e.target.value)
                   if (!isNaN(val)) {
                     store.config.setDimensions(val, store.config.height)
                   }
@@ -40,7 +46,7 @@ class GlobalOptions extends Component<Props> {
                 placeholder="Auto"
                 value={store.config.height || ''}
                 onChange={e => {
-                  const val = parseInt(e.target.value)
+                  const val = getVal(e.target.value)
                   if (!isNaN(val)) {
                     store.config.setDimensions(store.config.width, val)
                   }
