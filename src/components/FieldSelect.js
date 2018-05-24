@@ -32,6 +32,7 @@ export default class FieldSelect extends Component<Props> {
     })
     return (
       <Select
+        classNamePrefix="react-select"
         options={options}
         value={options.find(o => value && o.value === value.name)}
         onChange={v => {

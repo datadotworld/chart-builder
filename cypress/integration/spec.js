@@ -41,27 +41,27 @@ describe('Chart Explorer', function() {
     // set some chart options
     cy
       .get(
-        ':nth-child(1) > [data-test=encoding-bar] > .css-hedr9e > .react-select__control > .react-select__indicators > .react-select__indicator > .react-select__icon'
+        ':nth-child(1) > [data-test=encoding-bar] > .css-1y3q4ke > .react-select__control > .react-select__indicators > .react-select__indicator'
       )
       .click()
 
-    cy.get('#react-select-4--option-1').click()
+    cy.get('#react-select-4-option-1').click()
 
     cy
       .get(
-        ':nth-child(2) > [data-test=encoding-bar] > .css-hedr9e > .react-select__control > .react-select__indicators > .react-select__indicator > .react-select__icon'
+        ':nth-child(2) > [data-test=encoding-bar] > .css-1y3q4ke > .react-select__control > .react-select__indicators > .react-select__indicator'
       )
       .click()
 
-    cy.get('#react-select-6--option-2').click()
+    cy.get('#react-select-6-option-2').click()
 
     cy
       .get(
-        '#configure-tabs-pane-builder > :nth-child(2) > .react-select__control > .react-select__indicators > .react-select__indicator > .react-select__icon'
+        '#configure-tabs-pane-builder > :nth-child(2) > .react-select__control > .react-select__indicators > .react-select__indicator'
       )
       .click()
 
-    cy.get('#react-select-2--option-3').click()
+    cy.get('#react-select-2-option-3').click()
 
     // toggle some advanced options
     cy.get('[data-test=encoding-container]:nth-child(1)').within(() => {

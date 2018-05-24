@@ -47,6 +47,7 @@ export default class SimpleSelect extends Component<Props<*>> {
 
     return (
       <Select
+        classNamePrefix="react-select"
         options={options}
         value={options.find(o => o.value === value)}
         onChange={e => {

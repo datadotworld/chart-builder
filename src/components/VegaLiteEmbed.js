@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import * as vega from 'vega'
 import * as vl from 'vega-lite'
-import * as VegaTooltip from 'vega-tooltip'
+import VegaTooltip from 'vega-tooltip'
 
 /*
 expects a spec with a named source called `source`
@@ -47,7 +47,7 @@ export default class VegaLiteEmbed extends Component<Props> {
       .change('source', vega.changeset().insert(data))
 
     try {
-      VegaTooltip.vegaLite(view, spec)
+      VegaTooltip(view)
     } catch (e) {}
 
     this.view = view

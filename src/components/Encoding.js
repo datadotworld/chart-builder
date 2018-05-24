@@ -113,6 +113,7 @@ class Encoding extends Component<EncodingProps> {
       <div className={classes.container} data-test="encoding-container">
         <div className={classes.bar} data-test="encoding-bar">
           <Select
+            classNamePrefix="react-select"
             options={CHANNEL_OPTIONS}
             value={CHANNEL_OPTIONS.map(o => o.options)
               .reduce((a, v) => [...a, ...v], [])
