@@ -233,7 +233,7 @@ export const ChartConfig = types
           if (e.channel === 'tooltip' && encoding[e.channel]) {
             const existing = encoding[e.channel]
             encoding[e.channel] = [
-              ...(Array.isArray(enc) ? existing : [existing]),
+              ...(Array.isArray(existing) ? existing : [existing]),
               enc
             ]
           } else {

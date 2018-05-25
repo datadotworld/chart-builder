@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react'
 import { Modal, Button } from 'react-bootstrap'
-import { extendObservable } from 'mobx'
+import { decorate, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import LoadingAnimation from './LoadingAnimation'
 import classes from './LicenseModal.module.css'
@@ -12,15 +12,7 @@ import licenseTextUrl from '../generated/licenses.txt'
 class LicenseModal extends Component<{
   onClose: () => mixed
 }> {
-  licenseText: string
-
-  constructor(props) {
-    super(props)
-
-    extendObservable(this, {
-      licenseText: ''
-    })
-  }
+  licenseText: string = ''
 
   componentDidMount() {
     this.loadText()
@@ -63,5 +55,9 @@ class LicenseModal extends Component<{
     )
   }
 }
+
+decorate(LicenseModal, {
+  licenseText: observable
+})
 
 export default observer(LicenseModal)

@@ -1,6 +1,6 @@
 // @flow
-import { extendObservable } from 'mobx'
 import React, { Component } from 'react'
+import { decorate, observable } from 'mobx'
 import * as vega from 'vega'
 import * as vl from 'vega-lite'
 import { observer } from 'mobx-react'
@@ -14,14 +14,7 @@ type Props = {
 }
 
 class VegaLiteImage extends Component<Props> {
-  image: string
-
-  constructor(props) {
-    super(props)
-    extendObservable(this, {
-      image: ''
-    })
-  }
+  image: string = ''
 
   componentDidMount() {
     this.constructView()
@@ -73,5 +66,9 @@ class VegaLiteImage extends Component<Props> {
     )
   }
 }
+
+decorate(VegaLiteImage, {
+  image: observable
+})
 
 export default observer(VegaLiteImage)

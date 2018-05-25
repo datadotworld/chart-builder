@@ -1,6 +1,6 @@
 // @flow
 import React, { Fragment, Component } from 'react'
-import { extendObservable } from 'mobx'
+import { decorate, observable } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import DevTools from 'mobx-react-devtools'
 import { Grid } from 'react-bootstrap'
@@ -93,15 +93,7 @@ class AuthGate extends Component<{
   location: Object,
   store: StoreType
 }> {
-  hasValidToken: boolean
-
-  constructor(props) {
-    super(props)
-
-    extendObservable(this, {
-      hasValidToken: false
-    })
-  }
+  hasValidToken: boolean = false
 
   componentDidMount() {
     const token = localStorage.getItem('token')
@@ -173,5 +165,9 @@ class AuthGate extends Component<{
     )
   }
 }
+
+decorate(AuthGate, {
+  hasValidToken: observable
+})
 
 export default inject('store')(observer(AuthGate))

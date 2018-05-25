@@ -1,6 +1,6 @@
 // @flow
 import React, { Component, Fragment } from 'react'
-import { extendObservable } from 'mobx'
+import { decorate, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { API_HOST } from '../util/constants'
 
@@ -50,14 +50,6 @@ function toID(d: Dataset) {
 class DatasetSelector extends Component<Props> {
   loading: boolean
   datasets: ?Array<Dataset>
-
-  constructor() {
-    super()
-    extendObservable(this, {
-      loading: true,
-      datasets: null
-    })
-  }
 
   componentDidMount() {
     this.fetch()
@@ -122,5 +114,10 @@ class DatasetSelector extends Component<Props> {
     )
   }
 }
+
+decorate(DatasetSelector, {
+  loading: observable,
+  datasets: observable
+})
 
 export default observer(DatasetSelector)

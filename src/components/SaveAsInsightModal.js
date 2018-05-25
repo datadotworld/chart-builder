@@ -12,7 +12,7 @@ import {
   Grid,
   Checkbox
 } from 'react-bootstrap'
-import { extendObservable } from 'mobx'
+import { decorate, observable } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import kebabCase from 'lodash/kebabCase'
 import { API_HOST } from '../util/constants'
@@ -40,29 +40,15 @@ function storeBlob(blob: Blob): Promise<{ url: string }> {
 }
 
 class SaveAsInsightModal extends Component<Props> {
-  id: string
-  title: string
-  comment: string
-  saveAsFile: boolean
+  id: string = ''
+  title: string = this.props.store.config.title || ''
+  comment: string = ''
+  saveAsFile: boolean = true
 
-  response: ?{ message: string, uri: string }
-  saving: boolean
+  response: ?{ message: string, uri: string } = null
+  saving: boolean = false
 
-  img: Blob
-
-  constructor(props) {
-    super(props)
-
-    extendObservable(this, {
-      id: '',
-      title: props.store.config.title || '',
-      comment: '',
-      saveAsFile: true,
-      img: null,
-      response: null,
-      saving: false
-    })
-  }
+  img: ?Blob = null
 
   getFileCreateUrl() {
     const slugname = kebabCase(this.title)
@@ -104,6 +90,9 @@ class SaveAsInsightModal extends Component<Props> {
         this.id
       }/workspace/file?filename=${filename}`
     }
+
+    // shouldn't really happen
+    if (!this.img) return
 
     // upload image
     const uploadRes = await storeBlob(this.img)
@@ -227,5 +216,15 @@ class SaveAsInsightModal extends Component<Props> {
     )
   }
 }
+
+decorate(SaveAsInsightModal, {
+  id: observable,
+  title: observable,
+  comment: observable,
+  saveAsFile: observable,
+  img: observable,
+  response: observable,
+  saving: observable
+})
 
 export default inject('store')(observer(SaveAsInsightModal))

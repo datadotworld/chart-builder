@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react'
 import SimpleSelect from './SimpleSelect'
-import { extendObservable } from 'mobx'
+import { decorate, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { getParent } from 'mobx-state-tree'
 import {
@@ -91,14 +91,7 @@ type EncodingProps = {
 }
 
 class Encoding extends Component<EncodingProps> {
-  showConfig: boolean
-
-  constructor() {
-    super()
-    extendObservable(this, {
-      showConfig: false
-    })
-  }
+  showConfig: boolean = false
 
   handleRemove = () => {
     const { encoding } = this.props
@@ -413,5 +406,9 @@ class Encoding extends Component<EncodingProps> {
     )
   }
 }
+
+decorate(Encoding, {
+  showConfig: observable
+})
 
 export default observer(Encoding)

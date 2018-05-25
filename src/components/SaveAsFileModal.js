@@ -11,7 +11,7 @@ import {
   Row,
   Grid
 } from 'react-bootstrap'
-import { extendObservable } from 'mobx'
+import { decorate, observable } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import { API_HOST } from '../util/constants'
 import DatasetSelector from './DatasetSelector'
@@ -28,22 +28,11 @@ type Props = {
 }
 
 class SaveAsFileModal extends Component<Props> {
-  id: string
-  filename: string
+  id: string = ''
+  filename: string = 'vega-lite.vl.json'
 
-  response: ?{ message: string, uri: string }
-  saving: boolean
-
-  constructor(props) {
-    super(props)
-
-    extendObservable(this, {
-      id: '',
-      filename: 'vega-lite.vl.json',
-      response: null,
-      saving: false
-    })
-  }
+  response: ?{ message: string, uri: string } = null
+  saving: boolean = false
 
   getFileCreateUrl() {
     return `${API_HOST}/v0/uploads/${this.id}/files/${this.filename}`
@@ -150,5 +139,12 @@ class SaveAsFileModal extends Component<Props> {
     )
   }
 }
+
+decorate(SaveAsFileModal, {
+  id: observable,
+  filename: observable,
+  response: observable,
+  saving: observable
+})
 
 export default inject('store')(observer(SaveAsFileModal))

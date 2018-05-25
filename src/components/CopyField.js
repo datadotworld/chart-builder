@@ -1,6 +1,5 @@
 // @flow
 /* eslint no-unused-vars: ["warn", { "args": "after-used" }] */
-import { extendObservable } from 'mobx'
 import React, { Component } from 'react'
 import {
   FormGroup,
@@ -10,22 +9,15 @@ import {
   Tooltip,
   Overlay
 } from 'react-bootstrap'
+import { decorate, observable } from 'mobx'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { observer } from 'mobx-react'
 
 class CopyField extends Component<{ getValue: () => string }> {
-  copied: null | string
-  value: string
+  copied: null | string = null
+  value: string = this.props.getValue()
 
   copyButton: ?Button
-
-  constructor(props) {
-    super(props)
-    extendObservable(this, {
-      copied: false,
-      value: props.getValue()
-    })
-  }
 
   handleCopy = (text: string, result: boolean) => {
     this.copied = result ? 'Copied!' : 'Ctrl+C to copy'
@@ -81,4 +73,10 @@ class CopyField extends Component<{ getValue: () => string }> {
     )
   }
 }
+
+decorate(CopyField, {
+  copied: observable,
+  value: observable
+})
+
 export default observer(CopyField)

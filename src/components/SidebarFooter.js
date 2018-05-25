@@ -1,22 +1,14 @@
 // @flow
 /* eslint jsx-a11y/anchor-is-valid: 0 */
 import React, { Component } from 'react'
-import { extendObservable } from 'mobx'
+import { decorate, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import LicenseModal from './LicenseModal'
 
 import classes from './SidebarFooter.module.css'
 
 class SidebarFooter extends Component<{}> {
-  showLicenses: boolean
-
-  constructor() {
-    super()
-
-    extendObservable(this, {
-      showLicenses: false
-    })
-  }
+  showLicenses: boolean = false
 
   render() {
     return (
@@ -57,5 +49,9 @@ class SidebarFooter extends Component<{}> {
     )
   }
 }
+
+decorate(SidebarFooter, {
+  showLicenses: observable
+})
 
 export default observer(SidebarFooter)

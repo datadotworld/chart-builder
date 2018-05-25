@@ -1,6 +1,6 @@
 // @flow
 import React, { Fragment, Component } from 'react'
-import { extendObservable, runInAction } from 'mobx'
+import { decorate, observable, runInAction } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import { Link } from 'react-router-dom'
 import DevTools from 'mobx-react-devtools'
@@ -37,24 +37,15 @@ class App extends Component<{
   location: Object,
   store: StoreType
 }> {
-  data: ?Array<Object>
+  data: ?Array<Object> = null
 
-  loading: boolean
-  errorLoading: boolean
-  bytesDownloaded: number
+  loading: boolean = true
+  errorLoading: boolean = false
+  bytesDownloaded: number = 0
 
-  saveModalOpen: false | 'insight' | 'file'
+  saveModalOpen: false | 'insight' | 'file' = false
 
-  constructor(props) {
-    super(props)
-    extendObservable(this, {
-      // data: null,
-      loading: true,
-      errorLoading: false,
-      saveModalOpen: false,
-      bytesDownloaded: 0
-    })
-
+  componentDidMount() {
     if (this.props.store.hasValidParams) {
       this.fetchQuery()
     }
@@ -320,5 +311,13 @@ class App extends Component<{
     )
   }
 }
+
+decorate(App, {
+  // data: null,
+  loading: observable,
+  errorLoading: observable,
+  saveModalOpen: observable,
+  bytesDownloaded: observable
+})
 
 export default inject('store')(observer(App))
