@@ -331,6 +331,7 @@ export type StoreType = {
   agentid: string,
   datasetid: string,
   query: string,
+  queryType: 'sql' | 'sparql',
 
   // actions
   syncQueryParams: Object => void,
@@ -367,6 +368,14 @@ const Store: ModelType<StoreType> = types
     },
     get query() {
       return self.parsedUrlQuery.query
+    },
+    get queryType() {
+      const providedQueryType = self.parsedUrlQuery.query_type
+      if (providedQueryType) {
+        const lowered = providedQueryType.toLowerCase()
+        if (lowered === 'sql' || lowered === 'sparql') return lowered
+      }
+      return 'sql'
     }
   }))
   .actions((self: StoreType) => ({

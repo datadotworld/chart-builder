@@ -29,6 +29,32 @@ describe('Store', () => {
     })
     expect(store.hasValidParams).toBe(false)
   })
+  ;[
+    ['sql', 'sql'],
+    ['sqL', 'sql'],
+    ['blah', 'sql'],
+    ['', 'sql'],
+    ['sparql', 'sparql'],
+    ['sparqL', 'sparql']
+  ].forEach(([type, expected]) => {
+    it(`standardizes queryType from ${type} to ${expected}`, () => {
+      const store = Store.create({
+        location: {
+          search: `agentid=foo&datasetid=bar&query=select&query_type=${type}`
+        }
+      })
+      expect(store.queryType).toBe(expected)
+    })
+  })
+
+  it('detects standardizes queryType', () => {
+    const store = Store.create({
+      location: {
+        search: 'agentid=foo&datasetid=bar&query=select&queryType=SQL'
+      }
+    })
+    expect(store.queryType).toBe('sql')
+  })
 })
 
 describe('ChartConfig', () => {

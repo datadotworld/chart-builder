@@ -32,11 +32,27 @@ import { createParams } from '../util/util'
 import classes from './App.module.css'
 import type { StoreType } from '../util/Store'
 
-class App extends Component<{
+type AppP = {
   history: Object,
   location: Object,
   store: StoreType
-}> {
+}
+
+type SparqlResults = {
+  head: {
+    vars: Array<string>
+  },
+  results: {
+    bindings: Array<{
+      [key: string]: {
+        type: string,
+        value: string
+      }
+    }>
+  }
+}
+
+class App extends Component<AppP> {
   data: ?Array<Object> = null
 
   loading: boolean = true
@@ -53,9 +69,21 @@ class App extends Component<{
 
   getQueryUrl() {
     const { store } = this.props
-    return `${API_HOST}/v0/sql/${store.agentid}/${
+    return `${API_HOST}/v0/${store.queryType}/${store.agentid}/${
       store.datasetid
     }?includeTableSchema=true`
+  }
+
+  getQueryHeaders() {
+    const { store } = this.props
+    return {
+      Accept:
+        store.queryType === 'sql'
+          ? 'application/json'
+          : 'application/sparql-results+json',
+      Authorization: `Bearer ${store.token}`,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   }
 
   fetchQuery = async () => {
@@ -67,11 +95,7 @@ class App extends Component<{
     })
     const res = await fetch(this.getQueryUrl(), {
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${store.token}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
+      headers: this.getQueryHeaders(),
       body: createParams({ query: store.query }).toString()
     })
 
@@ -119,13 +143,45 @@ class App extends Component<{
     this.handleData(data)
   }
 
+  processData(data: Array<Object> | SparqlResults) {
+    if (Array.isArray(data)) {
+      // we're processing application/json
+      const [dschema, ...rows] = data
+      return {
+        fields: dschema.fields,
+        rows
+      }
+    }
+
+    // we're processing application/sparql+json
+    const sparqlFields: any = data.head.vars.map(v => ({
+      name: v,
+      rdfType: 'http://www.w3.org/2001/XMLSchema#string'
+    }))
+
+    const sparqlRows = data.results.bindings.map(b => {
+      const obj = {}
+      for (let k in b) {
+        obj[k] = b[k].value
+      }
+      return obj
+    })
+
+    return {
+      fields: sparqlFields,
+      rows: sparqlRows
+    }
+  }
+
   handleData = (data: Array<Object>) => {
     const { store } = this.props
 
-    const [dschema, ...rows] = data
+    const { fields, rows } = this.processData(data)
+
+    // const [dschema, ...rows] = data
     runInAction(() => {
       store.setFields([
-        ...dschema.fields.map(f => ({
+        ...fields.map(f => ({
           name: f.name,
           rdfType: f.rdfType
         })),
