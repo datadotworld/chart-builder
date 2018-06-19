@@ -178,7 +178,6 @@ class App extends Component<AppP> {
 
     const { fields, rows } = this.processData(data)
 
-    // const [dschema, ...rows] = data
     runInAction(() => {
       store.setFields([
         ...fields.map(f => ({
