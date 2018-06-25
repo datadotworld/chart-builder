@@ -31,6 +31,7 @@ jobs:
           key: v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
+            - ~/.cache/Cypress
 
       - run:
           name: Install aws-cli and integration test deps
@@ -46,7 +47,9 @@ jobs:
 
       - run:
           name: Cypress tests
-          command: yarn cypress run
+          command: |
+            yarn cypress install
+            yarn cypress run
 
       - store_artifacts:
           path: cypress/videos
