@@ -14,6 +14,19 @@ Map {
 }
 `;
 
+exports[`fixupJsonFields works 1`] = `
+Array [
+  Object {
+    "name": "foo",
+    "rdfType": "http://www.w3.org/2001/XMLSchema#decimal",
+  },
+  Object {
+    "name": "bar",
+    "rdfType": "http://www.w3.org/2001/XMLSchema#string",
+  },
+]
+`;
+
 exports[`getDownloadName works 1`] = `"base-name-2018-04-01T18-00-00-000Z.png"`;
 
 exports[`parseParams works 1`] = `

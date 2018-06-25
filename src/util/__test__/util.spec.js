@@ -2,7 +2,8 @@ import {
   parseParams,
   createParams,
   getDownloadName,
-  encodeFieldName
+  encodeFieldName,
+  fixupJsonFields
 } from '../util'
 
 describe('parseParams', () => {
@@ -46,5 +47,21 @@ describe('encodeFieldName', () => {
     it(`works for ${input}`, () => {
       expect(encodeFieldName(input)).toBe(expected)
     })
+  })
+})
+
+describe('fixupJsonFields', () => {
+  it('works', () => {
+    expect(
+      fixupJsonFields([
+        {
+          name: 'foo',
+          rdfType: 'http://www.w3.org/2001/XMLSchema#decimal'
+        },
+        {
+          name: 'bar'
+        }
+      ])
+    ).toMatchSnapshot()
   })
 })

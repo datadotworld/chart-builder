@@ -28,7 +28,7 @@ import VizCard from '../components/VizCard'
 import VizEmpty from '../components/VizEmpty'
 import ResizableVegaLiteEmbed from '../components/ResizableVegaLiteEmbed'
 import CopyField from '../components/CopyField'
-import { createParams } from '../util/util'
+import { createParams, fixupJsonFields } from '../util/util'
 import classes from './App.module.css'
 import type { StoreType } from '../util/Store'
 
@@ -148,7 +148,7 @@ class App extends Component<AppP> {
       // we're processing application/json
       const [dschema, ...rows] = data
       return {
-        fields: dschema.fields,
+        fields: fixupJsonFields(dschema.fields),
         rows
       }
     }

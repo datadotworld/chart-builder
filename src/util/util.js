@@ -27,3 +27,13 @@ export function getDownloadName(baseName: string, extension: string) {
 export function encodeFieldName(name: string) {
   return name.replace(/([.[\]])/g, '\\$1')
 }
+
+// sometimes a `field` doesn't contain an `rdfType`. we'll fallback to `string` in that case
+export function fixupJsonFields(
+  fields: Array<{ name: string, rdfType?: string }>
+) {
+  return fields.map(f => ({
+    rdfType: 'http://www.w3.org/2001/XMLSchema#string',
+    ...f
+  }))
+}
