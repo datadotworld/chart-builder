@@ -12,11 +12,14 @@ export default class LoadingAnimation extends Component<{
     const { hideOverlay, label } = this.props
     return (
       <div
-        className={cx(classes.container, hideOverlay && classes.hideOverlay)}
+        className={cx(
+          classes.container,
+          hideOverlay === true && classes.hideOverlay
+        )}
       >
         <div className={classes.center}>
           <div className={classes.loader}>Loading...</div>
-          {label && <small>{label}</small>}
+          {label != null && <small>{label}</small>}
         </div>
       </div>
     )

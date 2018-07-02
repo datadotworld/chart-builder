@@ -13,7 +13,7 @@
     "classnames": "^2.2.6",
     "filepicker-js": "^2.4.18",
     "filesize": "^3.6.1",
-    "flow-bin": "^0.74.0",
+    "flow-bin": "^0.75.0",
     "history": "^4.7.2",
     "lz-string": "^1.4.4",
     "mobx": "4.3.1",
@@ -31,7 +31,7 @@
     "react-select": "^2.0.0-beta.1",
     "vega": "^3.3.0",
     "vega-lite": "^2.5.2",
-    "vega-tooltip": "^0.11.0"
+    "vega-tooltip": "^0.12.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -43,12 +43,12 @@
     "precommit": "pretty-quick --staged"
   },
   "devDependencies": {
-    "cypress": "^3.0.1",
-    "fetch-mock": "^6.4.4",
+    "cypress": "^3.0.2",
+    "fetch-mock": "^6.5.0",
     "http-server": "^0.11.1",
     "husky": "^0.14.3",
     "mobx-react-devtools": "5.0.1",
-    "prettier": "^1.13.5",
+    "prettier": "^1.13.7",
     "pretty-quick": "^1.6.0",
     "react-test-renderer": "^16.4.1"
   },

@@ -27,7 +27,7 @@ class GlobalOptions extends Component<Props> {
               <FormControl
                 type="number"
                 placeholder="Auto"
-                value={store.config.width || ''}
+                value={store.config.width != null ? store.config.width : ''}
                 onChange={e => {
                   const val = getVal(e.target.value)
                   if (!isNaN(val)) {
@@ -44,7 +44,7 @@ class GlobalOptions extends Component<Props> {
               <FormControl
                 type="number"
                 placeholder="Auto"
-                value={store.config.height || ''}
+                value={store.config.height != null ? store.config.height : ''}
                 onChange={e => {
                   const val = getVal(e.target.value)
                   if (!isNaN(val)) {

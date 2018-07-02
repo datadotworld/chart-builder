@@ -28,6 +28,7 @@ export default class FieldSelect extends Component<Props> {
   render() {
     const { fields, value, disabled } = this.props
     const options = fields.map(f => {
+      /* flowlint-next-line sketchy-null:off */
       return { value: f.name, label: f.label || f.name, field: f }
     })
     return (

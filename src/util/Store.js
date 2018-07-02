@@ -186,7 +186,7 @@ export const ChartConfig = types
       )
     },
     get generatedSpec() {
-      if (self.manualSpec) {
+      if (self.manualSpec != null && self.manualSpec !== '') {
         try {
           const obj = JSON.parse(self.manualSpec)
           return obj
@@ -244,11 +244,19 @@ export const ChartConfig = types
 
       return {
         $schema: 'https://vega.github.io/schema/vega-lite/v2.json',
-        title: self.title || undefined,
-        width: self.hasFacetField ? undefined : self.width || undefined,
-        height: self.hasFacetField ? undefined : self.height || undefined,
+        title: self.title != null ? self.title : undefined,
+        width: self.hasFacetField
+          ? undefined
+          : self.width != null
+            ? self.width
+            : undefined,
+        height: self.hasFacetField
+          ? undefined
+          : self.height != null
+            ? self.height
+            : undefined,
         autosize:
-          !self.hasFacetField && (self.width || self.height)
+          !self.hasFacetField && (self.width != null || self.height != null)
             ? {
                 type: 'fit',
                 contains: 'padding'

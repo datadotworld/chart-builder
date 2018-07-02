@@ -180,7 +180,7 @@ class App extends Component<AppP> {
 
     runInAction(() => {
       store.setFields([
-        ...fields.map(f => ({
+        ...(fields: any).map(f => ({
           name: f.name,
           rdfType: f.rdfType
         })),

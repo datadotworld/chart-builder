@@ -14,7 +14,6 @@ type Props = {
 }
 
 export default class VegaLiteEmbed extends Component<Props> {
-  // $FlowIssue: createRef api
   nodeRef = React.createRef()
 
   shouldComponentUpdate() {

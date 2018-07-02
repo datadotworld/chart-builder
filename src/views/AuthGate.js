@@ -55,7 +55,7 @@ function redirectToOauth() {
 
 async function fetchToken(code: string): Promise<{ access_token: string }> {
   const challenge = getAndClearChallenge()
-  if (!challenge) {
+  if (challenge == null) {
     throw new Error('no challenge in storage')
   }
   const params = createParams({
@@ -101,7 +101,7 @@ class AuthGate extends Component<{
 
     if (parsedParams.has('code')) {
       this.fetchToken()
-    } else if (token) {
+    } else if (token != null) {
       this.verifyToken()
     } else {
       redirectToOauth()
@@ -133,7 +133,7 @@ class AuthGate extends Component<{
     const token = localStorage.getItem('token')
 
     try {
-      if (!token) {
+      if (token == null || token === '') {
         throw new Error('no token')
       }
       await verifyToken(token)

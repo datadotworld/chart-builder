@@ -36,7 +36,7 @@ class CopyField extends Component<{ getValue: () => string }> {
   render() {
     const { value } = this
 
-    const copiedTooltip = this.copied && (
+    const copiedTooltip = this.copied != null && (
       <Tooltip placement="bottom" className="in" id="tooltip-bottom">
         {this.copied}
       </Tooltip>
@@ -58,7 +58,7 @@ class CopyField extends Component<{ getValue: () => string }> {
               </Button>
             </CopyToClipboard>
           </InputGroup.Button>
-          {!!this.copied && (
+          {this.copied != null && (
             <Overlay
               placement="top"
               show

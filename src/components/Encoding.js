@@ -331,6 +331,7 @@ class Encoding extends Component<EncodingProps> {
                         .map(s => s._id)}
                       labels={encodings.filter(e => e !== encoding).map(e => {
                         return `${e.channel} - ${
+                          /* flowlint-next-line sketchy-null:off */
                           e.field ? e.field.label || e.field.name : 'n/a'
                         }`
                       })}

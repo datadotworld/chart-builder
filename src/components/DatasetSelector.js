@@ -94,7 +94,8 @@ class DatasetSelector extends Component<Props> {
         {this.datasets ? (
           <Fragment>
             <option value="">
-              Choose a {this.props.limitToProjects ? 'project' : 'dataset'}
+              Choose a{' '}
+              {this.props.limitToProjects === true ? 'project' : 'dataset'}
             </option>
             {this.datasets.map(d => {
               const text = toID(d)
