@@ -27,6 +27,7 @@ class GlobalOptions extends Component<Props> {
               <FormControl
                 type="number"
                 placeholder="Auto"
+                disabled={store.config.hasManualSpec}
                 value={store.config.width != null ? store.config.width : ''}
                 onChange={e => {
                   const val = getVal(e.target.value)
@@ -44,6 +45,7 @@ class GlobalOptions extends Component<Props> {
               <FormControl
                 type="number"
                 placeholder="Auto"
+                disabled={store.config.hasManualSpec}
                 value={store.config.height != null ? store.config.height : ''}
                 onChange={e => {
                   const val = getVal(e.target.value)

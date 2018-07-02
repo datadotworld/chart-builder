@@ -36,13 +36,13 @@ class Sidebar extends Component<Props> {
           >
             {store.config.hasManualSpec && (
               <Alert className={classes.manualAlert}>
-                You've manually edited the spec, so you can't modify these
-                fields.
+                Visual Builder editing has been disabled because of manual
+                changes made in the Vega-Lite Editor.
                 <Button
                   bsStyle="link"
                   onClick={() => store.config.setManualSpec(null)}
                 >
-                  Undo manual modifications
+                  Undo manual changes
                 </Button>
               </Alert>
             )}
@@ -103,7 +103,7 @@ class Sidebar extends Component<Props> {
                 <div />
               </div>
             )}
-            <div className={classes.title}>Global options</div>
+            <div className={classes.title}>Set chart size</div>
             <GlobalOptions />
           </Tab>
           <Tab eventKey="editor" title="Vega-Lite Editor">

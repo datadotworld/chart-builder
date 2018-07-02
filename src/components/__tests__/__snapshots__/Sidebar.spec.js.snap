@@ -155,7 +155,7 @@ exports[`renders 1`] = `
         <div
           className="title"
         >
-          Global options
+          Set chart size
         </div>
         <global-options />
       </div>

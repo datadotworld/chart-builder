@@ -24,7 +24,6 @@ export default class VegaLiteEmbed extends Component<Props> {
     this.constructView()
   }
 
-  node: ?HTMLDivElement
   view: ?Object
 
   async constructView() {
@@ -33,25 +32,27 @@ export default class VegaLiteEmbed extends Component<Props> {
     const logLevel = vega.Warn
     const renderer = 'svg'
 
-    const vgSpec = vl.compile(spec).spec
-
-    const runtime = vega.parse(vgSpec)
-
-    const view = new vega.View(runtime, {
-      loader,
-      logLevel,
-      renderer
-    })
-      .initialize(this.nodeRef.current)
-      .change('source', vega.changeset().insert(data))
-
     try {
-      VegaTooltip(view)
-    } catch (e) {}
+      const vgSpec = vl.compile(spec).spec
 
-    this.view = view
-    await view.runAsync()
-    onViewRender && onViewRender(view)
+      const runtime = vega.parse(vgSpec)
+
+      const view = new vega.View(runtime, {
+        loader,
+        logLevel,
+        renderer
+      })
+        .initialize(this.nodeRef.current)
+        .change('source', vega.changeset().insert(data))
+
+      try {
+        VegaTooltip(view)
+      } catch (e) {}
+
+      this.view = view
+      await view.runAsync()
+      onViewRender && onViewRender(view)
+    } catch (e) {}
   }
 
   componentWillUnmount() {
