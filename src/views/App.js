@@ -248,7 +248,7 @@ class App extends Component<AppP> {
                   to={{
                     pathname: '/',
                     search:
-                      '?agentid=data-society&datasetid=iris-species&query=SELECT+%2A%0AFROM+iris'
+                      '?dataset=data-society/iris-species&query=SELECT+%2A%0AFROM+iris'
                   }}
                 >
                   Here's an example

@@ -46,14 +46,29 @@ describe('Store', () => {
       expect(store.queryType).toBe(expected)
     })
   })
+  ;[
+    ['agentid=a&datasetid=b', { agentid: 'a', datasetid: 'b' }],
+    ['dataset=a/b', { agentid: 'a', datasetid: 'b' }],
+    ['dataset=a&agentid=b&datasetid=c', { agentid: 'b', datasetid: 'c' }],
+    ['project=a/b', { agentid: 'a', datasetid: 'b' }],
+    ['dataset=c/d&project=a/b', { agentid: 'c', datasetid: 'd' }],
+    [
+      'dataset=c/d&project=a/b&agentid=e&datasetid=f',
+      { agentid: 'c', datasetid: 'd' }
+    ]
+  ].forEach(([search, expected]) => {
+    it(`parsing agentid/datasetid works for ${search}`, () => {
+      const store = Store.create({
+        location: {
+          search
+        }
+      })
 
-  it('detects standardizes queryType', () => {
-    const store = Store.create({
-      location: {
-        search: 'agentid=foo&datasetid=bar&query=select&queryType=SQL'
-      }
+      expect({
+        agentid: store.agentid,
+        datasetid: store.datasetid
+      }).toEqual(expected)
     })
-    expect(store.queryType).toBe('sql')
   })
 })
 
