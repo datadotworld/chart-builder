@@ -71,7 +71,6 @@ class Sidebar extends Component<Props> {
               value={store.config.mark}
               onChange={store.config.setMark}
               disabled={store.config.hasManualSpec}
-              size="large"
             />
             <div className={classes.title}>
               Configuration

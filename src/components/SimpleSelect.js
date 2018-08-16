@@ -10,7 +10,6 @@ type Props<T> = {
   placeholder?: string,
   disabled?: boolean,
   isClearable?: boolean,
-  size?: 'large',
   onChange: (e: T) => any
 }
 
@@ -18,13 +17,6 @@ const NORMAL_SELECT_STYLES = selectStyles({
   control: () => ({
     height: 28,
     fontSize: 13
-  })
-})
-
-const LARGE_SELECT_STYLES = selectStyles({
-  control: () => ({
-    height: 44,
-    fontSize: 16
   })
 })
 
@@ -37,8 +29,7 @@ export default class SimpleSelect extends Component<Props<*>> {
       labels,
       disabled,
       placeholder,
-      isClearable,
-      size
+      isClearable
     } = this.props
 
     const options = values.map((v, vi) => {
@@ -53,7 +44,7 @@ export default class SimpleSelect extends Component<Props<*>> {
         onChange={e => {
           onChange(e ? e.value : null)
         }}
-        styles={size === 'large' ? LARGE_SELECT_STYLES : NORMAL_SELECT_STYLES}
+        styles={NORMAL_SELECT_STYLES}
         isDisabled={disabled}
         placeholder={placeholder}
         isClearable={isClearable}
