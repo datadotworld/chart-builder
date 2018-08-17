@@ -4,10 +4,55 @@
 
 .dimensions :global(.help-block) {
   margin-left: 0.125rem;
+  padding-top: 0.125rem;
+  clear: both;
 }
 
 .cross {
   margin: 0 0.5rem;
   font-size: 1.5rem;
   color: #8c9caf;
+}
+
+.cross svg {
+  display: inline-block;
+  fill: currentColor;
+  line-height: 1;
+  stroke: currentColor;
+  stroke-width: 0;
+}
+
+.formGroup {
+  flex-grow: 1;
+}
+
+.formGroup :global(.input-group) {
+  width: 100%;
+}
+
+.formGroup:global(.form-group) input:global(.form-control) {
+  background-color: #fff;
+  border-color: hsl(0, 0%, 80%);
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+  min-height: 28px;
+  outline: 0 !important;
+  position: relative;
+  transition: all 100ms;
+  height: 28px;
+  font-size: 13px;
+  margin: 0.25rem 0;
+  box-shadow: none;
+}
+
+.formGroup:global(.form-group) input:global(.form-control):focus {
+  border-color: #2684ff;
+  box-shadow: 0 0 0 1px #2684ff;
+}
+
+.formGroup input::placeholder {
+  color: hsl(0, 0%, 50%);
+  font-size: 13px;
+  font-weight: 400;
 }

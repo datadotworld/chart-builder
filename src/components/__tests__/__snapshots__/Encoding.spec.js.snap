@@ -172,14 +172,28 @@ exports[`renders 1`] = `
       data-test="toggle-adv-config"
       disabled={false}
       onClick={[Function]}
-      style={
-        Object {
-          "flexShrink": 0,
-        }
-      }
       type="button"
     >
       Options
+       
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="16"
+        style={
+          Object {
+            "transform": "",
+          }
+        }
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <g>
+          <polyline
+            points="12,5.8 8,10.2 4,5.8"
+          />
+        </g>
+      </svg>
     </button>
   </div>
 </div>

@@ -125,11 +125,22 @@ class Encoding extends Component<EncodingProps> {
           <Button
             bsSize="xs"
             onClick={() => (this.showConfig = !this.showConfig)}
-            style={{ flexShrink: 0 }}
             disabled={disabled}
             data-test="toggle-adv-config"
           >
-            Options
+            Options{' '}
+            <svg
+              height="16"
+              width="16"
+              viewBox="0 0 16 16"
+              aria-hidden="true"
+              focusable="false"
+              style={{ transform: this.showConfig ? 'rotate(180deg)' : '' }}
+            >
+              <g>
+                <polyline points="12,5.8 8,10.2 4,5.8" />
+              </g>
+            </svg>
           </Button>
         </div>
         {this.showConfig &&
