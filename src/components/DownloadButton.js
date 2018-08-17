@@ -115,6 +115,41 @@ export class DownloadButton extends Component<Props> {
         >
           SVG <span className="text-muted">(.svg)</span>
         </DownloadMenuItem>
+        <MenuItem header>HTML</MenuItem>
+        <DownloadMenuItem
+          baseName="download"
+          extension="html"
+          getDownloadUrl={() => {
+            const vlSpec = JSON.stringify(
+              store.config.getSpecWithMinimumAmountOfData(getData())
+            )
+            let html = `<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vega@4.2.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc3"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@3.18.2"></script>
+</head>
+<body>
+
+  <div id="vis"></div>
+
+  <script type="text/javascript">
+    var yourVlSpec = ${vlSpec};
+    vegaEmbed("#vis", yourVlSpec);
+  </script>
+</body>
+</html>
+            `
+            const blob = new Blob([html], {
+              type: 'application/html'
+            })
+            return URL.createObjectURL(blob)
+          }}
+          href="##"
+        >
+          HTML <span className="text-muted">(.html)</span>
+        </DownloadMenuItem>
       </DropdownButton>
     )
   }

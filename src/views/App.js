@@ -58,13 +58,7 @@ class App extends Component<AppP> {
   errorLoading: boolean = false
   bytesDownloaded: number = 0
 
-  saveModalOpen:
-    | false
-    | 'insight'
-    | 'file'
-    | 'shareurl'
-    | 'ddwembed'
-    | 'html' = false
+  saveModalOpen: false | 'insight' | 'file' | 'shareurl' | 'ddwembed' = false
 
   componentDidMount() {
     if (this.props.store.hasValidParams) {
@@ -327,7 +321,6 @@ class App extends Component<AppP> {
                         </MenuItem>
                         <MenuItem header>Other</MenuItem>
                         <MenuItem eventKey="shareurl">Share URL</MenuItem>
-                        <MenuItem eventKey="html">HTML</MenuItem>
                       </DropdownButton>
                     </ButtonToolbar>
                   </div>
@@ -420,7 +413,6 @@ class App extends Component<AppP> {
             </Modal.Footer>
           </Modal>
         )}
-        {this.saveModalOpen === 'html' && console.log('Get VL HTML!')}
       </Fragment>
     )
   }
