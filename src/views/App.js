@@ -10,10 +10,9 @@ import {
   Button,
   Col,
   ButtonToolbar,
-  OverlayTrigger,
-  Popover,
   DropdownButton,
-  MenuItem
+  MenuItem,
+  Modal
 } from 'react-bootstrap'
 import filesize from 'filesize'
 import DownloadButton from '../components/DownloadButton'
@@ -59,7 +58,13 @@ class App extends Component<AppP> {
   errorLoading: boolean = false
   bytesDownloaded: number = 0
 
-  saveModalOpen: false | 'insight' | 'file' = false
+  saveModalOpen:
+    | false
+    | 'insight'
+    | 'file'
+    | 'shareurl'
+    | 'ddwembed'
+    | 'html' = false
 
   componentDidMount() {
     if (this.props.store.hasValidParams) {
@@ -203,14 +208,6 @@ class App extends Component<AppP> {
     this.vegaView = v
   }
 
-  renderShareOverlay() {
-    return (
-      <Popover id="popover-share-url" title="Share Link">
-        <CopyField getValue={() => getStateUrl(this.props.store)} />
-      </Popover>
-    )
-  }
-
   renderEmbed() {
     const { data } = this
     const { store } = this.props
@@ -308,27 +305,13 @@ class App extends Component<AppP> {
                   </div>
                   <div className={classes.topBarButtons}>
                     <ButtonToolbar>
-                      <OverlayTrigger
-                        trigger="click"
-                        rootClose
-                        placement="bottom"
-                        overlay={this.renderShareOverlay()}
-                      >
-                        <Button
-                          data-test="share-btn"
-                          bsSize="xs"
-                          disabled={!store.config.hasPossiblyValidChart}
-                        >
-                          Share Link
-                        </Button>
-                      </OverlayTrigger>
                       <DownloadButton
                         getVegaView={() => this.vegaView}
                         getData={() => this.data}
                       />
                       <DropdownButton
                         bsSize="xs"
-                        title="Save as..."
+                        title="Share"
                         id="dropdown-save-ddw"
                         disabled={!store.config.hasPossiblyValidChart}
                         className={classes.dropdownButton}
@@ -336,9 +319,15 @@ class App extends Component<AppP> {
                         noCaret
                         onSelect={ek => (this.saveModalOpen = ek)}
                       >
-                        <MenuItem header>data.world</MenuItem>
-                        <MenuItem eventKey="file">File</MenuItem>
+                        <MenuItem header>Share to data.world as...</MenuItem>
                         <MenuItem eventKey="insight">Insight</MenuItem>
+                        <MenuItem eventKey="file">File</MenuItem>
+                        <MenuItem eventKey="ddwembed">
+                          Markdown Embed (Comment)
+                        </MenuItem>
+                        <MenuItem header>Other</MenuItem>
+                        <MenuItem eventKey="shareurl">Share URL</MenuItem>
+                        <MenuItem eventKey="html">HTML</MenuItem>
                       </DropdownButton>
                     </ButtonToolbar>
                   </div>
@@ -362,6 +351,76 @@ class App extends Component<AppP> {
             data={this.data}
           />
         )}
+        {this.saveModalOpen === 'shareurl' && (
+          <Modal
+            onHide={() => (this.saveModalOpen = false)}
+            show
+            backdrop="static"
+            className={classes.modal}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Share URL</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Grid>
+                <Row>
+                  <Col md={12}>
+                    Use this URL to share this chart so other people can
+                    view/edit it in Chart Builder:
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={12}>
+                    <CopyField getValue={() => getStateUrl(this.props.store)} />
+                  </Col>
+                </Row>
+              </Grid>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={() => (this.saveModalOpen = false)}>Done</Button>
+            </Modal.Footer>
+          </Modal>
+        )}
+        {this.saveModalOpen === 'ddwembed' && (
+          <Modal
+            onHide={() => (this.saveModalOpen = false)}
+            show
+            backdrop="static"
+            className={classes.modal}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Share URL</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Grid>
+                <Row>
+                  <Col md={12}>
+                    Copy and paste this into any Markdown (Comments, Summaries,
+                    Insights) on data.world to render this chart:
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={12}>
+                    <CopyField
+                      getValue={() => {
+                        const storeConfig = this.props.store.config
+                        const data = this.data || []
+                        let spec = storeConfig.getSpecWithMinimumAmountOfData(
+                          data
+                        )
+                        return '```vega-lite\n' + JSON.stringify(spec)
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </Grid>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={() => (this.saveModalOpen = false)}>Done</Button>
+            </Modal.Footer>
+          </Modal>
+        )}
+        {this.saveModalOpen === 'html' && console.log('Get VL HTML!')}
       </Fragment>
     )
   }
