@@ -11,15 +11,14 @@ describe('Chart Explorer', function() {
           this.queryResponse
         )
         fetch.get(
-          'https://api.data.world/v0/user/datasets/contributing?limit=100',
-          this.datasetsResponse
+          'https://api.data.world/v0/datasets/data-society/iris-species',
+          {
+            accessLevel: 'WRITE',
+            isProject: true
+          }
         )
-        fetch.get('https://api.data.world/v0/user/datasets/own?limit=100', {
-          count: 0,
-          records: []
-        })
         fetch.put(
-          'https://api.data.world/v0/uploads/test-id/test-ds-1/files/vega-lite.vl.json',
+          'https://api.data.world/v0/uploads/data-society/iris-species/files/vega-lite.vl.json',
           { message: 'File uploaded.' }
         )
         fetch.get('glob:*/static/media/licenses*', 'cypress license text')
@@ -31,7 +30,6 @@ describe('Chart Explorer', function() {
 
     cy.fixture('profile').as('profile')
     cy.fixture('queryResponse').as('queryResponse')
-    cy.fixture('datasetsResponse').as('datasetsResponse')
 
     cy.visit('/', visitOptions)
 
@@ -39,27 +37,21 @@ describe('Chart Explorer', function() {
     cy.get('[data-test=example-link]').click()
 
     // set some chart options
-    cy
-      .get(
-        ':nth-child(1) > [data-test=encoding-bar] > .css-1y3q4ke > .react-select__control > .react-select__indicators > .react-select__indicator'
-      )
-      .click()
+    cy.get(
+      ':nth-child(1) > [data-test=encoding-bar] > .css-1y3q4ke > .react-select__control > .react-select__indicators > .react-select__indicator'
+    ).click()
 
     cy.get('#react-select-4-option-1').click()
 
-    cy
-      .get(
-        ':nth-child(2) > [data-test=encoding-bar] > .css-1y3q4ke > .react-select__control > .react-select__indicators > .react-select__indicator'
-      )
-      .click()
+    cy.get(
+      ':nth-child(2) > [data-test=encoding-bar] > .css-1y3q4ke > .react-select__control > .react-select__indicators > .react-select__indicator'
+    ).click()
 
     cy.get('#react-select-6-option-2').click()
 
-    cy
-      .get(
-        '#configure-tabs-pane-builder > :nth-child(2) > .react-select__control > .react-select__indicators > .react-select__indicator'
-      )
-      .click()
+    cy.get(
+      '#configure-tabs-pane-builder > :nth-child(2) > .react-select__control > .react-select__indicators > .react-select__indicator'
+    ).click()
 
     cy.get('#react-select-2-option-3').click()
 
@@ -79,11 +71,9 @@ describe('Chart Explorer', function() {
     // add and remove encoding
     cy.get('[data-test=add-encoding]').click()
 
-    cy
-      .get(
-        ':nth-child(4) > [data-test=encoding-bar] > [data-test=toggle-adv-config]'
-      )
-      .click()
+    cy.get(
+      ':nth-child(4) > [data-test=encoding-bar] > [data-test=toggle-adv-config]'
+    ).click()
     cy.get('[data-test=rm-encoding]').click()
 
     // check for editor existence
@@ -117,13 +107,11 @@ describe('Chart Explorer', function() {
 
     cy.get('.btn-primary').click()
 
-    cy
-      .get('.alert-link')
-      .should(
-        'have.attr',
-        'href',
-        'https://data.world/test-id/test-ds-1/workspace/file?filename=vega-lite.vl.json'
-      )
+    cy.get('.alert-link').should(
+      'have.attr',
+      'href',
+      'https://data.world/data-society/iris-species/workspace/file?filename=vega-lite.vl.json'
+    )
 
     cy.get('.modal-footer > .btn').click()
 
