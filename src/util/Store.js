@@ -16,7 +16,7 @@ type ModelType<T> = {
 export type FieldType = {
   // model
   name: string,
-  label: ?string,
+  label: string,
   rdfType: string,
 
   // views
@@ -25,8 +25,8 @@ export type FieldType = {
 
 export const Field: ModelType<FieldType> = types
   .model('Field', {
-    name: types.identifier(types.string),
-    label: types.maybe(types.string),
+    name: types.identifier,
+    label: types.maybeNull(types.string),
     rdfType: types.string
   })
   .views(self => ({
@@ -70,22 +70,22 @@ let currentEncLineID = 0
 
 export const EncLine: ModelType<EncLineType> = types
   .model('EncLine', {
-    _id: types.identifier(types.number),
+    _id: types.identifierNumber,
 
-    field: types.maybe(types.reference(Field)),
+    field: types.maybeNull(types.reference(Field)),
     channel: types.optional(types.string, 'x'),
     type: types.optional(types.string, 'auto'),
 
     bin: types.optional(types.boolean, false),
-    aggregate: types.maybe(types.string),
+    aggregate: types.maybeNull(types.string),
     zero: types.optional(types.boolean, true),
     scale: types.optional(types.string, 'linear'),
     sort: types.optional(
       types.enumeration(['none', 'ascending', 'descending']),
       'ascending'
     ),
-    timeUnit: types.maybe(types.string),
-    sortField: types.maybe(types.reference(types.late(() => EncLine)))
+    timeUnit: types.maybeNull(types.string),
+    sortField: types.maybeNull(types.reference(types.late(() => EncLine)))
   })
   .views(self => ({
     get autoType() {
@@ -166,12 +166,12 @@ export type ChartConfigType = {
 
 export const ChartConfig = types
   .model('ChartConfig', {
-    title: types.maybe(types.string),
+    title: types.maybeNull(types.string),
     mark: types.optional(types.string, 'bar'),
     encodings: types.optional(types.array(EncLine), () => []),
-    manualSpec: types.maybe(types.string),
-    width: types.maybe(types.number),
-    height: types.maybe(types.number)
+    manualSpec: types.maybeNull(types.string),
+    width: types.maybeNull(types.number),
+    height: types.maybeNull(types.number)
   })
   .views((self: ChartConfigType) => ({
     get hasPossiblyValidChart() {
@@ -355,7 +355,7 @@ const Store: ModelType<StoreType> = types
   .model('Store', {
     token: types.optional(types.string, ''),
 
-    location: types.frozen,
+    location: types.frozen(),
 
     fields: types.optional(types.array(Field), []),
     config: types.optional(ChartConfig, {})
