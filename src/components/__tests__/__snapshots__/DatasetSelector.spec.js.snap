@@ -1,17 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders loading 1`] = `
-<select
-  className="form-control"
-  disabled={true}
-  onChange={[Function]}
-  value=""
+<div
+  className="form-group"
 >
-  <option
-    disabled={true}
-    value=""
+  <span
+    className="input-group"
   >
-    Loading...
-  </option>
-</select>
+    <input
+      className="form-control"
+      id={undefined}
+      readOnly={true}
+      type="text"
+      value="Loading..."
+    />
+    <span
+      className="input-group-btn"
+    >
+      <button
+        className="btn btn-default"
+        data-test="select-dataset-modal"
+        disabled={false}
+        onClick={[Function]}
+        style={
+          Object {
+            "padding": "0 0.5rem",
+          }
+        }
+        type="button"
+      >
+        Select
+      </button>
+    </span>
+  </span>
+</div>
 `;

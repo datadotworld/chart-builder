@@ -1,37 +1,10 @@
 // @flow
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { decorate, observable } from 'mobx'
 import { observer } from 'mobx-react'
+import { FormGroup, InputGroup, FormControl, Button } from 'react-bootstrap'
 import { API_HOST } from '../util/constants'
-
-async function fetchUntilCompletion(token: string, baseUrl: string) {
-  let next = ''
-  const records = []
-  do {
-    const fullUrl = baseUrl + (next ? `&next=${encodeURIComponent(next)}` : '')
-    const data = await fetch(fullUrl, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${token}`
-      }
-    }).then(r => r.json())
-    records.push(...data.records)
-    next = data.nextPageToken
-  } while (next)
-  return records
-}
-
-async function fetchAllDatasets(token: string, limitToProjects: boolean) {
-  const baseUrl = `${API_HOST}/v0/user/${
-    limitToProjects ? 'projects' : 'datasets'
-  }`
-  const [ownDatasets, contribDatasets] = await Promise.all([
-    fetchUntilCompletion(token, `${baseUrl}/own?limit=100`),
-    fetchUntilCompletion(token, `${baseUrl}/contributing?limit=100`)
-  ])
-  return ownDatasets.concat(contribDatasets)
-}
+import DWDatasetModal, { type SelectedDatasetType } from './DWDatasetModal'
 
 type Props = {
   token: string,
@@ -41,84 +14,94 @@ type Props = {
   onChange: (id: string) => mixed
 }
 
-type Dataset = { owner: string, id: string, isProject: boolean }
-
-function toID(d: Dataset) {
+function toID(d: SelectedDatasetType) {
   return d.owner + '/' + d.id
 }
 
 class DatasetSelector extends Component<Props> {
-  loading: boolean
-  datasets: ?Array<Dataset>
+  loadingInitial: boolean = true
+  modalOpen: boolean = false
 
   componentDidMount() {
-    this.fetch()
+    this.setValueIfValid()
   }
 
-  async fetch() {
-    this.loading = true
-    this.datasets = await fetchAllDatasets(
-      this.props.token,
-      !!this.props.limitToProjects
-    )
-    this.loading = false
+  async setValueIfValid() {
+    const { token, defaultValue, limitToProjects } = this.props
+    if (!defaultValue) return
 
-    const { defaultValue, onChange } = this.props
-    if (defaultValue) {
-      if (this.datasets.some(d => toID(d) === defaultValue)) {
-        onChange(defaultValue)
-        return
+    try {
+      const resp = await fetch(`${API_HOST}/v0/datasets/${defaultValue}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      })
+      if (resp.ok) {
+        const jsonResponse = await resp.json()
+        if (jsonResponse.accessLevel === 'WRITE') {
+          if ((limitToProjects && jsonResponse.isProject) || !limitToProjects) {
+            this.props.onChange(defaultValue)
+          }
+        }
       }
-    }
-    // set the first dataset as selected
-    const [dataset] = this.datasets
-    if (dataset && this.props.onChange) {
-      this.props.onChange(toID(dataset))
-    }
+    } catch (e) {}
+
+    this.loadingInitial = false
   }
 
-  handleChange = e => {
-    this.props.onChange(e.target.value)
+  handleSelect = (d: SelectedDatasetType) => {
+    this.props.onChange(toID(d))
+    this.modalOpen = false
+  }
+
+  handleSelectClick = () => {
+    this.modalOpen = true
+  }
+
+  handleCancel = () => {
+    this.modalOpen = false
   }
 
   render() {
-    const value = this.loading ? '' : this.props.value
+    const { limitToProjects } = this.props
+    const value = this.loadingInitial
+      ? 'Loading...'
+      : this.props.value ||
+        `Select ${limitToProjects ? 'project' : 'dataset/project'}`
 
     return (
-      <select
-        disabled={this.loading}
-        className="form-control"
-        value={value}
-        onChange={this.handleChange}
-      >
-        {this.datasets ? (
-          <Fragment>
-            <option value="">
-              Choose a{' '}
-              {this.props.limitToProjects === true ? 'project' : 'dataset'}
-            </option>
-            {this.datasets.map(d => {
-              const text = toID(d)
-              return (
-                <option key={text} value={text}>
-                  {text}
-                </option>
-              )
-            })}
-          </Fragment>
-        ) : (
-          <option disabled value="">
-            Loading...
-          </option>
+      <>
+        <FormGroup>
+          <InputGroup>
+            <FormControl type="text" readOnly value={value} />
+            <InputGroup.Button>
+              <Button
+                data-test="select-dataset-modal"
+                onClick={this.handleSelectClick}
+                style={{ padding: '0 0.5rem' }}
+              >
+                Select
+              </Button>
+            </InputGroup.Button>
+          </InputGroup>
+        </FormGroup>
+        {this.modalOpen && (
+          <DWDatasetModal
+            limitToProjects={this.props.limitToProjects}
+            onSelect={this.handleSelect}
+            onCancel={this.handleCancel}
+          />
         )}
-      </select>
+      </>
     )
   }
 }
 
 decorate(DatasetSelector, {
-  loading: observable,
-  datasets: observable
+  modalOpen: observable,
+  loadingInitial: observable
 })
 
 export default observer(DatasetSelector)

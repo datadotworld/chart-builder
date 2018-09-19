@@ -156,7 +156,7 @@ class SaveAsInsightModal extends Component<Props> {
               </Col>
               <Col md={4} sm={5} xs={12}>
                 <FormGroup controlId="insight-agentiddatasetid">
-                  <ControlLabel>Agent ID/Project ID</ControlLabel>
+                  <ControlLabel>Project</ControlLabel>
                   <DatasetSelector
                     token={store.token}
                     defaultValue={defaultId}

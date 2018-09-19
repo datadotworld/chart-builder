@@ -15,23 +15,42 @@ exports[`renders 1`] = `
     <div
       className="navbar-header"
     >
-      <img
-        alt="data.world logo"
+      <a
         className="navbar-brand"
-        src="logo.svg"
-        style={
-          Object {
-            "height": 40,
-            "marginLeft": "-0.5rem",
-            "marginTop": 9,
-            "width": 40,
+        href="https://data.world/integrations/chart-builder"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <img
+          alt="data.world logo"
+          src="logo.png"
+          style={
+            Object {
+              "height": 30,
+              "marginLeft": "-0.5rem",
+              "marginTop": 13,
+              "width": 30,
+            }
           }
-        }
-      />
+        />
+      </a>
       <p
         className="navbar-text"
+        style={
+          Object {
+            "marginLeft": "0.75rem",
+          }
+        }
       >
-        Chart Builder
+        <span
+          style={
+            Object {
+              "color": "#a3afbf",
+            }
+          }
+        >
+          chart-builder
+        </span>
       </p>
     </div>
     <p
@@ -63,26 +82,37 @@ exports[`renders with agentid/datasetid 1`] = `
     <div
       className="navbar-header"
     >
-      <img
-        alt="data.world logo"
+      <a
         className="navbar-brand"
-        src="logo.svg"
-        style={
-          Object {
-            "height": 40,
-            "marginLeft": "-0.5rem",
-            "marginTop": 9,
-            "width": 40,
+        href="https://data.world/integrations/chart-builder"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <img
+          alt="data.world logo"
+          src="logo.png"
+          style={
+            Object {
+              "height": 30,
+              "marginLeft": "-0.5rem",
+              "marginTop": 13,
+              "width": 30,
+            }
           }
-        }
-      />
+        />
+      </a>
       <p
         className="navbar-text"
+        style={
+          Object {
+            "marginLeft": "0.75rem",
+          }
+        }
       >
         <span
           style={
             Object {
-              "color": "#a3afbf",
+              "color": "white",
             }
           }
         >
@@ -90,7 +120,15 @@ exports[`renders with agentid/datasetid 1`] = `
           /
           bar
         </span>
-        /Chart Builder
+        <span
+          style={
+            Object {
+              "color": "#a3afbf",
+            }
+          }
+        >
+          /chart-builder
+        </span>
       </p>
     </div>
     <p

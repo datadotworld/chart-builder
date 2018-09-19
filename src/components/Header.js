@@ -2,7 +2,7 @@
 import React, { Component, Fragment } from 'react'
 import { Navbar } from 'react-bootstrap'
 import { observer, inject } from 'mobx-react'
-import logo from './logo.svg'
+import logo from './logo.png'
 
 import type { StoreType } from '../util/Store'
 
@@ -21,29 +21,39 @@ class Header extends Component<{
 
     const headerText = hasContext ? (
       <Fragment>
-        <span style={{ color: '#a3afbf' }}>{agentid}/{datasetid}</span>/Chart
-        Builder
+        <span style={{ color: 'white' }}>
+          {agentid}/{datasetid}
+        </span>
+        <span style={{ color: '#a3afbf' }}>/chart-builder</span>
       </Fragment>
     ) : (
-      'Chart Builder'
+      <span style={{ color: '#a3afbf' }}>chart-builder</span>
     )
 
     return (
       <Navbar inverse staticTop fluid style={{ border: 0 }}>
         <Navbar.Header>
           <Navbar.Brand>
-            <img
-              alt="data.world logo"
-              src={logo}
-              style={{
-                height: 40,
-                marginTop: 9,
-                width: 40,
-                marginLeft: '-0.5rem'
-              }}
-            />
+            <a
+              href="https://data.world/integrations/chart-builder"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                alt="data.world logo"
+                src={logo}
+                style={{
+                  height: 30,
+                  marginTop: 13,
+                  width: 30,
+                  marginLeft: '-0.5rem'
+                }}
+              />
+            </a>
           </Navbar.Brand>
-          <Navbar.Text>{headerText}</Navbar.Text>
+          <Navbar.Text style={{ marginLeft: '0.75rem' }}>
+            {headerText}
+          </Navbar.Text>
         </Navbar.Header>
         <Navbar.Text pullRight>
           <Navbar.Link href={href}>Back to data.world</Navbar.Link>
