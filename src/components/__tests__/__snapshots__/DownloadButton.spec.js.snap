@@ -148,6 +148,36 @@ exports[`renders 1`] = `
         </span>
       </a>
     </li>
+    <li
+      className="dropdown-header"
+      onKeyDown={[Function]}
+      role="heading"
+      style={undefined}
+    >
+      HTML
+    </li>
+    <li
+      className=""
+      role="presentation"
+      style={undefined}
+    >
+      <a
+        download="download.html"
+        href="##"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        role="menuitem"
+        tabIndex="-1"
+      >
+        HTML 
+        <span
+          className="text-muted"
+        >
+          (.html)
+        </span>
+      </a>
+    </li>
   </ul>
 </div>
 `;
