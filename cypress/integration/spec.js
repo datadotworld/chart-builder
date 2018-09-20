@@ -102,7 +102,7 @@ describe('Chart Explorer', function() {
 
     // check download as insight
     cy.get('#dropdown-save-ddw').click()
-    cy.get('.open > .dropdown-menu > :nth-child(2) > a').click()
+    cy.get('.open > .dropdown-menu > :nth-child(3) > a').click()
     cy.get('.modal')
 
     cy.get('.btn-primary').click()
