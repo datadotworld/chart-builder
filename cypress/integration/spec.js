@@ -116,9 +116,10 @@ describe('Chart Explorer', function() {
     cy.get('.modal-footer > .btn').click()
 
     // check share link
+    cy.get('#dropdown-save-ddw').click()
     cy.get('[data-test=share-btn]').click()
 
-    cy.get('.popover-content input').then($i => {
+    cy.get('[data-test=share-url-text] input').then($i => {
       cy.visit($i.val(), visitOptions)
     })
 

@@ -320,7 +320,9 @@ class App extends Component<AppP> {
                           Markdown Embed (Comment)
                         </MenuItem>
                         <MenuItem header>Other</MenuItem>
-                        <MenuItem eventKey="shareurl">Share URL</MenuItem>
+                        <MenuItem eventKey="shareurl" data-test="share-btn">
+                          Share URL
+                        </MenuItem>
                       </DropdownButton>
                     </ButtonToolbar>
                   </div>
@@ -363,7 +365,7 @@ class App extends Component<AppP> {
                   </Col>
                 </Row>
                 <Row>
-                  <Col md={12}>
+                  <Col md={12} data-test="share-url-text">
                     <CopyField getValue={() => getStateUrl(this.props.store)} />
                   </Col>
                 </Row>

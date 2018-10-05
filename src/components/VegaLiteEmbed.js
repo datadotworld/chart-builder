@@ -14,7 +14,7 @@ type Props = {
 }
 
 export default class VegaLiteEmbed extends Component<Props> {
-  nodeRef = React.createRef()
+  nodeRef: { current: null | HTMLDivElement } = React.createRef()
 
   shouldComponentUpdate() {
     return false
