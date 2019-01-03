@@ -28,9 +28,6 @@ class DatasetSelector extends Component<Props> {
 
   async setValueIfValid() {
     const { token, defaultValue, limitToProjects } = this.props
-
-    console.log(defaultValue)
-
     if (!defaultValue) return
 
     try {
