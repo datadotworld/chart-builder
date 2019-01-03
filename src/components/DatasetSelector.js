@@ -28,6 +28,9 @@ class DatasetSelector extends Component<Props> {
 
   async setValueIfValid() {
     const { token, defaultValue, limitToProjects } = this.props
+
+    console.log(defaultValue)
+
     if (!defaultValue) return
 
     try {
@@ -40,7 +43,10 @@ class DatasetSelector extends Component<Props> {
       })
       if (resp.ok) {
         const jsonResponse = await resp.json()
-        if (jsonResponse.accessLevel === 'WRITE') {
+        if (
+          jsonResponse.accessLevel === 'WRITE' ||
+          jsonResponse.accessLevel === 'ADMIN'
+        ) {
           if ((limitToProjects && jsonResponse.isProject) || !limitToProjects) {
             this.props.onChange(defaultValue)
           }

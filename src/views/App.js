@@ -242,7 +242,19 @@ class App extends Component<AppP> {
                       '?dataset=data-society/iris-species&query=SELECT+%2A%0AFROM+iris'
                   }}
                 >
-                  Here's an example
+                  Here's an example (with a link to a query)
+                </Link>
+                <br />
+                <Link
+                  data-test="example-link-2"
+                  onClick={this.forceUpdate}
+                  to={{
+                    pathname: '/',
+                    search:
+                      '?s=N4IgbgpgTgzglgewHYgFwEYA0IA2CDGAhgC6IqqgwSFT4AWaIA-IQOYRKkAmAvAFbI8ATw4wAZFxKEq3HnE7QAthC5wSEALSTihDQHcEUHFzEBHAK7QhPKjgj5iAUgBMABhcBBF64BmUBIrejq5eAGyuMHQICKRIrDD4cMRCMDrEEAB0+DBgLgBikdGx8YnJqeqO4S4AwsEerIrIEEIZla7mMBqlQhrpigAOGlCEcRAwba3h1UlC3gAqEAPeAEoj7BkAHjgwG-kAInA+PtAc+BDe8vOL-eNVIXp0J96FMfIlM+XpWR9p5wDMeza02SVyWblWo02212zjyByOJyQZwuSFBNwmwKEZksUCEAH1kv0IDwAMoARQAMiAAL7YfDIHxwVhoUCkYh2NBIcw4HDYRQ0ADWjAARjQQNhTghVHEYGgANqgPFwLhoVzYRkQYyMT4QPFIQjKcUgegjJCaxgbI2EiCMQjmYgII3C+RoHyEbYQbBsVhQCCsdSc7m8kAAL2gjtQxCglmwCXdNtQuHk1CgRpghmItoSHGlzOwpGUAFUkElAzzYxm8nBNSrUFyebTFcq0FgQBqtYmAFRGk1IM04RhCK1CIm2+2O7DO8huj1e1g+v0BxP08ycI1h-xoKMxkBxjmJnDJsUVqCZxPSM5IXNWuBFktn+vB9Onqs1ss4RsgJW15zq6sdx86ToU1zWXBA8FTfMRwTEA7QdJ0XVQGcqDnBd-XSd9sA3CNt09XciH3JMzWPXcMyzS9r3zW8IGLUs6yDE9iFfACg2pABdPkRnMd0SSJfBMJAPRlWIBh6PLEBHiZOgH1Y6kgA'
+                  }}
+                >
+                  Here's another example (with a preconfigured chart)
                 </Link>
               </Col>
             </Row>

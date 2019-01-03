@@ -19,6 +19,7 @@ import LoadingAnimation from './LoadingAnimation'
 import VegaLiteImage from './VegaLiteImage'
 import classes from './Modals.module.css'
 import type { StoreType } from '../util/Store'
+import kebabCase from 'lodash/kebabCase'
 
 type Props = {
   onClose: Function,
@@ -29,8 +30,8 @@ type Props = {
 
 class SaveAsFileModal extends Component<Props> {
   id: string = ''
-  filename: string = 'vega-lite.vl.json'
-
+  filename: string =
+    kebabCase(this.props.store.config.title || 'untitled') + '.vl.json'
   response: ?{ message: string, uri: string } = null
   saving: boolean = false
 

@@ -209,7 +209,7 @@ export const ChartConfig = types
                   field: e.sortField.field.name,
                   op:
                     e.sortField.aggregate === null
-                      ? 'average'
+                      ? 'sum'
                       : e.sortField.aggregate,
                   order: sortOrder
                 }
@@ -290,13 +290,20 @@ export const ChartConfig = types
       })
     },
     getSpecWithMinimumAmountOfData(data: Array<Object>) {
-      const values = self.getMinimumAmountOfData(data)
+      const spec = self.generatedSpec
+      let data_block = {}
 
-      return {
-        ...self.generatedSpec,
-        data: {
-          values: values
+      // if the user is still using the runtime bound data block, inject  values, otherwise whatever is there
+      if (spec.data && spec.data.name && spec.data.name === 'source') {
+        data_block.values = self.getMinimumAmountOfData(data)
+      } else if (spec.data) {
+        data_block = {
+          ...spec.data
         }
+      }
+      return {
+        ...spec,
+        data: data_block
       }
     }
   }))
