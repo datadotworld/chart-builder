@@ -10,6 +10,7 @@ import {
   FormGroup,
   Col,
   ControlLabel,
+  HelpBlock,
   Radio
 } from 'react-bootstrap'
 import Select from 'react-select'
@@ -348,13 +349,19 @@ class Encoding extends Component<EncodingProps> {
                       })}
                       value={encoding.sortField ? encoding.sortField._id : null}
                       onChange={id => {
-                        encoding.setSortField(
-                          encodings.find(e => e._id === id) || null
-                        )
+                        const e = encodings.find(e => e._id === id) || null
+                        encoding.setSortField(e)
                       }}
                       isClearable
                       placeholder="Select a field..."
                     />
+                    {encoding.sortField &&
+                      !encoding.sortField.aggregate && (
+                        <HelpBlock>
+                          Selected sort field does not have an aggregation
+                          function set, defaulting to "sum" for sorting.
+                        </HelpBlock>
+                      )}
                   </Col>
                 </AdvancedFormGroup>
               )}

@@ -18,7 +18,7 @@ describe('Chart Explorer', function() {
           }
         )
         fetch.put(
-          'https://api.data.world/v0/uploads/data-society/iris-species/files/vega-lite.vl.json',
+          'https://api.data.world/v0/uploads/data-society/iris-species/files/test-title.vl.json',
           { message: 'File uploaded.' }
         )
         fetch.get('glob:*/static/media/licenses*', 'cypress license text')
@@ -110,7 +110,7 @@ describe('Chart Explorer', function() {
     cy.get('.alert-link').should(
       'have.attr',
       'href',
-      'https://data.world/data-society/iris-species/workspace/file?filename=vega-lite.vl.json'
+      'https://data.world/data-society/iris-species/workspace/file?filename=test-title.vl.json'
     )
 
     cy.get('.modal-footer > .btn').click()

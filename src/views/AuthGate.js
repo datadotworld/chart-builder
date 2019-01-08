@@ -120,7 +120,7 @@ class AuthGate extends Component<{
       this.props.store.setToken(token)
       this.props.history.push({
         path: '/',
-        search: parsedParams.get('state')
+        search: decodeURIComponent(parsedParams.get('state'))
       })
       this.hasValidToken = true
     } catch (e) {

@@ -53,3 +53,7 @@
   padding-left: 16px;
   display: inline-block;
 }
+
+.advancedFormGroup :global(.help-block) {
+  margin-bottom: 0px;
+}
