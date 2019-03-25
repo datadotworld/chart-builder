@@ -68,6 +68,11 @@ class App extends Component<AppP> {
 
   getQueryUrl() {
     const { store } = this.props
+    if (store.queryid !== undefined) {
+      return `${API_HOST}/v0/queries/${
+        store.queryid
+      }/results?includeTableSchema=true`
+    }
     return `${API_HOST}/v0/${store.queryType}/${store.agentid}/${
       store.datasetid
     }?includeTableSchema=true`
@@ -92,11 +97,20 @@ class App extends Component<AppP> {
       this.data = null
       this.loading = true
     })
-    const res = await fetch(this.getQueryUrl(), {
-      method: 'POST',
-      headers: this.getQueryHeaders(),
-      body: createParams({ query: store.query }).toString()
-    })
+
+    let res
+    if (store.queryid !== undefined) {
+      res = await fetch(this.getQueryUrl(), {
+        method: 'GET',
+        headers: this.getQueryHeaders()
+      })
+    } else {
+      res = await fetch(this.getQueryUrl(), {
+        method: 'POST',
+        headers: this.getQueryHeaders(),
+        body: createParams({ query: store.query }).toString()
+      })
+    }
 
     const loadError = () =>
       runInAction(() => {
