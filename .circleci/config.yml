@@ -6,6 +6,8 @@ jobs:
         - master
     docker:
       - image: circleci/node:9
+    environment:
+      BASH_ENV: ~/.env
     steps:
       - checkout
       - run:
@@ -28,11 +30,17 @@ jobs:
           command: yarn licenses generate-disclaimer --silent > src/generated/licenses.txt
       - run: yarn build
       - run:
-          name: Install aws-cli and integration test deps
+          name: Install integration test deps
           command: |
             sudo apt-get update && sudo apt-get install -qq -y python-pip libpython-dev xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
-            curl -O https://bootstrap.pypa.io/get-pip.py && sudo python get-pip.py
-            sudo pip install -q awscli --upgrade
+      - run:
+          name: Install AWS Cli
+          command: |
+            cd /tmp
+            curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+            unzip awscli-bundle.zip
+            ./awscli-bundle/install -i $HOME/.local/aws -b $HOME/.local/bin/aws
+            echo "PATH=$HOME/.local/bin:$PATH" | tee -a ~/.env
       - run:
           name: Run server for tests
           command: yarn http-server build/ -p 3500
