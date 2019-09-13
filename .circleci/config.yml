@@ -2,6 +2,30 @@ version: 2
 jobs:
   build:
     branches:
+      ignore:
+        - master
+    docker:
+      - image: circleci/node:10
+    environment:
+      BASH_ENV: ~/.env
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - v1-npm-deps-{{ .Branch }}
+            - v1-npm-deps-
+      - run: yarn install
+      - run:
+          name: Jest tests
+          command: yarn test
+      - run: yarn build
+      - save_cache:
+          key: v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+  build_master:
+    branches:
       only:
         - master
     docker:
