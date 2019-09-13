@@ -1,9 +1,6 @@
-version: 2
+version: 2.1
 jobs:
   build:
-    branches:
-      ignore:
-        - master
     docker:
       - image: circleci/node:10
     environment:
@@ -49,9 +46,6 @@ jobs:
           paths:
             - node_modules
   build_master:
-    branches:
-      only:
-        - master
     docker:
       - image: circleci/node:10
     environment:
@@ -120,3 +114,19 @@ jobs:
             aws s3 cp build/asset-manifest.json s3://dataworld-chartbuilder-us-east-1/asset-manifest.json --cache-control max-age=300
           environment:
             AWS_PROFILE: artifacts
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - master
+  build_master:
+    jobs:
+      - build_master:
+          filters:
+            branches:
+              only:
+                - master
