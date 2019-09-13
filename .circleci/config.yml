@@ -25,16 +25,6 @@ jobs:
           key: v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
-      - run:
-          name: Sync to s3
-          command: |
-            aws s3 sync build s3://dataworld-chartbuilder-us-east-1 --exclude "index.html" --exclude "manifest.json" --exclude "service-worker.js" --exclude "asset-manifest.json"
-            aws s3 cp build/index.html s3://dataworld-chartbuilder-us-east-1/index.html --cache-control max-age=300
-            aws s3 cp build/manifest.json s3://dataworld-chartbuilder-us-east-1/manifest.json --cache-control max-age=300
-            aws s3 cp build/service-worker.js s3://dataworld-chartbuilder-us-east-1/service-worker.js --cache-control max-age=300
-            aws s3 cp build/asset-manifest.json s3://dataworld-chartbuilder-us-east-1/asset-manifest.json --cache-control max-age=300
-          environment:
-            AWS_PROFILE: artifacts
   build_master:
     branches:
       only:
