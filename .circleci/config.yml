@@ -1,9 +1,27 @@
-version: 2
+version: 2.1
 jobs:
   build:
-    branches:
-      only:
-        - master
+    docker:
+      - image: circleci/node:10
+    environment:
+      BASH_ENV: ~/.env
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - v1-npm-deps-{{ .Branch }}
+            - v1-npm-deps-
+      - run: yarn install
+      - run:
+          name: Jest tests
+          command: yarn test
+      - run: yarn build
+      - save_cache:
+          key: v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+  build_master:
     docker:
       - image: circleci/node:10
     environment:
@@ -61,7 +79,6 @@ jobs:
           path: cypress/screenshots
       - store_test_results:
           path: cypress/junit-results
-
       - run:
           name: Sync to s3
           command: |
@@ -72,3 +89,18 @@ jobs:
             aws s3 cp build/asset-manifest.json s3://dataworld-chartbuilder-us-east-1/asset-manifest.json --cache-control max-age=300
           environment:
             AWS_PROFILE: artifacts
+workflows:
+  build:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - master
+  build_master:
+    jobs:
+      - build_master:
+          filters:
+            branches:
+              only:
+                - master
