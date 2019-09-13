@@ -1,10 +1,9 @@
 version: 2
 jobs:
   build:
-    filters:
-      branches:
-        ignore:
-          - master
+    branches:
+      ignore:
+        - master
     docker:
       - image: circleci/node:10
     environment:
