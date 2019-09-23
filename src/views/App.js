@@ -67,8 +67,12 @@ class App extends Component<AppP> {
 
   getQueryUrl() {
     const { store } = this.props
-    return `${API_HOST}/v0/${store.queryType}/${store.agentid}/${
-      store.datasetid
+    console.log('STORE', store)
+    console.log('STORE', store)
+    console.log('STORE', store)
+
+    return `${API_HOST}/v0/${store.queryType}/${
+      store.dataset
     }?includeTableSchema=true`
   }
 
@@ -96,7 +100,7 @@ class App extends Component<AppP> {
       headers: this.getQueryHeaders(),
       body: createParams({ query: store.query }).toString()
     })
-
+    console.log('QUERY URL', this.getQueryUrl())
     const loadError = () =>
       runInAction(() => {
         this.loading = false

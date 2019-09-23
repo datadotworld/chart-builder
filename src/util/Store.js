@@ -344,10 +344,9 @@ export type StoreType = {
   parsedUrlQuery: Object,
   possibleResourceFromQuery: ?{ agentid: string, datasetid: string },
   hasValidParams: boolean,
-  agentid: string,
-  datasetid: string,
   query: string,
   queryType: 'sql' | 'sparql',
+  dataset: string,
 
   // actions
   syncQueryParams: Object => void,
@@ -369,7 +368,7 @@ const Store: ModelType<StoreType> = types
   })
   .views((self: StoreType) => ({
     get hasValidParams() {
-      return !!self.agentid && !!self.datasetid && !!self.query
+      return !!self.dataset && !!self.query
     },
 
     get parsedUrlQuery() {
@@ -395,19 +394,6 @@ const Store: ModelType<StoreType> = types
       }
       return null
     },
-
-    get agentid() {
-      const resource = self.possibleResourceFromQuery
-      if (resource) return resource.agentid
-
-      return self.parsedUrlQuery.agentid
-    },
-    get datasetid() {
-      const resource = self.possibleResourceFromQuery
-      if (resource) return resource.datasetid
-
-      return self.parsedUrlQuery.datasetid
-    },
     get query() {
       return self.parsedUrlQuery.query
     },
@@ -418,6 +404,10 @@ const Store: ModelType<StoreType> = types
         if (lowered === 'sql' || lowered === 'sparql') return lowered
       }
       return 'sql'
+    },
+    get dataset() {
+      const providedDataset = self.parsedUrlQuery.dataset
+      return providedDataset
     }
   }))
   .actions((self: StoreType) => ({
