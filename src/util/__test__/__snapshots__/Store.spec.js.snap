@@ -117,8 +117,7 @@ Object {
 
 exports[`Store detects valid params 1`] = `
 Object {
-  "agentid": "foo",
-  "datasetid": "bar",
+  "dataset": "foo/bar",
   "query": "select",
 }
 `;

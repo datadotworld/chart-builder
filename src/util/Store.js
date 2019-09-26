@@ -342,7 +342,6 @@ export type StoreType = {
 
   // views
   parsedUrlQuery: Object,
-  possibleResourceFromQuery: ?{ agentid: string, datasetid: string },
   hasValidParams: boolean,
   query: string,
   queryType: 'sql' | 'sparql',
@@ -376,25 +375,6 @@ const Store: ModelType<StoreType> = types
       return parseParams(self.location.search)
     },
 
-    /*
-      support 3 types of passing resource:
-      dataset=<agentid>/<datasetid>
-      project=<agentid>/<datasetid>
-      agentid=<agentid>&datasetid=<datasetid>
-
-      they're preferred in that order
-    */
-    get possibleResourceFromQuery() {
-      const resource: ?string =
-        self.parsedUrlQuery.dataset || self.parsedUrlQuery.project
-      if (resource != null) {
-        const [agentid, datasetid] = resource.split('/')
-        if (agentid && datasetid) {
-          return { agentid, datasetid }
-        }
-      }
-      return null
-    },
     get query() {
       return self.parsedUrlQuery.query
     },

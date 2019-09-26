@@ -11,19 +11,17 @@ class Header extends Component<{
 }> {
   render() {
     const { store } = this.props
-    const { agentid, datasetid } = store
+    const { dataset } = store
 
-    const hasContext = !!(agentid && datasetid)
+    const hasContext = !!dataset
 
     const href = hasContext
-      ? `https://data.world/${agentid}/${datasetid}`
+      ? `https://data.world/${dataset}`
       : 'https://data.world'
 
     const headerText = hasContext ? (
       <Fragment>
-        <span style={{ color: 'white' }}>
-          {agentid}/{datasetid}
-        </span>
+        <span style={{ color: 'white' }}>{dataset}</span>
         <span style={{ color: '#a3afbf' }}>/chart-builder</span>
       </Fragment>
     ) : (

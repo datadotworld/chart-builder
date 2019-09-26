@@ -67,7 +67,7 @@ exports[`renders 1`] = `
 </nav>
 `;
 
-exports[`renders with agentid/datasetid 1`] = `
+exports[`renders with dataset 1`] = `
 <nav
   className="navbar navbar-inverse navbar-static-top"
   style={
@@ -116,9 +116,7 @@ exports[`renders with agentid/datasetid 1`] = `
             }
           }
         >
-          foo
-          /
-          bar
+          foo/bar
         </span>
         <span
           style={

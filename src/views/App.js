@@ -296,7 +296,7 @@ class App extends Component<AppP> {
 
     return (
       <Fragment>
-        <Header agentid={store.agentid} datasetid={store.datasetid} />
+        <Header />
 
         <div className={classes.main}>
           <Sidebar />
@@ -360,14 +360,14 @@ class App extends Component<AppP> {
         {this.saveModalOpen === 'insight' && (
           <SaveAsInsightModal
             onClose={() => (this.saveModalOpen = false)}
-            defaultId={store.agentid + '/' + store.datasetid}
+            defaultId={store.dataset}
             data={this.data}
           />
         )}
         {this.saveModalOpen === 'file' && (
           <SaveAsFileModal
             onClose={() => (this.saveModalOpen = false)}
-            defaultId={store.agentid + '/' + store.datasetid}
+            defaultId={store.dataset}
             data={this.data}
           />
         )}

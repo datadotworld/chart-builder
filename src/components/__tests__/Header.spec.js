@@ -12,10 +12,10 @@ it('renders', () => {
   snap(<Header store={store} />)
 })
 
-it('renders with agentid/datasetid', () => {
+it('renders with dataset', () => {
   const store = Store.create({
     location: {
-      search: 'agentid=foo&datasetid=bar'
+      search: 'dataset=foo/bar'
     }
   })
 
