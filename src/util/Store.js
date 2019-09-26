@@ -346,6 +346,7 @@ export type StoreType = {
   hasValidParams: boolean,
   query: string,
   queryType: 'sql' | 'sparql',
+  savedQueryId: string | null,
   dataset: string,
 
   // actions
@@ -368,7 +369,7 @@ const Store: ModelType<StoreType> = types
   })
   .views((self: StoreType) => ({
     get hasValidParams() {
-      return !!self.dataset && !!self.query
+      return !!self.dataset && (!!self.query || !!self.savedQueryId)
     },
 
     get parsedUrlQuery() {
@@ -404,6 +405,13 @@ const Store: ModelType<StoreType> = types
         if (lowered === 'sql' || lowered === 'sparql') return lowered
       }
       return 'sql'
+    },
+    get savedQueryId() {
+      const providedSavedQueryId = self.parsedUrlQuery.saved_query
+      if (!providedSavedQueryId) {
+        return null
+      }
+      return providedSavedQueryId
     },
     get dataset() {
       const providedDataset = self.parsedUrlQuery.dataset
