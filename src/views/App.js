@@ -86,7 +86,7 @@ class App extends Component<AppP> {
     })
 
     let res
-    if (store.savedQueryId) {
+    if (store.savedQueryId && !store.savedQueryId.includes('sample')) {
       const savedQueryURL = `${API_HOST}/v0/queries/${
         store.savedQueryId
       }/results?includeTableSchema=true`
