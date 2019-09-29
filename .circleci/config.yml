@@ -5,6 +5,7 @@ jobs:
       - image: circleci/node:10
     environment:
       BASH_ENV: ~/.env
+      CI: true
     steps:
       - checkout
       - restore_cache:
