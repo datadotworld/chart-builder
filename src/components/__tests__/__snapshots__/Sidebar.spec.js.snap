@@ -65,75 +65,79 @@ exports[`renders 1`] = `
         >
           Marks
         </div>
-        <react-select
-          classNamePrefix="react-select"
-          isClearable={undefined}
-          isDisabled={false}
-          menuPortalTarget={<body />}
-          onChange={[Function]}
-          options={
-            Array [
+        <div
+          data-dw="chart-type-selector"
+        >
+          <react-select
+            classNamePrefix="react-select"
+            isClearable={undefined}
+            isDisabled={false}
+            menuPortalTarget={<body />}
+            onChange={[Function]}
+            options={
+              Array [
+                Object {
+                  "label": "Area",
+                  "value": "area",
+                },
+                Object {
+                  "label": "Bar",
+                  "value": "bar",
+                },
+                Object {
+                  "label": "Line",
+                  "value": "line",
+                },
+                Object {
+                  "label": "Point",
+                  "value": "point",
+                },
+                Object {
+                  "label": "Tick",
+                  "value": "tick",
+                },
+                Object {
+                  "label": "Rect",
+                  "value": "rect",
+                },
+                Object {
+                  "label": "Circle",
+                  "value": "circle",
+                },
+                Object {
+                  "label": "Square",
+                  "value": "square",
+                },
+              ]
+            }
+            placeholder={undefined}
+            styles={
               Object {
-                "label": "Area",
-                "value": "area",
-              },
+                "clearIndicator": [Function],
+                "control": [Function],
+                "dropdownIndicator": [Function],
+                "menu": [Function],
+                "menuPortal": [Function],
+                "option": [Function],
+                "singleValue": [Function],
+                "valueContainer": [Function],
+              }
+            }
+            value={
               Object {
                 "label": "Bar",
                 "value": "bar",
-              },
-              Object {
-                "label": "Line",
-                "value": "line",
-              },
-              Object {
-                "label": "Point",
-                "value": "point",
-              },
-              Object {
-                "label": "Tick",
-                "value": "tick",
-              },
-              Object {
-                "label": "Rect",
-                "value": "rect",
-              },
-              Object {
-                "label": "Circle",
-                "value": "circle",
-              },
-              Object {
-                "label": "Square",
-                "value": "square",
-              },
-            ]
-          }
-          placeholder={undefined}
-          styles={
-            Object {
-              "clearIndicator": [Function],
-              "control": [Function],
-              "dropdownIndicator": [Function],
-              "menu": [Function],
-              "menuPortal": [Function],
-              "option": [Function],
-              "singleValue": [Function],
-              "valueContainer": [Function],
+              }
             }
-          }
-          value={
-            Object {
-              "label": "Bar",
-              "value": "bar",
-            }
-          }
-        />
+          />
+        </div>
         <div
           className="title"
         >
           Configuration
           <button
             className="pull-right btn btn-xs btn-link"
-            data-test="add-encoding"
+            data-dw="add-encoding"
             disabled={false}
             onClick={[Function]}
             style={
@@ -148,7 +152,7 @@ exports[`renders 1`] = `
           </button>
         </div>
         <div
-          data-test="encodings-list"
+          data-dw="encodings-list"
         >
           <div />
         </div>
@@ -174,7 +178,7 @@ exports[`renders 1`] = `
       </a>
        | 
       <a
-        data-test="license-open"
+        data-dw="license-open"
         href=""
         onClick={[Function]}
       >

@@ -3,11 +3,11 @@
 exports[`renders 1`] = `
 <div
   className="container"
-  data-test="encoding-container"
+  data-dw={undefined}
 >
   <div
     className="bar"
-    data-test="encoding-bar"
+    data-dw="encoding-bar"
   >
     <react-select
       classNamePrefix="react-select"
@@ -169,7 +169,7 @@ exports[`renders 1`] = `
     />
     <button
       className="btn btn-xs btn-default"
-      data-test="toggle-adv-config"
+      data-dw="toggle-adv-config"
       disabled={false}
       onClick={[Function]}
       type="button"
