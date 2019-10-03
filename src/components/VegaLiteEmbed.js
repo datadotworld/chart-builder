@@ -60,6 +60,6 @@ export default class VegaLiteEmbed extends Component<Props> {
   }
 
   render() {
-    return <div data-test="vega-embed" ref={this.nodeRef} />
+    return <div data-dw="vega-embed" ref={this.nodeRef} />
   }
 }

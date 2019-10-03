@@ -88,7 +88,8 @@ type EncodingProps = {
   fields: Array<FieldType>,
   encodings: Array<EncLineType>,
   encoding: EncLineType,
-  disabled: boolean
+  disabled: boolean,
+  'data-dw'?: string
 }
 
 class Encoding extends Component<EncodingProps> {
@@ -104,8 +105,8 @@ class Encoding extends Component<EncodingProps> {
     const { fields, encoding, encodings, disabled } = this.props
 
     return (
-      <div className={classes.container} data-test="encoding-container">
-        <div className={classes.bar} data-test="encoding-bar">
+      <div className={classes.container} data-dw={this.props['data-dw']}>
+        <div className={classes.bar} data-dw="encoding-bar">
           <Select
             classNamePrefix="react-select"
             options={CHANNEL_OPTIONS}
@@ -127,7 +128,7 @@ class Encoding extends Component<EncodingProps> {
             bsSize="xs"
             onClick={() => (this.showConfig = !this.showConfig)}
             disabled={disabled}
-            data-test="toggle-adv-config"
+            data-dw="toggle-adv-config"
           >
             Options{' '}
             <svg
@@ -215,7 +216,7 @@ class Encoding extends Component<EncodingProps> {
                 <Col sm={9}>
                   <InlineFormGroup>
                     <Radio
-                      data-test="bin-yes"
+                      data-dw="bin-yes"
                       name="bin-yes"
                       checked={encoding.bin}
                       onChange={() => encoding.setBin(true)}
@@ -224,7 +225,7 @@ class Encoding extends Component<EncodingProps> {
                       Yes
                     </Radio>{' '}
                     <Radio
-                      data-test="bin-no"
+                      data-dw="bin-no"
                       name="bin-no"
                       checked={!encoding.bin}
                       onChange={() => encoding.setBin(false)}
@@ -242,7 +243,7 @@ class Encoding extends Component<EncodingProps> {
                 <Col sm={9}>
                   <InlineFormGroup>
                     <Radio
-                      data-test="zero-yes"
+                      data-dw="zero-yes"
                       name="zero-yes"
                       checked={encoding.zero}
                       onChange={() => encoding.setZero(true)}
@@ -251,7 +252,7 @@ class Encoding extends Component<EncodingProps> {
                       Yes
                     </Radio>{' '}
                     <Radio
-                      data-test="zero-no"
+                      data-dw="zero-no"
                       name="zero-no"
                       checked={!encoding.zero}
                       onChange={() => encoding.setZero(false)}
@@ -410,7 +411,7 @@ class Encoding extends Component<EncodingProps> {
                 <Col sm={9} smOffset={3}>
                   <InlineFormGroup>
                     <Button
-                      data-test="rm-encoding"
+                      data-dw="rm-encoding"
                       bsSize="xs"
                       onClick={this.handleRemove}
                     >

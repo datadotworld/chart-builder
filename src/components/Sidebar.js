@@ -71,11 +71,12 @@ class Sidebar extends Component<Props> {
               value={store.config.mark}
               onChange={store.config.setMark}
               disabled={store.config.hasManualSpec}
+              data-dw="chart-type-selector"
             />
             <div className={classes.title}>
               Configuration
               <Button
-                data-test="add-encoding"
+                data-dw="add-encoding"
                 bsStyle="link"
                 bsSize="xs"
                 className="pull-right"
@@ -87,10 +88,11 @@ class Sidebar extends Component<Props> {
               </Button>
             </div>
             {fields && (
-              <div data-test="encodings-list">
-                {store.config.encodings.map(e => {
+              <div data-dw="encodings-list">
+                {store.config.encodings.map((e, index) => {
                   return (
                     <Encoding
+                      data-dw={`encoding-container-${index}`}
                       key={e._id}
                       fields={fields}
                       encodings={store.config.encodings}

@@ -188,6 +188,7 @@ class SaveAsInsightModal extends Component<Props> {
                   />
                 </FormGroup>
                 <Checkbox
+                  data-dw="insight-save-vega-lite-checkbox"
                   checked={this.saveAsFile}
                   onChange={e => (this.saveAsFile = e.target.checked)}
                 >
