@@ -10,7 +10,8 @@ type Props<T> = {
   placeholder?: string,
   disabled?: boolean,
   isClearable?: boolean,
-  onChange: (e: T) => any
+  onChange: (e: T) => any,
+  'data-dw'?: string
 }
 
 const NORMAL_SELECT_STYLES = selectStyles({
@@ -37,19 +38,21 @@ export default class SimpleSelect extends Component<Props<*>> {
     })
 
     return (
-      <Select
-        classNamePrefix="react-select"
-        options={options}
-        value={options.find(o => o.value === value)}
-        onChange={e => {
-          onChange(e ? e.value : null)
-        }}
-        styles={NORMAL_SELECT_STYLES}
-        isDisabled={disabled}
-        placeholder={placeholder}
-        isClearable={isClearable}
-        menuPortalTarget={document.body}
-      />
+      <div data-dw={this.props['data-dw']}>
+        <Select
+          classNamePrefix="react-select"
+          options={options}
+          value={options.find(o => o.value === value)}
+          onChange={e => {
+            onChange(e ? e.value : null)
+          }}
+          styles={NORMAL_SELECT_STYLES}
+          isDisabled={disabled}
+          placeholder={placeholder}
+          isClearable={isClearable}
+          menuPortalTarget={document.body}
+        />
+      </div>
     )
   }
 }

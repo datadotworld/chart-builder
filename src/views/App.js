@@ -233,7 +233,7 @@ class App extends Component<AppP> {
               <Col xs={12}>
                 <h3>Valid parameters required</h3>
                 <Link
-                  data-test="example-link"
+                  data-dw="example-link"
                   to={{
                     pathname: '/',
                     search:
@@ -244,7 +244,7 @@ class App extends Component<AppP> {
                 </Link>
                 <br />
                 <Link
-                  data-test="example-link-2"
+                  data-dw="example-link-2"
                   onClick={this.forceUpdate}
                   to={{
                     pathname: '/',
@@ -296,7 +296,7 @@ class App extends Component<AppP> {
                 <Col xs={12} className={classes.topBarCol}>
                   <div className={classes.topBarHeader}>
                     <input
-                      data-test="chart-title"
+                      data-dw="chart-title"
                       className={classes.topBarTitle}
                       placeholder="Untitled chart"
                       value={store.config.title || ''}
@@ -322,13 +322,17 @@ class App extends Component<AppP> {
                         onSelect={ek => (this.saveModalOpen = ek)}
                       >
                         <MenuItem header>Share to data.world as...</MenuItem>
-                        <MenuItem eventKey="insight">Insight</MenuItem>
-                        <MenuItem eventKey="file">File</MenuItem>
-                        <MenuItem eventKey="ddwembed">
+                        <MenuItem data-dw="share-insight" eventKey="insight">
+                          Insight
+                        </MenuItem>
+                        <MenuItem data-dw="share-file" eventKey="file">
+                          File
+                        </MenuItem>
+                        <MenuItem data-dw="share-markdown" eventKey="ddwembed">
                           Markdown Embed (Comment)
                         </MenuItem>
                         <MenuItem header>Other</MenuItem>
-                        <MenuItem eventKey="shareurl" data-test="share-btn">
+                        <MenuItem data-dw="share-url" eventKey="shareurl">
                           Share URL
                         </MenuItem>
                       </DropdownButton>
@@ -373,7 +377,7 @@ class App extends Component<AppP> {
                   </Col>
                 </Row>
                 <Row>
-                  <Col md={12} data-test="share-url-text">
+                  <Col md={12} data-dw="share-url-text">
                     <CopyField getValue={() => getStateUrl(this.props.store)} />
                   </Col>
                 </Row>
@@ -403,7 +407,7 @@ class App extends Component<AppP> {
                   </Col>
                 </Row>
                 <Row>
-                  <Col md={12} data-test="share-markdown-embed">
+                  <Col md={12} data-dw="share-markdown-embed">
                     <CopyField
                       getValue={() => {
                         const storeConfig = this.props.store.config

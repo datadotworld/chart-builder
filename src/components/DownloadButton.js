@@ -19,7 +19,8 @@ type DownloadMenuItemProps = {
   extension: string,
   baseName: string,
   children: Node,
-  getDownloadUrl: () => string
+  getDownloadUrl: () => string,
+  'data-dw'?: string
 }
 
 export class DownloadMenuItem extends Component<DownloadMenuItemProps> {
@@ -37,6 +38,7 @@ export class DownloadMenuItem extends Component<DownloadMenuItemProps> {
 
     return (
       <MenuItem
+        data-dw={this.props['data-dw']}
         download={`${baseName}.${extension}`}
         onMouseDown={this.handleMouseDown}
         href="##"
@@ -69,6 +71,7 @@ export class DownloadButton extends Component<Props> {
       >
         <MenuItem header>JSON</MenuItem>
         <DownloadMenuItem
+          data-dw="download-vega-lite"
           baseName="vega-lite"
           extension="vl.json"
           getDownloadUrl={() => {
@@ -81,6 +84,7 @@ export class DownloadButton extends Component<Props> {
           Vega-Lite <span className="text-muted">(.vl.json)</span>
         </DownloadMenuItem>
         <DownloadMenuItem
+          data-dw="download-vega"
           baseName="vega"
           extension="vg.json"
           getDownloadUrl={() => {
@@ -96,6 +100,7 @@ export class DownloadButton extends Component<Props> {
         </DownloadMenuItem>
         <MenuItem header>Image</MenuItem>
         <DownloadMenuItem
+          data-dw="download-png"
           baseName="download"
           extension="png"
           getDownloadUrl={() => {
@@ -106,6 +111,7 @@ export class DownloadButton extends Component<Props> {
           PNG <span className="text-muted">(.png)</span>
         </DownloadMenuItem>
         <DownloadMenuItem
+          data-dw="download-svg"
           baseName="download"
           extension="svg"
           getDownloadUrl={() => {
@@ -117,6 +123,7 @@ export class DownloadButton extends Component<Props> {
         </DownloadMenuItem>
         <MenuItem header>HTML</MenuItem>
         <DownloadMenuItem
+          data-dw="download-html"
           baseName="download"
           extension="html"
           getDownloadUrl={() => {
