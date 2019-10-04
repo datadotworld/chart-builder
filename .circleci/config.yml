@@ -22,6 +22,26 @@ jobs:
           key: v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
+      - run:
+          name: Run server for tests
+          command: yarn http-server build/ -p 3500
+          background: true
+      - run:
+          name: Cypress tests
+          command: |
+            yarn cypress install
+            yarn cypress run
+      - save_cache:
+          key: v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+            - ~/.cache/Cypress
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: cypress/screenshots
+      - store_test_results:
+          path: cypress/junit-results
   build_master:
     docker:
       - image: circleci/node:10
