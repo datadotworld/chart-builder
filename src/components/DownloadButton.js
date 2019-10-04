@@ -20,7 +20,7 @@ type DownloadMenuItemProps = {
   baseName: string,
   children: Node,
   getDownloadUrl: () => string,
-  'data-dw'?: string
+  'data-test'?: string
 }
 
 export class DownloadMenuItem extends Component<DownloadMenuItemProps> {
@@ -38,7 +38,7 @@ export class DownloadMenuItem extends Component<DownloadMenuItemProps> {
 
     return (
       <MenuItem
-        data-dw={this.props['data-dw']}
+        data-test={this.props['data-test']}
         download={`${baseName}.${extension}`}
         onMouseDown={this.handleMouseDown}
         href="##"
@@ -71,7 +71,7 @@ export class DownloadButton extends Component<Props> {
       >
         <MenuItem header>JSON</MenuItem>
         <DownloadMenuItem
-          data-dw="download-vega-lite"
+          data-test="download-vega-lite"
           baseName="vega-lite"
           extension="vl.json"
           getDownloadUrl={() => {
@@ -84,7 +84,7 @@ export class DownloadButton extends Component<Props> {
           Vega-Lite <span className="text-muted">(.vl.json)</span>
         </DownloadMenuItem>
         <DownloadMenuItem
-          data-dw="download-vega"
+          data-test="download-vega"
           baseName="vega"
           extension="vg.json"
           getDownloadUrl={() => {
@@ -100,7 +100,7 @@ export class DownloadButton extends Component<Props> {
         </DownloadMenuItem>
         <MenuItem header>Image</MenuItem>
         <DownloadMenuItem
-          data-dw="download-png"
+          data-test="download-png"
           baseName="download"
           extension="png"
           getDownloadUrl={() => {
@@ -111,7 +111,7 @@ export class DownloadButton extends Component<Props> {
           PNG <span className="text-muted">(.png)</span>
         </DownloadMenuItem>
         <DownloadMenuItem
-          data-dw="download-svg"
+          data-test="download-svg"
           baseName="download"
           extension="svg"
           getDownloadUrl={() => {
@@ -123,7 +123,7 @@ export class DownloadButton extends Component<Props> {
         </DownloadMenuItem>
         <MenuItem header>HTML</MenuItem>
         <DownloadMenuItem
-          data-dw="download-html"
+          data-test="download-html"
           baseName="download"
           extension="html"
           getDownloadUrl={() => {

@@ -66,7 +66,7 @@ exports[`renders 1`] = `
           Marks
         </div>
         <div
-          data-dw="chart-type-selector"
+          data-test="chart-type-selector"
         >
           <react-select
             classNamePrefix="react-select"
@@ -137,7 +137,7 @@ exports[`renders 1`] = `
           Configuration
           <button
             className="pull-right btn btn-xs btn-link"
-            data-dw="add-encoding"
+            data-test="add-encoding"
             disabled={false}
             onClick={[Function]}
             style={
@@ -152,7 +152,7 @@ exports[`renders 1`] = `
           </button>
         </div>
         <div
-          data-dw="encodings-list"
+          data-test="encodings-list"
         >
           <div />
         </div>
@@ -178,7 +178,7 @@ exports[`renders 1`] = `
       </a>
        | 
       <a
-        data-dw="license-open"
+        data-test="license-open"
         href=""
         onClick={[Function]}
       >

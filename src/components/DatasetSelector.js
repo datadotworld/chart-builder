@@ -81,7 +81,7 @@ class DatasetSelector extends Component<Props> {
             <FormControl type="text" readOnly value={value} />
             <InputGroup.Button>
               <Button
-                data-dw="select-dataset-modal"
+                data-test="select-dataset-modal"
                 onClick={this.handleSelectClick}
                 style={{ padding: '0 0.5rem' }}
               >

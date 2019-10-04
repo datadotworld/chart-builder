@@ -19,7 +19,7 @@ exports[`renders loading 1`] = `
     >
       <button
         className="btn btn-default"
-        data-dw="select-dataset-modal"
+        data-test="select-dataset-modal"
         disabled={false}
         onClick={[Function]}
         style={
