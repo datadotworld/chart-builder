@@ -28,7 +28,7 @@ class SidebarFooter extends Component<{}> {
               e.preventDefault()
               this.showLicenses = true
             }}
-            data-dw="license-open"
+            data-test="license-open"
           >
             Licenses
           </a>

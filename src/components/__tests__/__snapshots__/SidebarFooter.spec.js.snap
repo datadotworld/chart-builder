@@ -14,7 +14,7 @@ exports[`renders 1`] = `
     </a>
      | 
     <a
-      data-dw="license-open"
+      data-test="license-open"
       href=""
       onClick={[Function]}
     >

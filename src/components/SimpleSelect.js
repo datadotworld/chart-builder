@@ -11,7 +11,7 @@ type Props<T> = {
   disabled?: boolean,
   isClearable?: boolean,
   onChange: (e: T) => any,
-  'data-dw'?: string
+  'data-test'?: string
 }
 
 const NORMAL_SELECT_STYLES = selectStyles({
@@ -38,7 +38,7 @@ export default class SimpleSelect extends Component<Props<*>> {
     })
 
     return (
-      <div data-dw={this.props['data-dw']}>
+      <div data-test={this.props['data-test']}>
         <Select
           classNamePrefix="react-select"
           options={options}

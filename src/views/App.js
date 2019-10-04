@@ -233,7 +233,7 @@ class App extends Component<AppP> {
               <Col xs={12}>
                 <h3>Valid parameters required</h3>
                 <Link
-                  data-dw="example-link"
+                  data-test="example-link"
                   to={{
                     pathname: '/',
                     search:
@@ -244,7 +244,7 @@ class App extends Component<AppP> {
                 </Link>
                 <br />
                 <Link
-                  data-dw="example-link-2"
+                  data-test="example-link-2"
                   onClick={this.forceUpdate}
                   to={{
                     pathname: '/',
@@ -296,7 +296,7 @@ class App extends Component<AppP> {
                 <Col xs={12} className={classes.topBarCol}>
                   <div className={classes.topBarHeader}>
                     <input
-                      data-dw="chart-title"
+                      data-test="chart-title"
                       className={classes.topBarTitle}
                       placeholder="Untitled chart"
                       value={store.config.title || ''}
@@ -322,17 +322,20 @@ class App extends Component<AppP> {
                         onSelect={ek => (this.saveModalOpen = ek)}
                       >
                         <MenuItem header>Share to data.world as...</MenuItem>
-                        <MenuItem data-dw="share-insight" eventKey="insight">
+                        <MenuItem data-test="share-insight" eventKey="insight">
                           Insight
                         </MenuItem>
-                        <MenuItem data-dw="share-file" eventKey="file">
+                        <MenuItem data-test="share-file" eventKey="file">
                           File
                         </MenuItem>
-                        <MenuItem data-dw="share-markdown" eventKey="ddwembed">
+                        <MenuItem
+                          data-test="share-markdown"
+                          eventKey="ddwembed"
+                        >
                           Markdown Embed (Comment)
                         </MenuItem>
                         <MenuItem header>Other</MenuItem>
-                        <MenuItem data-dw="share-url" eventKey="shareurl">
+                        <MenuItem data-test="share-url" eventKey="shareurl">
                           Share URL
                         </MenuItem>
                       </DropdownButton>
@@ -377,7 +380,7 @@ class App extends Component<AppP> {
                   </Col>
                 </Row>
                 <Row>
-                  <Col md={12} data-dw="share-url-text">
+                  <Col md={12} data-test="share-url-text">
                     <CopyField getValue={() => getStateUrl(this.props.store)} />
                   </Col>
                 </Row>
@@ -407,7 +410,7 @@ class App extends Component<AppP> {
                   </Col>
                 </Row>
                 <Row>
-                  <Col md={12} data-dw="share-markdown-embed">
+                  <Col md={12} data-test="share-markdown-embed">
                     <CopyField
                       getValue={() => {
                         const storeConfig = this.props.store.config

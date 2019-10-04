@@ -41,7 +41,7 @@ class LicenseModal extends Component<{
         </Modal.Header>
         <Modal.Body className={classes.body}>
           {this.licenseText ? (
-            <div className={classes.text} data-dw="license-text">
+            <div className={classes.text} data-test="license-text">
               {this.licenseText}
             </div>
           ) : (
