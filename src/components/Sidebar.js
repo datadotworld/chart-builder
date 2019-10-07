@@ -47,33 +47,31 @@ class Sidebar extends Component<Props> {
               </Alert>
             )}
             <div className={classes.title}>Marks</div>
-            <div data-test="chart-type-selector">
-              <SimpleSelect
-                values={[
-                  'area',
-                  'bar',
-                  'line',
-                  'point',
-                  'tick',
-                  'rect',
-                  'circle',
-                  'square'
-                ]}
-                labels={[
-                  'Area',
-                  'Bar',
-                  'Line',
-                  'Point',
-                  'Tick',
-                  'Rect',
-                  'Circle',
-                  'Square'
-                ]}
-                value={store.config.mark}
-                onChange={store.config.setMark}
-                disabled={store.config.hasManualSpec}
-              />
-            </div>
+            <SimpleSelect
+              values={[
+                'area',
+                'bar',
+                'line',
+                'point',
+                'tick',
+                'rect',
+                'circle',
+                'square'
+              ]}
+              labels={[
+                'Area',
+                'Bar',
+                'Line',
+                'Point',
+                'Tick',
+                'Rect',
+                'Circle',
+                'Square'
+              ]}
+              value={store.config.mark}
+              onChange={store.config.setMark}
+              disabled={store.config.hasManualSpec}
+            />
             <div className={classes.title}>
               Configuration
               <Button
@@ -90,10 +88,9 @@ class Sidebar extends Component<Props> {
             </div>
             {fields && (
               <div data-test="encodings-list">
-                {store.config.encodings.map((e, index) => {
+                {store.config.encodings.map(e => {
                   return (
                     <Encoding
-                      data-test={`encoding-container-${index}`}
                       key={e._id}
                       fields={fields}
                       encodings={store.config.encodings}
