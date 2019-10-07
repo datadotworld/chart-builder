@@ -1,12 +1,11 @@
 // @flow
-import 'regenerator-runtime/runtime'
-
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route } from 'react-router-dom'
 import { Provider } from 'mobx-react'
 import { createBrowserHistory } from 'history'
 
+import 'regenerator-runtime/runtime'
 import AuthGate from './views/AuthGate'
 import { unregister } from './registerServiceWorker'
 import Store from './util/Store'
