@@ -102,8 +102,7 @@ describe('Chart Builder', function() {
     cy.get('#configure-tabs-tab-editor').click()
 
     cy.get('.inputarea')
-      .type('{ctrl}f')
-      .focused()
+      .type('{rightarrow}')
       .type('"title": "test 123",')
 
     cy.get('#configure-tabs-tab-builder').click()
