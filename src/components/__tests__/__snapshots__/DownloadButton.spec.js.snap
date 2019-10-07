@@ -7,7 +7,6 @@ exports[`DownloadMenuItem renders 1`] = `
   style={undefined}
 >
   <a
-    data-test={undefined}
     download="testing.json"
     href="##"
     onClick={[Function]}
@@ -59,7 +58,6 @@ exports[`renders 1`] = `
       style={undefined}
     >
       <a
-        data-test="download-vega-lite"
         download="vega-lite.vl.json"
         href="##"
         onClick={[Function]}
@@ -82,7 +80,6 @@ exports[`renders 1`] = `
       style={undefined}
     >
       <a
-        data-test="download-vega"
         download="vega.vg.json"
         href="##"
         onClick={[Function]}
@@ -113,7 +110,6 @@ exports[`renders 1`] = `
       style={undefined}
     >
       <a
-        data-test="download-png"
         download="download.png"
         href="##"
         onClick={[Function]}
@@ -136,7 +132,6 @@ exports[`renders 1`] = `
       style={undefined}
     >
       <a
-        data-test="download-svg"
         download="download.svg"
         href="##"
         onClick={[Function]}
@@ -167,7 +162,6 @@ exports[`renders 1`] = `
       style={undefined}
     >
       <a
-        data-test="download-html"
         download="download.html"
         href="##"
         onClick={[Function]}
