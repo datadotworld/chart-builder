@@ -188,7 +188,6 @@ class SaveAsInsightModal extends Component<Props> {
                   />
                 </FormGroup>
                 <Checkbox
-                  data-test="insight-save-vega-lite-checkbox"
                   checked={this.saveAsFile}
                   onChange={e => (this.saveAsFile = e.target.checked)}
                 >

@@ -88,8 +88,7 @@ type EncodingProps = {
   fields: Array<FieldType>,
   encodings: Array<EncLineType>,
   encoding: EncLineType,
-  disabled: boolean,
-  'data-test'?: string
+  disabled: boolean
 }
 
 class Encoding extends Component<EncodingProps> {
@@ -105,7 +104,7 @@ class Encoding extends Component<EncodingProps> {
     const { fields, encoding, encodings, disabled } = this.props
 
     return (
-      <div className={classes.container} data-test={this.props['data-test']}>
+      <div className={classes.container} data-test="encoding-container">
         <div className={classes.bar} data-test="encoding-bar">
           <Select
             classNamePrefix="react-select"
