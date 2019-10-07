@@ -22,6 +22,30 @@ jobs:
           key: v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
+      - run:
+          name: Install integration test deps
+          command: |
+            sudo apt-get update && sudo apt-get install -qq -y python-pip libpython-dev xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
+      - run:
+          name: Run server for tests
+          command: yarn http-server build/ -p 3500
+          background: true
+      - run:
+          name: Cypress tests
+          command: |
+            yarn cypress install
+            yarn cypress run
+      - save_cache:
+          key: v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+            - ~/.cache/Cypress
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: cypress/screenshots
+      - store_test_results:
+          path: cypress/junit-results
   build_master:
     docker:
       - image: circleci/node:10
