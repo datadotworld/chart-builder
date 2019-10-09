@@ -3,7 +3,6 @@ import React, { Fragment, Component } from 'react'
 import { decorate, observable, runInAction } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import { Link } from 'react-router-dom'
-import DevTools from 'mobx-react-devtools'
 import {
   Grid,
   Row,
@@ -228,7 +227,6 @@ class App extends Component<AppP> {
     if (!store.hasValidParams) {
       return (
         <Fragment>
-          {process.env.NODE_ENV === 'development' && <DevTools />}
           <Header />
           <Grid style={{ marginTop: 32 }}>
             <Row>
@@ -266,7 +264,6 @@ class App extends Component<AppP> {
     if (this.loading || this.errorLoading) {
       return (
         <Fragment>
-          {process.env.NODE_ENV === 'development' && <DevTools />}
           <Header />
           <Grid style={{ marginTop: 32 }}>
             {this.loading ? (
@@ -289,7 +286,6 @@ class App extends Component<AppP> {
 
     return (
       <Fragment>
-        {process.env.NODE_ENV === 'development' && <DevTools />}
         <Header agentid={store.agentid} datasetid={store.datasetid} />
 
         <div className={classes.main}>
@@ -326,13 +322,20 @@ class App extends Component<AppP> {
                         onSelect={ek => (this.saveModalOpen = ek)}
                       >
                         <MenuItem header>Share to data.world as...</MenuItem>
-                        <MenuItem eventKey="insight">Insight</MenuItem>
-                        <MenuItem eventKey="file">File</MenuItem>
-                        <MenuItem eventKey="ddwembed">
+                        <MenuItem data-test="share-insight" eventKey="insight">
+                          Insight
+                        </MenuItem>
+                        <MenuItem data-test="share-file" eventKey="file">
+                          File
+                        </MenuItem>
+                        <MenuItem
+                          data-test="share-markdown"
+                          eventKey="ddwembed"
+                        >
                           Markdown Embed (Comment)
                         </MenuItem>
                         <MenuItem header>Other</MenuItem>
-                        <MenuItem eventKey="shareurl" data-test="share-btn">
+                        <MenuItem data-test="share-url" eventKey="shareurl">
                           Share URL
                         </MenuItem>
                       </DropdownButton>
@@ -407,7 +410,7 @@ class App extends Component<AppP> {
                   </Col>
                 </Row>
                 <Row>
-                  <Col md={12}>
+                  <Col md={12} data-test="share-markdown-embed">
                     <CopyField
                       getValue={() => {
                         const storeConfig = this.props.store.config
