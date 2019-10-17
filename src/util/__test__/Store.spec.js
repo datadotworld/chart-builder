@@ -10,13 +10,12 @@ describe('Store', () => {
   it('detects valid params', () => {
     const store = Store.create({
       location: {
-        search: 'agentid=foo&datasetid=bar&query=select'
+        search: 'dataset=foo/bar&query=select'
       }
     })
     expect(store.hasValidParams).toBe(true)
     expect({
-      agentid: store.agentid,
-      datasetid: store.datasetid,
+      dataset: store.dataset,
       query: store.query
     }).toMatchSnapshot()
   })
@@ -24,7 +23,7 @@ describe('Store', () => {
   it('detects invalid params', () => {
     const store = Store.create({
       location: {
-        search: 'agentid=foo&datasetid=bar'
+        search: 'dataset=foo/bar'
       }
     })
     expect(store.hasValidParams).toBe(false)
@@ -40,34 +39,10 @@ describe('Store', () => {
     it(`standardizes queryType from ${type} to ${expected}`, () => {
       const store = Store.create({
         location: {
-          search: `agentid=foo&datasetid=bar&query=select&query_type=${type}`
+          search: `dataset=foo/bar&query=select&query_type=${type}`
         }
       })
       expect(store.queryType).toBe(expected)
-    })
-  })
-  ;[
-    ['agentid=a&datasetid=b', { agentid: 'a', datasetid: 'b' }],
-    ['dataset=a/b', { agentid: 'a', datasetid: 'b' }],
-    ['dataset=a&agentid=b&datasetid=c', { agentid: 'b', datasetid: 'c' }],
-    ['project=a/b', { agentid: 'a', datasetid: 'b' }],
-    ['dataset=c/d&project=a/b', { agentid: 'c', datasetid: 'd' }],
-    [
-      'dataset=c/d&project=a/b&agentid=e&datasetid=f',
-      { agentid: 'c', datasetid: 'd' }
-    ]
-  ].forEach(([search, expected]) => {
-    it(`parsing agentid/datasetid works for ${search}`, () => {
-      const store = Store.create({
-        location: {
-          search
-        }
-      })
-
-      expect({
-        agentid: store.agentid,
-        datasetid: store.datasetid
-      }).toEqual(expected)
     })
   })
 })

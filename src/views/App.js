@@ -65,13 +65,6 @@ class App extends Component<AppP> {
     }
   }
 
-  getQueryUrl() {
-    const { store } = this.props
-    return `${API_HOST}/v0/${store.queryType}/${store.agentid}/${
-      store.datasetid
-    }?includeTableSchema=true`
-  }
-
   getQueryHeaders() {
     const { store } = this.props
     return {
@@ -91,11 +84,28 @@ class App extends Component<AppP> {
       this.data = null
       this.loading = true
     })
-    const res = await fetch(this.getQueryUrl(), {
-      method: 'POST',
-      headers: this.getQueryHeaders(),
-      body: createParams({ query: store.query }).toString()
-    })
+
+    let res
+    if (store.savedQueryId && !store.savedQueryId.includes('sample')) {
+      const savedQueryURL = `${API_HOST}/v0/queries/${
+        store.savedQueryId
+      }/results?includeTableSchema=true`
+
+      res = await fetch(savedQueryURL, {
+        method: 'GET',
+        headers: this.getQueryHeaders()
+      })
+    } else {
+      const unsavedQueryURL = `${API_HOST}/v0/${store.queryType}/${
+        store.dataset
+      }?includeTableSchema=true`
+
+      res = await fetch(unsavedQueryURL, {
+        method: 'POST',
+        headers: this.getQueryHeaders(),
+        body: createParams({ query: store.query }).toString()
+      })
+    }
 
     const loadError = () =>
       runInAction(() => {
@@ -249,7 +259,7 @@ class App extends Component<AppP> {
                   to={{
                     pathname: '/',
                     search:
-                      '?s=N4IgbgpgTgzglgewHYgFwEYA0IA2CDGAhgC6IqqgwSFT4AWaIA-IQOYRKkAmAvAFbI8ATw4wAZFxKEq3HnE7QAthC5wSEALSTihDQHcEUHFzEBHAK7QhPKjgj5iAUgBMABhcBBF64BmUBIrejq5eAGyuMHQICKRIrDD4cMRCMDrEEAB0+DBgLgBikdGx8YnJqeqO4S4AwsEerIrIEEIZla7mMBqlQhrpigAOGlCEcRAwba3h1UlC3gAqEAPeAEoj7BkAHjgwG-kAInA+PtAc+BDe8vOL-eNVIXp0J96FMfIlM+XpWR9p5wDMeza02SVyWblWo02212zjyByOJyQZwuSFBNwmwKEZksUCEAH1kv0IDwAMoARQAMiAAL7YfDIHxwVhoUCkYh2NBIcw4HDYRQ0ADWjAARjQQNhTghVHEYGgANqgPFwLhoVzYRkQYyMT4QPFIQjKcUgegjJCaxgbI2EiCMQjmYgII3C+RoHyEbYQbBsVhQCCsdSc7m8kAAL2gjtQxCglmwCXdNtQuHk1CgRpghmItoSHGlzOwpGUAFUkElAzzYxm8nBNSrUFyebTFcq0FgQBqtYmAFRGk1IM04RhCK1CIm2+2O7DO8huj1e1g+v0BxP08ycI1h-xoKMxkBxjmJnDJsUVqCZxPSM5IXNWuBFktn+vB9Onqs1ss4RsgJW15zq6sdx86ToU1zWXBA8FTfMRwTEA7QdJ0XVQGcqDnBd-XSd9sA3CNt09XciH3JMzWPXcMyzS9r3zW8IGLUs6yDE9iFfACg2pABdPkRnMd0SSJfBMJAPRlWIBh6PLEBHiZOgH1Y6kgA'
+                      '?s=N4IgbgpgTgzglgewHYgFwEYA0IA2CDGAhgC6IqqgwSFT4AWaIA-ACYmFXEC8AVsngE8ISGAFIATADE4SYtAC2EFnBIQAtG2KE1AdwRQcLAGQBHAK7QBXKjgj5iEgAwSAgk4BmUBPKcw6CBFIkAHMYfDhiARgtOQkAYVFHF2D5ZAgBADpRADZHMxg1cMi1OXkABzUoQhCIMVys3LiIgScAFQhypwAlauCIDIAPHBgBiUkAETh3d2hhfAgnGTaOsrrnJJ06Wd9-QJlQoqiY-sPo1VEAZnGcxybI5c7xRx6aweHRqUnp2aR5xaQHqsbhk7gJTBYoAIAPqRMoQLgAZQAigAZEAAX2w+GQ7jgwTQoFIxFsaCQZhwOGw8hoAGtGAAjGggbBzBDKEIwNAAbVAULgLDQjmwuIghkYZzkUKQhEUzJA9GqSFFjAGcthEEYhDMxAQcvpMjQ7kIwwg2EIwWCUAgwVUpPJlJAAC9oLrUMQoBZsGFjRrULgZNQoHKYPpiJqwsJ2fjsKRFABVJARO0Ur2h6SigWoMkUzG8-loLAgEViv0AKjlCqQSpwjAEaoEcM12t12H15CNJrNFqtNrkjGxZlkcudXjQ7s9IG9JL9OADTNTUDDfo48yQUbVcHjiaX2YdIcX6ZLu9zID5mfEwrgGeTDsr1f7CDwQZjDd9IC1Or1BtQHaoXct1q2lm9rYCOrrjqak5ENO-pKvOk6huGq7rjGm4QAmSbASmCEHleR72uiAC6VLVGYxoInC+A3tgOj8sQDBYQ6Wx4nQO4EeiQA'
                   }}
                 >
                   Here's another example (with a preconfigured chart)
@@ -286,7 +296,7 @@ class App extends Component<AppP> {
 
     return (
       <Fragment>
-        <Header agentid={store.agentid} datasetid={store.datasetid} />
+        <Header />
 
         <div className={classes.main}>
           <Sidebar />
@@ -350,14 +360,14 @@ class App extends Component<AppP> {
         {this.saveModalOpen === 'insight' && (
           <SaveAsInsightModal
             onClose={() => (this.saveModalOpen = false)}
-            defaultId={store.agentid + '/' + store.datasetid}
+            defaultId={store.dataset}
             data={this.data}
           />
         )}
         {this.saveModalOpen === 'file' && (
           <SaveAsFileModal
             onClose={() => (this.saveModalOpen = false)}
-            defaultId={store.agentid + '/' + store.datasetid}
+            defaultId={store.dataset}
             data={this.data}
           />
         )}

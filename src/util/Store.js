@@ -342,12 +342,11 @@ export type StoreType = {
 
   // views
   parsedUrlQuery: Object,
-  possibleResourceFromQuery: ?{ agentid: string, datasetid: string },
   hasValidParams: boolean,
-  agentid: string,
-  datasetid: string,
   query: string,
   queryType: 'sql' | 'sparql',
+  savedQueryId: string | null,
+  dataset: string,
 
   // actions
   syncQueryParams: Object => void,
@@ -369,45 +368,13 @@ const Store: ModelType<StoreType> = types
   })
   .views((self: StoreType) => ({
     get hasValidParams() {
-      return !!self.agentid && !!self.datasetid && !!self.query
+      return !!self.dataset && (!!self.query || !!self.savedQueryId)
     },
 
     get parsedUrlQuery() {
       return parseParams(self.location.search)
     },
 
-    /*
-      support 3 types of passing resource:
-      dataset=<agentid>/<datasetid>
-      project=<agentid>/<datasetid>
-      agentid=<agentid>&datasetid=<datasetid>
-
-      they're preferred in that order
-    */
-    get possibleResourceFromQuery() {
-      const resource: ?string =
-        self.parsedUrlQuery.dataset || self.parsedUrlQuery.project
-      if (resource != null) {
-        const [agentid, datasetid] = resource.split('/')
-        if (agentid && datasetid) {
-          return { agentid, datasetid }
-        }
-      }
-      return null
-    },
-
-    get agentid() {
-      const resource = self.possibleResourceFromQuery
-      if (resource) return resource.agentid
-
-      return self.parsedUrlQuery.agentid
-    },
-    get datasetid() {
-      const resource = self.possibleResourceFromQuery
-      if (resource) return resource.datasetid
-
-      return self.parsedUrlQuery.datasetid
-    },
     get query() {
       return self.parsedUrlQuery.query
     },
@@ -418,6 +385,17 @@ const Store: ModelType<StoreType> = types
         if (lowered === 'sql' || lowered === 'sparql') return lowered
       }
       return 'sql'
+    },
+    get savedQueryId() {
+      const providedSavedQueryId = self.parsedUrlQuery.saved_query
+      if (!providedSavedQueryId) {
+        return null
+      }
+      return providedSavedQueryId
+    },
+    get dataset() {
+      const providedDataset = self.parsedUrlQuery.dataset
+      return providedDataset
     }
   }))
   .actions((self: StoreType) => ({

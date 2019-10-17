@@ -24,8 +24,7 @@ export default class StateRestorationGate extends Component<Props> {
         history.replace({
           pathname: '/',
           search: createParams({
-            agentid: store.agentid,
-            datasetid: store.datasetid,
+            dataset: store.dataset,
             query: store.query
           }).toString()
         })
