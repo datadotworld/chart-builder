@@ -9,8 +9,7 @@ import {
   Alert,
   Col,
   Row,
-  Grid,
-  Checkbox
+  Grid
 } from 'react-bootstrap'
 import { decorate, observable } from 'mobx'
 import { observer, inject } from 'mobx-react'
@@ -30,14 +29,6 @@ type Props = {
   data: Array<Object>,
   defaultId: string,
   store: StoreType
-}
-
-function storeBlob(blob: Blob): Promise<{ url: string }> {
-  const filepicker = require('filepicker-js')
-  return new Promise((resolve, reject) => {
-    filepicker.setKey('Al0jca1QpS4iGpimTNsAqz')
-    filepicker.store(blob, resolve, reject)
-  })
 }
 
 class SaveAsInsightModal extends Component<Props> {
