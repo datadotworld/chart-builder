@@ -21,6 +21,7 @@ import LoadingAnimation from './LoadingAnimation'
 import { getDownloadName } from '../util/util'
 import VegaLiteImage from './VegaLiteImage'
 import classes from './Modals.module.css'
+import { getStateUrl } from '../util/urlState'
 import type { StoreType } from '../util/Store'
 
 type Props = {
@@ -42,21 +43,12 @@ function storeBlob(blob: Blob): Promise<{ url: string }> {
 class SaveAsInsightModal extends Component<Props> {
   id: string = ''
   title: string = this.props.store.config.title || ''
-  comment: string = ''
-  saveAsFile: boolean = true
+  description: string = ''
 
   response: ?{ message: string, uri: string } = null
   saving: boolean = false
 
   img: ?Blob = null
-
-  getFileCreateUrl() {
-    const slugname = kebabCase(this.title)
-    return `${API_HOST}/v0/uploads/${this.id}/files/${getDownloadName(
-      slugname,
-      'vl.json'
-    )}`
-  }
 
   getInsightCreateUrl() {
     return `${API_HOST}/v0/insights/${this.id}`
@@ -68,34 +60,31 @@ class SaveAsInsightModal extends Component<Props> {
     const specWithData = store.config.getSpecWithMinimumAmountOfData(data)
     this.saving = true
 
-    let sourceLink = `https://chart-builder.data.world/${
-      window.location.search
-    }`
+    const filename = getDownloadName(kebabCase(this.title), 'vl.json')
+    const linkToVLFile = `https://data.world/${
+      this.id
+    }/workspace/file?filename=${filename}`
 
-    if (this.saveAsFile) {
-      const filename = getDownloadName(kebabCase(this.title), 'vl.json')
-      const fileCreateUrl = `${API_HOST}/v0/uploads/${
-        this.id
-      }/files/${filename}`
-      await fetch(fileCreateUrl, {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${store.token}`,
-          'Content-Type': 'application/octet-stream'
-        },
-        body: JSON.stringify(specWithData)
-      })
-      sourceLink = `https://data.world/${
-        this.id
-      }/workspace/file?filename=${filename}`
-    }
+    const fileCreateUrl = `${API_HOST}/v0/uploads/${this.id}/files/${filename}`
+    await fetch(fileCreateUrl, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${store.token}`,
+        'Content-Type': 'application/octet-stream'
+      },
+      body: JSON.stringify(specWithData)
+    })
 
     // shouldn't really happen
     if (!this.img) return
 
-    // upload image
-    const uploadRes = await storeBlob(this.img)
+    const chartURL = getStateUrl(store)
+    const queryResults =
+      store.savedQueryId &&
+      `https://data.world/${this.id}/workspace/query?queryid=${
+        store.savedQueryId
+      }`
 
     // create insight
     const d = await fetch(this.getInsightCreateUrl(), {
@@ -107,11 +96,16 @@ class SaveAsInsightModal extends Component<Props> {
       },
       body: JSON.stringify({
         title: this.title,
-        description: this.comment,
         body: {
-          imageUrl: uploadRes.url
+          markdownBody:
+            `\`\`\`vega-lite\n ${JSON.stringify(specWithData)} \n\`\`\`\n` +
+            this.description +
+            `\n\n Click [here](${chartURL}) to edit this chart` +
+            (queryResults
+              ? `\n\n Here is the query that generated this chart \n @(${queryResults})`
+              : '')
         },
-        sourceLink
+        sourceLink: linkToVLFile
       })
     }).then(r => r.json())
 
@@ -174,26 +168,20 @@ class SaveAsInsightModal extends Component<Props> {
                     onChange={e => (this.title = e.target.value)}
                   />
                 </FormGroup>
-                <FormGroup controlId="insight-comment">
+                <FormGroup controlId="insight-description">
                   <ControlLabel>
-                    Add comment <small className="text-muted">(optional)</small>
+                    Add description
+                    <small className="text-muted">(optional)</small>
                   </ControlLabel>
                   <FormControl
                     componentClass="textarea"
                     type="textarea"
-                    value={this.comment}
+                    value={this.description}
                     placeholder="Enter text"
-                    onChange={e => (this.comment = e.target.value)}
+                    onChange={e => (this.description = e.target.value)}
                     rows={3}
                   />
                 </FormGroup>
-                <Checkbox
-                  data-test="insight-save-vega-lite-checkbox"
-                  checked={this.saveAsFile}
-                  onChange={e => (this.saveAsFile = e.target.checked)}
-                >
-                  <strong>Also save as Vega-Lite source file</strong>
-                </Checkbox>
               </Col>
             </Row>
           </Grid>
@@ -221,8 +209,7 @@ class SaveAsInsightModal extends Component<Props> {
 decorate(SaveAsInsightModal, {
   id: observable,
   title: observable,
-  comment: observable,
-  saveAsFile: observable,
+  description: observable,
   img: observable,
   response: observable,
   saving: observable
