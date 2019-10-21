@@ -22,6 +22,7 @@ body {
 
 .form-horizontal .control-label {
   padding-top: 7px;
+  text-align: left;
 }
 .form-horizontal .form-group {
   margin-bottom: 0;

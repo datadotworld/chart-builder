@@ -45,7 +45,6 @@
 
 .advancedFormGroup {
   display: flex;
-  justify-content: flex-end;
   align-items: baseline;
   margin-right: -0.5rem;
 }
@@ -57,4 +56,8 @@
 
 .advancedFormGroup :global(.help-block) {
   margin-bottom: 0px;
+}
+
+.labelText {
+  display: inline-block;
 }
