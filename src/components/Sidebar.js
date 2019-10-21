@@ -65,7 +65,11 @@ class Sidebar extends Component<Props> {
               <div className={classes.title}>Marks</div>
               <OverlayTrigger
                 placement="top"
-                overlay={<Tooltip>{overlayDescriptions.marks}</Tooltip>}
+                overlay={
+                  <Tooltip id="sidebar-marks">
+                    {overlayDescriptions.marks}
+                  </Tooltip>
+                }
               >
                 <img
                   alt="data.world info icon"
@@ -109,7 +113,11 @@ class Sidebar extends Component<Props> {
               Configuration
               <OverlayTrigger
                 placement="top"
-                overlay={<Tooltip>{overlayDescriptions.addEncoding}</Tooltip>}
+                overlay={
+                  <Tooltip id="sidebar-add-encoding">
+                    {overlayDescriptions.addEncoding}
+                  </Tooltip>
+                }
               >
                 <Button
                   data-test="add-encoding"

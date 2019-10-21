@@ -163,7 +163,12 @@ class Encoding extends Component<EncodingProps> {
               <AdvancedFormGroup bsSize="xs">
                 <OverlayTrigger
                   placement="top"
-                  overlay={<Tooltip> {overlayDescriptions.type} </Tooltip>}
+                  overlay={
+                    <Tooltip id="encoding-type">
+                      {' '}
+                      {overlayDescriptions.type}{' '}
+                    </Tooltip>
+                  }
                 >
                   {/* This div is needed around each property to shrink the container to text (with no margins/padding).
                       This allows the tooltip to lay right above the text instead of being off-centered. */}
@@ -197,7 +202,11 @@ class Encoding extends Component<EncodingProps> {
               <AdvancedFormGroup bsSize="xs">
                 <OverlayTrigger
                   placement="top"
-                  overlay={<Tooltip>{overlayDescriptions.aggregate}</Tooltip>}
+                  overlay={
+                    <Tooltip id="encoding-aggregate">
+                      {overlayDescriptions.aggregate}
+                    </Tooltip>
+                  }
                 >
                   <div>
                     <Col componentClass={ControlLabel} sm={3}>
@@ -240,7 +249,11 @@ class Encoding extends Component<EncodingProps> {
               <AdvancedFormGroup bsSize="xs">
                 <OverlayTrigger
                   placement="top"
-                  overlay={<Tooltip>{overlayDescriptions.bin}</Tooltip>}
+                  overlay={
+                    <Tooltip id="encoding-bin">
+                      {overlayDescriptions.bin}
+                    </Tooltip>
+                  }
                 >
                   <div>
                     <Col componentClass={ControlLabel} sm={3}>
@@ -274,7 +287,11 @@ class Encoding extends Component<EncodingProps> {
               <AdvancedFormGroup bsSize="xs">
                 <OverlayTrigger
                   placement="top"
-                  overlay={<Tooltip>{overlayDescriptions.zero}</Tooltip>}
+                  overlay={
+                    <Tooltip id="encoding-zero">
+                      {overlayDescriptions.zero}
+                    </Tooltip>
+                  }
                 >
                   <div>
                     <Col componentClass={ControlLabel} sm={3}>
@@ -308,7 +325,11 @@ class Encoding extends Component<EncodingProps> {
               <AdvancedFormGroup bsSize="xs">
                 <OverlayTrigger
                   placement="top"
-                  overlay={<Tooltip>{overlayDescriptions.scale}</Tooltip>}
+                  overlay={
+                    <Tooltip id="encoding-scale">
+                      {overlayDescriptions.scale}
+                    </Tooltip>
+                  }
                 >
                   <div>
                     <Col componentClass={ControlLabel} sm={3}>
@@ -354,7 +375,11 @@ class Encoding extends Component<EncodingProps> {
               <AdvancedFormGroup bsSize="xs">
                 <OverlayTrigger
                   placement="top"
-                  overlay={<Tooltip>{overlayDescriptions.sort}</Tooltip>}
+                  overlay={
+                    <Tooltip id="encoding-sort">
+                      {overlayDescriptions.sort}
+                    </Tooltip>
+                  }
                 >
                   <div>
                     <Col componentClass={ControlLabel} sm={3}>

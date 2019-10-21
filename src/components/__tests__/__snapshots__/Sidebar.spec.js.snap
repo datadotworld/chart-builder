@@ -60,11 +60,31 @@ exports[`renders 1`] = `
         id="configure-tabs-pane-builder"
         role="tabpanel"
       >
-        <div
-          className="title"
+        <span
+          className="titleContainer"
         >
-          Marks
-        </div>
+          <div
+            className="title"
+          >
+            Marks
+          </div>
+          <img
+            alt="data.world info icon"
+            onBlur={[Function]}
+            onClick={null}
+            onFocus={[Function]}
+            onMouseOut={[Function]}
+            onMouseOver={[Function]}
+            src="infoIcon.svg"
+            style={
+              Object {
+                "height": 12,
+                "marginLeft": "0.2rem",
+                "width": 12,
+              }
+            }
+          />
+        </span>
         <div
           data-test="chart-type-selector"
         >
@@ -139,7 +159,11 @@ exports[`renders 1`] = `
             className="pull-right btn btn-xs btn-link"
             data-test="add-encoding"
             disabled={false}
+            onBlur={[Function]}
             onClick={[Function]}
+            onFocus={[Function]}
+            onMouseOut={[Function]}
+            onMouseOver={[Function]}
             style={
               Object {
                 "paddingLeft": 0,
