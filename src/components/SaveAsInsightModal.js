@@ -91,9 +91,9 @@ class SaveAsInsightModal extends Component<Props> {
           markdownBody:
             `\`\`\`vega-lite\n ${JSON.stringify(specWithData)} \n\`\`\`\n` +
             this.description +
-            `\n\n Click [here](${chartURL}) to edit this chart` +
+            `\n\n Click [here](${chartURL}) to edit this chart.` +
             (queryResults
-              ? `\n\n Here is the query that generated this chart \n @(${queryResults})`
+              ? `\n\n Here is the query that generated this chart: \n @(${queryResults})`
               : '')
         },
         sourceLink: linkToVLFile
