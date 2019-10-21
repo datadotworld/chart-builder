@@ -45,6 +45,7 @@
 
 .advancedFormGroup {
   display: flex;
+  justify-content: flex-end;
   align-items: baseline;
   margin-right: -0.5rem;
 }

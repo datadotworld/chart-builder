@@ -61,6 +61,12 @@
   margin: 1rem 0;
   margin-top: 1.5rem;
 }
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+}
+
 .title:first-of-type {
   margin-top: 1rem;
 }

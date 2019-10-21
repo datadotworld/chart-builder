@@ -11,7 +11,9 @@ import {
   Col,
   ControlLabel,
   HelpBlock,
-  Radio
+  Radio,
+  OverlayTrigger,
+  Tooltip
 } from 'react-bootstrap'
 import Select from 'react-select'
 
@@ -74,6 +76,16 @@ const CHANNEL_OPTIONS = [
     ]
   }
 ]
+
+const overlayDescriptions = {
+  type: 'The encoded field’s type of measurement',
+  aggregate: 'Used to compute aggregate summary statistics over groups of data',
+  bin: 'Binning discretizes numeric values into a set of bins',
+  zero: 'Whether to include zero as the baseline value in the scale or not',
+  scale:
+    'Scales map data values (numbers, dates, categories, etc.) to visual values (pixels, colors, sizes)',
+  sort: 'The sort property determines the order of the scale domain'
+}
 
 const ENCODING_SELECT_STYLES = selectStyles({
   control: () => ({
@@ -149,9 +161,18 @@ class Encoding extends Component<EncodingProps> {
           !disabled && (
             <Form horizontal className={classes.advanced}>
               <AdvancedFormGroup bsSize="xs">
-                <Col componentClass={ControlLabel} sm={3}>
-                  Type:
-                </Col>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip> {overlayDescriptions.type} </Tooltip>}
+                >
+                  {/* This div is needed around each property to shrink the container to text (with no margins/padding).
+                      This allows the tooltip to lay right above the text instead of being off-centered. */}
+                  <div>
+                    <Col componentClass={ControlLabel} sm={3}>
+                      Type:
+                    </Col>
+                  </div>
+                </OverlayTrigger>
                 <Col sm={9}>
                   <SimpleSelect
                     values={[
@@ -174,9 +195,16 @@ class Encoding extends Component<EncodingProps> {
                 </Col>
               </AdvancedFormGroup>
               <AdvancedFormGroup bsSize="xs">
-                <Col componentClass={ControlLabel} sm={3}>
-                  Aggregate:
-                </Col>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>{overlayDescriptions.aggregate}</Tooltip>}
+                >
+                  <div>
+                    <Col componentClass={ControlLabel} sm={3}>
+                      Aggregate:
+                    </Col>
+                  </div>
+                </OverlayTrigger>
                 <Col sm={9}>
                   <SimpleSelect
                     values={[
@@ -210,9 +238,16 @@ class Encoding extends Component<EncodingProps> {
                 </Col>
               </AdvancedFormGroup>
               <AdvancedFormGroup bsSize="xs">
-                <Col componentClass={ControlLabel} sm={3}>
-                  Bin:
-                </Col>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>{overlayDescriptions.bin}</Tooltip>}
+                >
+                  <div>
+                    <Col componentClass={ControlLabel} sm={3}>
+                      Bin:
+                    </Col>
+                  </div>
+                </OverlayTrigger>
                 <Col sm={9}>
                   <InlineFormGroup>
                     <Radio
@@ -237,9 +272,16 @@ class Encoding extends Component<EncodingProps> {
                 </Col>
               </AdvancedFormGroup>
               <AdvancedFormGroup bsSize="xs">
-                <Col componentClass={ControlLabel} sm={3}>
-                  Zero:
-                </Col>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>{overlayDescriptions.zero}</Tooltip>}
+                >
+                  <div>
+                    <Col componentClass={ControlLabel} sm={3}>
+                      Zero:
+                    </Col>
+                  </div>
+                </OverlayTrigger>
                 <Col sm={9}>
                   <InlineFormGroup>
                     <Radio
@@ -264,9 +306,16 @@ class Encoding extends Component<EncodingProps> {
                 </Col>
               </AdvancedFormGroup>
               <AdvancedFormGroup bsSize="xs">
-                <Col componentClass={ControlLabel} sm={3}>
-                  Scale:
-                </Col>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>{overlayDescriptions.scale}</Tooltip>}
+                >
+                  <div>
+                    <Col componentClass={ControlLabel} sm={3}>
+                      Scale:
+                    </Col>
+                  </div>
+                </OverlayTrigger>
                 <Col sm={9}>
                   <SimpleSelect
                     values={[
@@ -303,9 +352,16 @@ class Encoding extends Component<EncodingProps> {
                 </Col>
               </AdvancedFormGroup>
               <AdvancedFormGroup bsSize="xs">
-                <Col componentClass={ControlLabel} sm={3}>
-                  Sort:
-                </Col>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>{overlayDescriptions.sort}</Tooltip>}
+                >
+                  <div>
+                    <Col componentClass={ControlLabel} sm={3}>
+                      Sort:
+                    </Col>
+                  </div>
+                </OverlayTrigger>
                 <Col sm={9}>
                   <InlineFormGroup>
                     <Radio
