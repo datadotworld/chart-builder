@@ -388,7 +388,7 @@ const Store: ModelType<StoreType> = types
     },
     get savedQueryId() {
       const providedSavedQueryId = self.parsedUrlQuery.saved_query
-      if (!providedSavedQueryId) {
+      if (!providedSavedQueryId || providedSavedQueryId.includes('sample')) {
         return null
       }
       return providedSavedQueryId
