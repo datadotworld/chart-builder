@@ -28,7 +28,7 @@ describe('Chart Builder', function() {
           }
         )
         fetch.put(
-          'https://api.data.world/v0/uploads/data-society/iris-species/files/test-title.vl.json',
+          'begin:https://api.data.world/v0/uploads/data-society/iris-species/files/test-title',
           { message: 'File uploaded.' }
         )
         fetch.get('glob:*/static/media/licenses*', 'cypress license text')
@@ -157,7 +157,6 @@ describe('Chart Builder', function() {
     cy.get('[data-test=share-insight]').click()
     cy.get('.modal')
 
-    cy.get('[data-test=insight-save-vega-lite-checkbox]').uncheck()
     cy.get('.btn-primary').click()
 
     cy.get('.alert-link').should(
