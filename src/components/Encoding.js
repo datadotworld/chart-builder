@@ -12,8 +12,7 @@ import {
   ControlLabel,
   HelpBlock,
   Radio,
-  OverlayTrigger,
-  Tooltip
+  OverlayTrigger
 } from 'react-bootstrap'
 import Select from 'react-select'
 
@@ -21,6 +20,7 @@ import selectStyles from '../util/selectStyles'
 import FieldSelect from './FieldSelect'
 import classes from './Encoding.module.css'
 import type { EncLineType, FieldType, ChartConfigType } from '../util/Store'
+import { tooltipOverlay } from '../util/util'
 
 const AdvancedFormGroup = props => {
   return <FormGroup className={classes.advancedFormGroup} {...props} />
@@ -164,11 +164,10 @@ class Encoding extends Component<EncodingProps> {
                 <Col componentClass={ControlLabel} sm={3}>
                   <OverlayTrigger
                     placement="top"
-                    overlay={
-                      <Tooltip id="encoding-type">
-                        {overlayDescriptions.type}
-                      </Tooltip>
-                    }
+                    overlay={tooltipOverlay(
+                      'encoding-type',
+                      overlayDescriptions.type
+                    )}
                   >
                     {/* This div is needed around each property to shrink the container to text (with no margins/padding).
                       This allows the tooltip to lay right above the text instead of being off-centered. */}
@@ -200,11 +199,10 @@ class Encoding extends Component<EncodingProps> {
                 <Col componentClass={ControlLabel} sm={3}>
                   <OverlayTrigger
                     placement="top"
-                    overlay={
-                      <Tooltip id="encoding-aggregate">
-                        {overlayDescriptions.aggregate}
-                      </Tooltip>
-                    }
+                    overlay={tooltipOverlay(
+                      'encoding-aggregate',
+                      overlayDescriptions.aggregate
+                    )}
                   >
                     <div className={classes.labelText}>Aggregate:</div>
                   </OverlayTrigger>
@@ -245,11 +243,10 @@ class Encoding extends Component<EncodingProps> {
                 <Col componentClass={ControlLabel} sm={3}>
                   <OverlayTrigger
                     placement="top"
-                    overlay={
-                      <Tooltip id="encoding-bin">
-                        {overlayDescriptions.bin}
-                      </Tooltip>
-                    }
+                    overlay={tooltipOverlay(
+                      'encoding-bin',
+                      overlayDescriptions.bin
+                    )}
                   >
                     <div className={classes.labelText}>Bin:</div>
                   </OverlayTrigger>
@@ -281,11 +278,10 @@ class Encoding extends Component<EncodingProps> {
                 <Col componentClass={ControlLabel} sm={3}>
                   <OverlayTrigger
                     placement="top"
-                    overlay={
-                      <Tooltip id="encoding-zero">
-                        {overlayDescriptions.zero}
-                      </Tooltip>
-                    }
+                    overlay={tooltipOverlay(
+                      'encoding-zero',
+                      overlayDescriptions.zero
+                    )}
                   >
                     <div className={classes.labelText}>Zero:</div>
                   </OverlayTrigger>
@@ -317,11 +313,10 @@ class Encoding extends Component<EncodingProps> {
                 <Col componentClass={ControlLabel} sm={3}>
                   <OverlayTrigger
                     placement="top"
-                    overlay={
-                      <Tooltip id="encoding-scale">
-                        {overlayDescriptions.scale}
-                      </Tooltip>
-                    }
+                    overlay={tooltipOverlay(
+                      'encoding-scale',
+                      overlayDescriptions.scale
+                    )}
                   >
                     <div className={classes.labelText}>Scale:</div>
                   </OverlayTrigger>
@@ -365,11 +360,10 @@ class Encoding extends Component<EncodingProps> {
                 <Col componentClass={ControlLabel} sm={3}>
                   <OverlayTrigger
                     placement="top"
-                    overlay={
-                      <Tooltip id="encoding-sort">
-                        {overlayDescriptions.sort}
-                      </Tooltip>
-                    }
+                    overlay={tooltipOverlay(
+                      'encoding-sort',
+                      overlayDescriptions.sort
+                    )}
                   >
                     <div className={classes.labelText}>Sort:</div>
                   </OverlayTrigger>

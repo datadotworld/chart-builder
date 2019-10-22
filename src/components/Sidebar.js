@@ -1,13 +1,6 @@
 // @flow
 import React, { Component } from 'react'
-import {
-  Tabs,
-  Tab,
-  Alert,
-  Button,
-  Tooltip,
-  OverlayTrigger
-} from 'react-bootstrap'
+import { Tabs, Tab, Alert, Button, OverlayTrigger } from 'react-bootstrap'
 import { observer, inject } from 'mobx-react'
 import Editor from './Editor'
 import Encoding from './Encoding'
@@ -16,8 +9,8 @@ import SidebarFooter from './SidebarFooter'
 import SimpleSelect from './SimpleSelect'
 import classes from './Sidebar.module.css'
 import infoIcon from './infoIcon.svg'
-
 import type { StoreType } from '../util/Store'
+import { tooltipOverlay } from '../util/util'
 
 type Props = {
   store: StoreType
@@ -65,11 +58,10 @@ class Sidebar extends Component<Props> {
               <div className={classes.title}>Marks</div>
               <OverlayTrigger
                 placement="top"
-                overlay={
-                  <Tooltip id="sidebar-marks">
-                    {overlayDescriptions.marks}
-                  </Tooltip>
-                }
+                overlay={tooltipOverlay(
+                  'sidebar-marks',
+                  overlayDescriptions.marks
+                )}
               >
                 <img
                   alt="data.world info icon"
@@ -113,11 +105,10 @@ class Sidebar extends Component<Props> {
               Configuration
               <OverlayTrigger
                 placement="top"
-                overlay={
-                  <Tooltip id="sidebar-add-encoding">
-                    {overlayDescriptions.addEncoding}
-                  </Tooltip>
-                }
+                overlay={tooltipOverlay(
+                  'sidebar-add-encoding',
+                  overlayDescriptions.addEncoding
+                )}
               >
                 <Button
                   data-test="add-encoding"

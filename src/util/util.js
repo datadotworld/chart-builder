@@ -1,4 +1,6 @@
 // @flow
+import React from 'react'
+import { Tooltip } from 'react-bootstrap'
 
 export function parseParams(searchString: String) {
   const query = new URLSearchParams(searchString)
@@ -26,6 +28,10 @@ export function getDownloadName(baseName: string, extension: string) {
 
 export function encodeFieldName(name: string) {
   return name.replace(/([.[\]])/g, '\\$1')
+}
+
+export function tooltipOverlay(id: string, description: string) {
+  return <Tooltip id={id}>{description}</Tooltip>
 }
 
 type PossibleFieldType = {| name: string, rdfType?: string |}
