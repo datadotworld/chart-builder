@@ -11,7 +11,8 @@ import {
   Col,
   ControlLabel,
   HelpBlock,
-  Radio
+  Radio,
+  OverlayTrigger
 } from 'react-bootstrap'
 import Select from 'react-select'
 
@@ -19,6 +20,7 @@ import selectStyles from '../util/selectStyles'
 import FieldSelect from './FieldSelect'
 import classes from './Encoding.module.css'
 import type { EncLineType, FieldType, ChartConfigType } from '../util/Store'
+import { tooltipOverlay } from '../util/util'
 
 const AdvancedFormGroup = props => {
   return <FormGroup className={classes.advancedFormGroup} {...props} />
@@ -74,6 +76,16 @@ const CHANNEL_OPTIONS = [
     ]
   }
 ]
+
+const overlayDescriptions = {
+  type: 'The encoded field’s type of measurement',
+  aggregate: 'Used to compute aggregate summary statistics over groups of data',
+  bin: 'Binning discretizes numeric values into a set of bins',
+  zero: 'Whether to include zero as the baseline value in the scale or not',
+  scale:
+    'Scales map data values (numbers, dates, categories, etc.) to visual values (pixels, colors, sizes)',
+  sort: 'The sort property determines the order of the scale domain'
+}
 
 const ENCODING_SELECT_STYLES = selectStyles({
   control: () => ({
@@ -150,7 +162,17 @@ class Encoding extends Component<EncodingProps> {
             <Form horizontal className={classes.advanced}>
               <AdvancedFormGroup bsSize="xs">
                 <Col componentClass={ControlLabel} sm={3}>
-                  Type:
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={tooltipOverlay(
+                      'encoding-type',
+                      overlayDescriptions.type
+                    )}
+                  >
+                    {/* This div is needed around each property to shrink the container to text (with no margins/padding).
+                      This allows the tooltip to lay right above the text instead of being off-centered. */}
+                    <div className={classes.labelText}>Type:</div>
+                  </OverlayTrigger>
                 </Col>
                 <Col sm={9}>
                   <SimpleSelect
@@ -175,7 +197,15 @@ class Encoding extends Component<EncodingProps> {
               </AdvancedFormGroup>
               <AdvancedFormGroup bsSize="xs">
                 <Col componentClass={ControlLabel} sm={3}>
-                  Aggregate:
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={tooltipOverlay(
+                      'encoding-aggregate',
+                      overlayDescriptions.aggregate
+                    )}
+                  >
+                    <div className={classes.labelText}>Aggregate:</div>
+                  </OverlayTrigger>
                 </Col>
                 <Col sm={9}>
                   <SimpleSelect
@@ -211,7 +241,15 @@ class Encoding extends Component<EncodingProps> {
               </AdvancedFormGroup>
               <AdvancedFormGroup bsSize="xs">
                 <Col componentClass={ControlLabel} sm={3}>
-                  Bin:
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={tooltipOverlay(
+                      'encoding-bin',
+                      overlayDescriptions.bin
+                    )}
+                  >
+                    <div className={classes.labelText}>Bin:</div>
+                  </OverlayTrigger>
                 </Col>
                 <Col sm={9}>
                   <InlineFormGroup>
@@ -238,7 +276,15 @@ class Encoding extends Component<EncodingProps> {
               </AdvancedFormGroup>
               <AdvancedFormGroup bsSize="xs">
                 <Col componentClass={ControlLabel} sm={3}>
-                  Zero:
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={tooltipOverlay(
+                      'encoding-zero',
+                      overlayDescriptions.zero
+                    )}
+                  >
+                    <div className={classes.labelText}>Zero:</div>
+                  </OverlayTrigger>
                 </Col>
                 <Col sm={9}>
                   <InlineFormGroup>
@@ -265,7 +311,15 @@ class Encoding extends Component<EncodingProps> {
               </AdvancedFormGroup>
               <AdvancedFormGroup bsSize="xs">
                 <Col componentClass={ControlLabel} sm={3}>
-                  Scale:
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={tooltipOverlay(
+                      'encoding-scale',
+                      overlayDescriptions.scale
+                    )}
+                  >
+                    <div className={classes.labelText}>Scale:</div>
+                  </OverlayTrigger>
                 </Col>
                 <Col sm={9}>
                   <SimpleSelect
@@ -304,7 +358,15 @@ class Encoding extends Component<EncodingProps> {
               </AdvancedFormGroup>
               <AdvancedFormGroup bsSize="xs">
                 <Col componentClass={ControlLabel} sm={3}>
-                  Sort:
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={tooltipOverlay(
+                      'encoding-sort',
+                      overlayDescriptions.sort
+                    )}
+                  >
+                    <div className={classes.labelText}>Sort:</div>
+                  </OverlayTrigger>
                 </Col>
                 <Col sm={9}>
                   <InlineFormGroup>

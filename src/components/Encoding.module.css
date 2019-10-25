@@ -57,3 +57,7 @@
 .advancedFormGroup :global(.help-block) {
   margin-bottom: 0px;
 }
+
+.labelText {
+  display: inline-block;
+}

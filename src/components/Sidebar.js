@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react'
-import { Tabs, Tab, Alert, Button } from 'react-bootstrap'
+import { Tabs, Tab, Alert, Button, OverlayTrigger } from 'react-bootstrap'
 import { observer, inject } from 'mobx-react'
 import Editor from './Editor'
 import Encoding from './Encoding'
@@ -8,11 +8,19 @@ import GlobalOptions from './GlobalOptions'
 import SidebarFooter from './SidebarFooter'
 import SimpleSelect from './SimpleSelect'
 import classes from './Sidebar.module.css'
-
+import infoIcon from './infoIcon.svg'
 import type { StoreType } from '../util/Store'
+import { tooltipOverlay } from '../util/util'
 
 type Props = {
   store: StoreType
+}
+
+const overlayDescriptions = {
+  marks:
+    'Marks provide basic shapes whose properties (such as position, size, and color) can be used to visually encode data',
+  addEncoding:
+    'Encodings represent the mapping between encoding channels (such as x, y, or color) and data fields'
 }
 
 class Sidebar extends Component<Props> {
@@ -46,7 +54,26 @@ class Sidebar extends Component<Props> {
                 </Button>
               </Alert>
             )}
-            <div className={classes.title}>Marks</div>
+            <span className={classes.titleContainer}>
+              <div className={classes.title}>Marks</div>
+              <OverlayTrigger
+                placement="top"
+                overlay={tooltipOverlay(
+                  'sidebar-marks',
+                  overlayDescriptions.marks
+                )}
+              >
+                <img
+                  alt="data.world info icon"
+                  src={infoIcon}
+                  style={{
+                    height: 12,
+                    width: 12,
+                    marginLeft: '0.2rem'
+                  }}
+                />
+              </OverlayTrigger>
+            </span>
             <div data-test="chart-type-selector">
               <SimpleSelect
                 values={[
@@ -76,17 +103,25 @@ class Sidebar extends Component<Props> {
             </div>
             <div className={classes.title}>
               Configuration
-              <Button
-                data-test="add-encoding"
-                bsStyle="link"
-                bsSize="xs"
-                className="pull-right"
-                style={{ paddingLeft: 0, paddingRight: 0 }}
-                onClick={store.config.addEncoding}
-                disabled={store.config.hasManualSpec}
+              <OverlayTrigger
+                placement="top"
+                overlay={tooltipOverlay(
+                  'sidebar-add-encoding',
+                  overlayDescriptions.addEncoding
+                )}
               >
-                Add encoding
-              </Button>
+                <Button
+                  data-test="add-encoding"
+                  bsStyle="link"
+                  bsSize="xs"
+                  className="pull-right"
+                  style={{ paddingLeft: 0, paddingRight: 0 }}
+                  onClick={store.config.addEncoding}
+                  disabled={store.config.hasManualSpec}
+                >
+                  Add encoding
+                </Button>
+              </OverlayTrigger>
             </div>
             {fields && (
               <div data-test="encodings-list">
