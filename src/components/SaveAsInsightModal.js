@@ -89,7 +89,7 @@ class SaveAsInsightModal extends Component<Props> {
         title: this.title,
         body: {
           markdownBody:
-            `\`\`\`vega-lite\n ${JSON.stringify(specWithData)} \n\`\`\`\n` +
+            `@(${linkToVLFile}) \n ` +
             this.description +
             `\n\n Click [here](${chartURL}) to edit this chart.` +
             (queryResults
