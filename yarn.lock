@@ -4965,6 +4965,12 @@ hoist-non-react-statics@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.0.tgz#d2ca2dfc19c5a91c5a6615ce8e564ef0347e2a40"
 
+hoist-non-react-statics@^3.0.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.0.tgz#b09178f0122184fb95acf525daaecb4d8f45958b"
+  dependencies:
+    react-is "^16.7.0"
+
 home-or-tmp@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/home-or-tmp/-/home-or-tmp-2.0.0.tgz#e36c3f2d2cae7d746a857e38d18d5f32a7882db8"
@@ -6697,11 +6703,11 @@ mobx-react-devtools@6.0.3:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/mobx-react-devtools/-/mobx-react-devtools-6.0.3.tgz#4d536c8cdd77d9f4b81f5e8415d7bedccc6a2a99"
 
-mobx-react@5.2.6:
-  version "5.2.6"
-  resolved "https://registry.yarnpkg.com/mobx-react/-/mobx-react-5.2.6.tgz#1acf6bbbf4f3b52874b91ff4a1d49fc3aae9a5d5"
+mobx-react@5.4.4:
+  version "5.4.4"
+  resolved "https://registry.yarnpkg.com/mobx-react/-/mobx-react-5.4.4.tgz#b3de9c6eabcd0ed8a40036888cb0221ab9568b80"
   dependencies:
-    hoist-non-react-statics "^2.5.0"
+    hoist-non-react-statics "^3.0.0"
     react-lifecycles-compat "^3.0.2"
 
 mobx-state-tree@3.2.4:
@@ -8066,6 +8072,10 @@ react-input-autosize@^2.2.1:
 react-is@^16.4.2:
   version "16.4.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.4.2.tgz#84891b56c2b6d9efdee577cc83501dfc5ecead88"
+
+react-is@^16.7.0:
+  version "16.11.0"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.11.0.tgz#b85dfecd48ad1ce469ff558a882ca8e8313928fa"
 
 react-lifecycles-compat@^3.0.2:
   version "3.0.4"
