@@ -6708,9 +6708,9 @@ mobx-state-tree@3.2.4:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/mobx-state-tree/-/mobx-state-tree-3.2.4.tgz#91a922d2f0542e38c9b85c2a8a95ab4af47512e9"
 
-mobx@4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/mobx/-/mobx-4.3.1.tgz#334e5aab4916b1d43f0faf3605a64b1b4b3ccb8d"
+mobx@4.15.4:
+  version "4.15.4"
+  resolved "https://registry.yarnpkg.com/mobx/-/mobx-4.15.4.tgz#644eac80bdd15793855194e764c475041101b406"
 
 moment@2.24.0:
   version "2.24.0"

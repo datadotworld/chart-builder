@@ -17,7 +17,7 @@
     "history": "4.7.2",
     "little-loader": "0.2.0",
     "lz-string": "1.4.4",
-    "mobx": "4.3.1",
+    "mobx": "4.15.4",
     "mobx-react": "5.2.6",
     "mobx-state-tree": "3.2.4",
     "react": "16.4.2",
