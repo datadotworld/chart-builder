@@ -51,7 +51,7 @@ jobs:
           paths:
             - node_modules
       - cypress_tests
-  build_master:
+  build_main:
     docker:
       - image: circleci/node:10
     environment:
@@ -103,11 +103,11 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
-  build_master:
+                - main
+  build_main:
     jobs:
-      - build_master:
+      - build_main:
           filters:
             branches:
               only:
-                - master
+                - main
