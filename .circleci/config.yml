@@ -106,6 +106,8 @@ workflows:
   build_main:
     jobs:
       - build_main:
+          context:
+            - aws-artifacts
           filters:
             branches:
               only:

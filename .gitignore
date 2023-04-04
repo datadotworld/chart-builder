@@ -2,6 +2,8 @@ node_modules
 .npmrc
 *.log
 /build
+.DS_Store
+.idea/
 
 cypress/videos/*
 cypress/screenshots/*
