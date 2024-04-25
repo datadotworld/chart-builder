@@ -1,5 +1,4 @@
 // @flow
-/* eslint jsx-a11y/anchor-is-valid: 0 */
 import React, { Component } from 'react'
 import { decorate, observable } from 'mobx'
 import { observer } from 'mobx-react'

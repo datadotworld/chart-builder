@@ -243,7 +243,7 @@ export const ChartConfig = types
       })
 
       return {
-        $schema: 'https://vega.github.io/schema/vega-lite/v2.json',
+        $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
         title: self.title != null ? self.title : undefined,
         width: self.hasFacetField
           ? undefined

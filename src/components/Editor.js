@@ -3,11 +3,11 @@ import React, { Component } from 'react'
 import debounce from 'lodash/debounce'
 import MonacoEditor from 'react-monaco-editor'
 import { Measure } from 'react-measure'
-import vegaLiteSchema from '../util/vega-lite-schema-v2.json'
+import vegaLiteSchema from '../util/vega-lite-schema-v5.json'
 import classes from './Editor.module.css'
 
 const monacoJsonSchema = {
-  uri: 'https://vega.github.io/schema/vega-lite/v2.json',
+  uri: 'https://vega.github.io/schema/vega-lite/v5.json',
   schema: vegaLiteSchema,
   fileMatch: ['*']
 }
