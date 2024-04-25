@@ -14,7 +14,6 @@ exports[`renders 1`] = `
         <input
           className="form-control"
           disabled={false}
-          id={undefined}
           onChange={[Function]}
           placeholder="Auto"
           type="number"
@@ -51,7 +50,6 @@ exports[`renders 1`] = `
         <input
           className="form-control"
           disabled={false}
-          id={undefined}
           onChange={[Function]}
           placeholder="Auto"
           type="number"

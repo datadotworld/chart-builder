@@ -34,6 +34,5 @@ exports[`renders 1`] = `
       "valueContainer": [Function],
     }
   }
-  value={undefined}
 />
 `;

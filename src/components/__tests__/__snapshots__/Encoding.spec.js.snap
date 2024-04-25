@@ -3,7 +3,6 @@
 exports[`renders 1`] = `
 <div
   className="container"
-  data-test={undefined}
 >
   <div
     className="bar"
@@ -165,7 +164,6 @@ exports[`renders 1`] = `
           "valueContainer": [Function],
         }
       }
-      value={undefined}
     />
     <button
       className="btn btn-xs btn-default"
