@@ -1,10 +1,32 @@
 version: 2.1
-orbs:
-  cypress: cypress-io/cypress@3
+commands:
+  cypress_tests:
+    description: Setup and run cypress tests
+    steps:
+      - run:
+          name: Run server for tests
+          command: yarn http-server build/ -p 3500
+          background: true
+      - run:
+          name: Cypress tests
+          command: |
+            yarn cypress install
+            yarn cypress run
+      - save_cache:
+          key: v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+            - ~/.cache/Cypress
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: cypress/screenshots
+      - store_test_results:
+          path: cypress/junit-results
 jobs:
   build:
     docker:
-      - image: cimg/node:20.7.0
+      - image: cypress/base:latest
     environment:
       BASH_ENV: ~/.env
       CI: true
@@ -76,8 +98,6 @@ workflows:
             branches:
               ignore:
                 - main
-      - cypress/run:
-          start-command: 'yarn http-server build/ -p 3500'
   build_main:
     jobs:
       - build_main:
