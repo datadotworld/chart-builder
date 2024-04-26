@@ -1,32 +1,6 @@
 version: 2.1
-commands:
-  cypress_tests:
-    description: Setup and run cypress tests
-    steps:
-      - run:
-          name: Install integration test deps
-          command: |
-            sudo apt-get update && sudo apt-get install -qq -y python-pip libpython-all-dev xvfb libgtk-3-0 libatk-bridge2.0-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
-      - run:
-          name: Run server for tests
-          command: yarn http-server build/ -p 3500
-          background: true
-      - run:
-          name: Cypress tests
-          command: |
-            yarn cypress install
-            yarn cypress run
-      - save_cache:
-          key: v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules
-            - ~/.cache/Cypress
-      - store_artifacts:
-          path: cypress/videos
-      - store_artifacts:
-          path: cypress/screenshots
-      - store_test_results:
-          path: cypress/junit-results
+orbs:
+  cypress: cypress-io/cypress@3
 jobs:
   build:
     docker:
@@ -50,7 +24,6 @@ jobs:
           key: v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
-      - cypress_tests
   build_main:
     docker:
       - image: cimg/node:20.7.0
@@ -103,6 +76,8 @@ workflows:
             branches:
               ignore:
                 - main
+      - cypress/run:
+          start-command: 'yarn http-server build/ -p 3500'
   build_main:
     jobs:
       - build_main:
