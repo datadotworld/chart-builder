@@ -46,6 +46,7 @@ jobs:
           key: v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
+      - cypress_tests
   build_main:
     docker:
       - image: cimg/node:20.7.0
