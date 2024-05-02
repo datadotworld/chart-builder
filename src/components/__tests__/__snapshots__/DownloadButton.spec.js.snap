@@ -4,10 +4,8 @@ exports[`DownloadMenuItem renders 1`] = `
 <li
   className=""
   role="presentation"
-  style={undefined}
 >
   <a
-    data-test={undefined}
     download="testing.json"
     href="##"
     onClick={[Function]}
@@ -49,14 +47,12 @@ exports[`renders 1`] = `
       className="dropdown-header"
       onKeyDown={[Function]}
       role="heading"
-      style={undefined}
     >
       JSON
     </li>
     <li
       className=""
       role="presentation"
-      style={undefined}
     >
       <a
         data-test="download-vega-lite"
@@ -79,7 +75,6 @@ exports[`renders 1`] = `
     <li
       className=""
       role="presentation"
-      style={undefined}
     >
       <a
         data-test="download-vega"
@@ -103,14 +98,12 @@ exports[`renders 1`] = `
       className="dropdown-header"
       onKeyDown={[Function]}
       role="heading"
-      style={undefined}
     >
       Image
     </li>
     <li
       className=""
       role="presentation"
-      style={undefined}
     >
       <a
         data-test="download-png"
@@ -133,7 +126,6 @@ exports[`renders 1`] = `
     <li
       className=""
       role="presentation"
-      style={undefined}
     >
       <a
         data-test="download-svg"
@@ -157,14 +149,12 @@ exports[`renders 1`] = `
       className="dropdown-header"
       onKeyDown={[Function]}
       role="heading"
-      style={undefined}
     >
       HTML
     </li>
     <li
       className=""
       role="presentation"
-      style={undefined}
     >
       <a
         data-test="download-html"

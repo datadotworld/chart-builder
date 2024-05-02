@@ -7,7 +7,6 @@ exports[`renders 1`] = `
   <div
     className="editTab"
     id="configure-tabs"
-    style={undefined}
   >
     <ul
       className="nav nav-tabs"
@@ -16,7 +15,6 @@ exports[`renders 1`] = `
       <li
         className="active"
         role="presentation"
-        style={undefined}
       >
         <a
           aria-controls="configure-tabs-pane-builder"
@@ -26,7 +24,6 @@ exports[`renders 1`] = `
           onClick={[Function]}
           onKeyDown={[Function]}
           role="tab"
-          tabIndex={undefined}
         >
           Visual Builder
         </a>
@@ -34,7 +31,6 @@ exports[`renders 1`] = `
       <li
         className=""
         role="presentation"
-        style={undefined}
       >
         <a
           aria-controls="configure-tabs-pane-editor"
@@ -90,7 +86,6 @@ exports[`renders 1`] = `
         >
           <react-select
             classNamePrefix="react-select"
-            isClearable={undefined}
             isDisabled={false}
             menuPortalTarget={<body />}
             onChange={[Function]}
@@ -130,7 +125,6 @@ exports[`renders 1`] = `
                 },
               ]
             }
-            placeholder={undefined}
             styles={
               Object {
                 "clearIndicator": [Function],

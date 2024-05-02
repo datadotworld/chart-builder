@@ -14,7 +14,6 @@ exports[`renders 1`] = `
   >
     <input
       className="form-control"
-      id={undefined}
       readOnly={true}
       type="text"
       value="test copy"

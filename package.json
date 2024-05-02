@@ -28,23 +28,24 @@
     "react-measure": "3.0.0-rc.3",
     "react-monaco-editor": "0.14.1",
     "react-router-dom": "4.3.1",
-    "react-scripts": "2.0.0-next.3e165448",
+    "react-scripts": "^5.0.1",
     "react-select": "2.0.0",
-    "vega": "5.6.0",
-    "vega-lite": "3.4.0",
-    "vega-tooltip": "0.13.0"
+    "vega": "5.28.0",
+    "vega-lite": "5.18.0",
+    "vega-tooltip": "0.34.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "dev": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "flow": "flow",
     "precommit": "pretty-quick --staged"
   },
   "devDependencies": {
-    "cypress": "3.4.1",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "cypress": "13.8.1",
     "fetch-mock": "6.5.2",
     "http-server": "0.11.1",
     "husky": "0.14.3",

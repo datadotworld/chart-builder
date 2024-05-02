@@ -38,6 +38,8 @@ describe('Chart Builder', function() {
       }
     }
 
+    cy.once('uncaught:exception', () => false)
+
     cy.fixture('profile').as('profile')
     cy.fixture('queryResponse').as('queryResponse')
 

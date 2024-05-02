@@ -64,7 +64,7 @@ Object {
 
 exports[`ChartConfig sets a few encodings 2`] = `
 Object {
-  "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "autosize": undefined,
   "config": Object {
     "background": "#ffffff",
