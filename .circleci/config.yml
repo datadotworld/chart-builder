@@ -54,6 +54,24 @@ jobs:
       BASH_ENV: ~/.env
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-npm-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - v1-npm-deps-{{ .Branch }}
+            - v1-npm-deps-
+      - run: yarn install
+      - run:
+          name: Jest tests
+          command: yarn test
+      - run: yarn build
+      - cypress_tests
+  deploy_main:
+    docker:
+      - image: cimg/node:20.7.0
+    environment:
+      BASH_ENV: ~/.env
+    steps:
+      - checkout
       - run:
           name: Clone build-scripts repo
           command: git clone git@github.com:datadotworld/build-scripts.git
@@ -67,9 +85,6 @@ jobs:
             - v1-npm-deps-
       - run: yarn install
       - run:
-          name: Jest tests
-          command: yarn test
-      - run:
           name: Generate license text
           command: yarn licenses generate-disclaimer --silent > src/generated/licenses.txt
       - run: yarn build
@@ -80,7 +95,6 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             ./aws/install -i ~/.local/aws-cli -b ~/.local/bin
-      - cypress_tests
       - run:
           name: Sync to s3
           command: |
@@ -99,9 +113,14 @@ workflows:
             branches:
               ignore:
                 - main
-  build_main:
+  build_and_deploy_main:
     jobs:
       - build_main:
+          filters:
+            branches:
+              only:
+                - main
+      - deploy_main:
           context:
             - aws-artifacts
           filters:
