@@ -121,6 +121,8 @@ workflows:
               only:
                 - main
       - deploy_main:
+          requires:
+            - build_main
           context:
             - aws-artifacts
           filters:
