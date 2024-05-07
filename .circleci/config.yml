@@ -118,7 +118,7 @@ workflows:
       - build_main:
           filters:
             branches:
-              only:
+              ignore:
                 - main
       - deploy_main:
           requires:
@@ -127,5 +127,5 @@ workflows:
             - aws-artifacts
           filters:
             branches:
-              only:
+              ignore:
                 - main
