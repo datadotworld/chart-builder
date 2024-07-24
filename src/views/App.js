@@ -87,6 +87,7 @@ class App extends Component<AppP> {
 
     let res
     if (store.savedQueryId) {
+      // includeTableSchema must be passed as a query param when executing a SAVED query
       const savedQueryURL = `${API_HOST}/v0/queries/${
         store.savedQueryId
       }/results?includeTableSchema=true`
@@ -96,14 +97,20 @@ class App extends Component<AppP> {
         headers: this.getQueryHeaders()
       })
     } else {
+      // includeTableSchema must be passed as a body param when executing an UNSAVED query
       const unsavedQueryURL = `${API_HOST}/v0/${store.queryType}/${
         store.dataset
-      }?includeTableSchema=true`
+      }`
+
+      const bodyParams = {
+        query: store.query,
+        includeTableSchema: true
+      }
 
       res = await fetch(unsavedQueryURL, {
         method: 'POST',
         headers: this.getQueryHeaders(),
-        body: createParams({ query: store.query }).toString()
+        body: JSON.stringify(bodyParams)
       })
     }
 
