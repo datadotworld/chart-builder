@@ -26,7 +26,7 @@ import VizCard from '../components/VizCard'
 import VizEmpty from '../components/VizEmpty'
 import ResizableVegaLiteEmbed from '../components/ResizableVegaLiteEmbed'
 import CopyField from '../components/CopyField'
-import { createParams, fixupJsonFields } from '../util/util'
+import { fixupJsonFields } from '../util/util'
 import classes from './App.module.css'
 import type { StoreType } from '../util/Store'
 
