@@ -100,6 +100,11 @@ class SaveAsInsightModal extends Component<Props> {
       })
     }).then(r => r.json())
 
+    // Replace `api.data.world` with `data.world` in the response URI
+    if (d && d.uri) {
+      d.uri = d.uri.replace('https://api.data.world', 'https://data.world')
+    }
+
     this.response = d
     this.saving = false
   }

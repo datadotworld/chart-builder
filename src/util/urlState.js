@@ -34,5 +34,6 @@ export function getStateString(store: Object): string {
 }
 
 export function getStateUrl(store: Object) {
+  console.log(document.location.origin)
   return document.location.origin + '/?s=' + getStateString(store)
 }
