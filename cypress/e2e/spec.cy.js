@@ -6,34 +6,37 @@ describe('Chart Builder', function() {
     visitOptions = {
       onBeforeLoad: win => {
         let fetch = fetchMock.sandbox()
-        fetch.get('https://api.data.world/v0/user', this.profile)
+
+        // Mock the POST request with the correct endpoint and parameters
         fetch.post(
-          'https://api.data.world/v0/sql/data-society/iris-species?includeTableSchema=true',
+          `https://api.data.world/v0/sql/data-society/iris-species`,
           this.queryResponse
         )
+
+        // Mock other requests
+        fetch.get(`https://api.data.world/v0/user`, this.profile)
         fetch.post(
-          'https://api.data.world/v0/insights/data-society/iris-species',
+          `https://api.data.world/v0/insights/data-society/iris-species`,
           {
             message: 'Insight created successfully.',
             saving: false,
-            uri:
-              'https://data.world/data-society/iris-species/insights/abcd-1234'
+            uri: `https://api.data.world/data-society/iris-species/insights/abcd-1234`
           }
         )
         fetch.get(
-          'https://api.data.world/v0/datasets/data-society/iris-species',
+          `https://api.data.world/v0/datasets/data-society/iris-species`,
           {
             accessLevel: 'WRITE',
             isProject: true
           }
         )
         fetch.put(
-          'begin:https://api.data.world/v0/uploads/data-society/iris-species/files/test-title',
+          `begin:https://api.data.world/v0/uploads/data-society/iris-species/files/test-title`,
           { message: 'File uploaded.' }
         )
         fetch.get('glob:*/static/media/licenses*', 'cypress license text')
-        cy.stub(win, 'fetch', fetch).as('fetch')
 
+        cy.stub(win, 'fetch', fetch).as('fetch')
         win.localStorage.setItem('token', 'foo')
       }
     }

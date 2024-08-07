@@ -1,4 +1,5 @@
 // @flow
+// @flow
 import React, { Fragment, Component } from 'react'
 import { decorate, observable, runInAction } from 'mobx'
 import { observer, inject } from 'mobx-react'
@@ -26,7 +27,7 @@ import VizCard from '../components/VizCard'
 import VizEmpty from '../components/VizEmpty'
 import ResizableVegaLiteEmbed from '../components/ResizableVegaLiteEmbed'
 import CopyField from '../components/CopyField'
-import { createParams, fixupJsonFields } from '../util/util'
+import { fixupJsonFields } from '../util/util'
 import classes from './App.module.css'
 import type { StoreType } from '../util/Store'
 
@@ -60,8 +61,12 @@ class App extends Component<AppP> {
   saveModalOpen: false | 'insight' | 'file' | 'shareurl' | 'ddwembed' = false
 
   componentDidMount() {
-    if (this.props.store.hasValidParams) {
+    const { store } = this.props
+
+    if (store.hasValidParams) {
       this.fetchQuery()
+    } else {
+      console.warn('No valid parameters found.')
     }
   }
 
@@ -86,69 +91,48 @@ class App extends Component<AppP> {
     })
 
     let res
-    if (store.savedQueryId) {
-      const savedQueryURL = `${API_HOST}/v0/queries/${
-        store.savedQueryId
-      }/results?includeTableSchema=true`
+    try {
+      // Determine URL and method based on savedQueryId
+      const queryURL = store.savedQueryId
+        ? `${API_HOST}/v0/queries/${
+            store.savedQueryId
+          }/results?includeTableSchema=true`
+        : `${API_HOST}/v0/${store.queryType}/${store.dataset}`
 
-      res = await fetch(savedQueryURL, {
-        method: 'GET',
-        headers: this.getQueryHeaders()
-      })
-    } else {
-      const unsavedQueryURL = `${API_HOST}/v0/${store.queryType}/${
-        store.dataset
-      }?includeTableSchema=true`
+      const fetchOptions = store.savedQueryId
+        ? { method: 'GET', headers: this.getQueryHeaders() }
+        : {
+            method: 'POST',
+            headers: {
+              ...this.getQueryHeaders(),
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              query: store.query,
+              includeTableSchema: true
+            })
+          }
 
-      res = await fetch(unsavedQueryURL, {
-        method: 'POST',
-        headers: this.getQueryHeaders(),
-        body: createParams({ query: store.query }).toString()
-      })
-    }
+      res = await fetch(queryURL, fetchOptions)
 
-    const loadError = () =>
+      // Check for response success
+      if (!res.ok) {
+        const errorText = await res.text()
+        console.error('Error Response:', errorText)
+        throw new Error('Network response was not ok')
+      }
+
+      // Process response data
+      const data = await res.json()
+      this.handleData(data)
+    } catch (error) {
+      console.error('Fetch error:', error)
+      this.errorLoading = true
+    } finally {
       runInAction(() => {
         this.loading = false
-        this.errorLoading = true
       })
-
-    if (!res.ok) {
-      loadError()
-      return
     }
-
-    // firefox fallback
-    if (!res.body) {
-      try {
-        this.handleData(await res.json())
-      } catch (e) {
-        loadError()
-      }
-      return
-    }
-
-    const reader = res.body.getReader()
-    const chunks = []
-
-    while (true) {
-      const result = await reader.read()
-      if (result.done) {
-        break
-      }
-
-      const chunk = result.value
-      if (chunk == null) {
-        throw Error('Empty chunk received during download')
-      } else {
-        chunks.push(chunk)
-        this.bytesDownloaded += chunk.byteLength
-      }
-    }
-    const blob = new Blob(chunks, { type: 'application/json' })
-    const data = await new Response(blob).json()
-
-    this.handleData(data)
   }
 
   processData(data: Array<Object> | SparqlResults) {
@@ -161,7 +145,6 @@ class App extends Component<AppP> {
       }
     }
 
-    // we're processing application/sparql+json
     const sparqlFields: any = data.head.vars.map(v => ({
       name: v,
       rdfType: 'http://www.w3.org/2001/XMLSchema#string'
