@@ -270,7 +270,19 @@ class App extends Component<AppP> {
                 }
               />
             ) : (
-              <h4>Error loading data</h4>
+              <div>
+                <h4>Error loading data</h4>
+                <p>Are you authenticated against the correct instance?</p>
+                <Button
+                  bsStyle="primary"
+                  onClick={() => {
+                    localStorage.clear()
+                    window.location.reload()
+                  }}
+                >
+                  Reauthenticate
+                </Button>
+              </div>
             )}
           </Grid>
         </Fragment>
